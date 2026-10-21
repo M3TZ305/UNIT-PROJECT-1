@@ -1,3 +1,4 @@
+import sys
 import questionary
 from core.database import load_data
 from ui.animations import display_banner, show_deployment_animation
@@ -6,6 +7,12 @@ from services.store import search_agents, add_to_cart, remove_from_cart, list_ca
 from services.checkout import process_checkout, track_deployment_status
 from services.manager import manager_dashboard
 from rich.console import Console
+
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 console = Console()
 
