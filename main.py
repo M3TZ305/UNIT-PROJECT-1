@@ -9,6 +9,7 @@ from ui.dashboard import display_live_dashboard
 from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
 from services.checkout import process_checkout, track_deployment_status, view_purchase_history
 from services.manager import manager_dashboard
+from services.sandbox import run_agent_sandbox
 from rich.console import Console
 
 if hasattr(sys.stdout, 'reconfigure'):
@@ -55,6 +56,10 @@ def run_app():
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter):").ask()
             if agent_id:
                 add_to_cart(agent_id.strip())
+                
+        elif choice == "🧪 Launch AI Agent Sandbox Playground":
+            smooth_menu_transition("AI Agent Sandbox Playground")
+            run_agent_sandbox()
                 
         elif choice == "📊 View Live System Dashboard":
             smooth_menu_transition("Live System Dashboard")

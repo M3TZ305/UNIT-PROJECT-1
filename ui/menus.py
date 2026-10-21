@@ -30,6 +30,7 @@ def main_menu():
             "🛒 Browse AI Agents Catalogue",
             "🔍 Search for an Agent",
             "💡 Get AI Recommendations",
+            "🧪 Launch AI Agent Sandbox Playground",
             "📊 View Live System Dashboard",
             "📜 View Past Receipts & History",
             "🛍️ View My Cart & Checkout",

@@ -33,16 +33,7 @@
             "stock": 15
         }
     ],
-    "cart": [
-        {
-            "id": "01",
-            "name": "DeepCode-V4",
-            "specialty": "Architecture",
-            "success_rate": 99.4,
-            "price": 450,
-            "stock": 10
-        }
-    ],
+    "cart": [],
     "history": [
         {
             "id": "01",
