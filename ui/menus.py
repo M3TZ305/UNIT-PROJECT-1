@@ -30,6 +30,7 @@ def main_menu():
             "🛒 Browse AI Agents Catalogue",
             "🔍 Search for an Agent",
             "💡 Get AI Recommendations",
+            "📊 View Live System Dashboard",
             "🛍️ View My Cart & Checkout",
             "💳 Top-Up Wallet Tokens",
             "🎨 Switch Terminal Theme",

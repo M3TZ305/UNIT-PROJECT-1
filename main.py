@@ -5,6 +5,7 @@ import questionary
 from core.database import load_data
 from ui.animations import display_banner, show_deployment_animation, cyber_matrix_intro
 from ui.menus import main_menu, display_agent_table, select_theme_menu
+from ui.dashboard import display_live_dashboard
 from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
 from services.checkout import process_checkout, track_deployment_status
 from services.manager import manager_dashboard
@@ -51,6 +52,9 @@ def run_app():
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter):").ask()
             if agent_id:
                 add_to_cart(agent_id.strip())
+                
+        elif choice == "📊 View Live System Dashboard":
+            display_live_dashboard()
                 
         elif choice == "🛍️ View My Cart & Checkout":
             total = list_cart()
