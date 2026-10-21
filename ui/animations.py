@@ -92,3 +92,24 @@ def show_deployment_animation(agent_name):
     show_loading_spinner(f"Allocating GPU Tokens for {agent_name}")
     show_loading_spinner(f"Syncing REST Endpoint")
     console.print(f"[bold green]✔ {agent_name} deployed successfully to cluster![/bold green]\n")
+
+def smooth_menu_transition(section_name):
+    """انميشن انتقال سريع، حي، ومتحرك (مو ديلاي) يعطي طابعاً سينمائياً فورياً"""
+    console.clear()
+    
+    # انميشن شريط تقدم سريع جداً ومتحرك (يخلص في لحظات بس يعطيك شكل حركي فخم)
+    with Progress(
+        SpinnerColumn("dots", style="bold cyan"),
+        TextColumn(f"[bold cyan]⚡ Loading [yellow]{section_name}[/yellow]...[/bold cyan]"),
+        BarColumn(bar_width=25, style="blue", complete_style="bold green"),
+        console=console,
+        transient=True # يختفي فور ما ينتهي عشان ما يصير فيه زحمة بالشاشة
+    ) as progress:
+        task = progress.add_task("", total=100)
+        while not progress.finished:
+            progress.update(task, advance=50) # سرعة عالية جداً (انميشن مو تعليق)
+            time.sleep(0.04)
+            
+    console.print(f"[dim green]>> [{section_name}] Initialized successfully.[/dim green]")
+    time.sleep(0.1) # ومضة سريعة جداً قبل عرض المحتوى
+    console.print("─" * 80, style="dim")

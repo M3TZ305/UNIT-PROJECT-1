@@ -1,7 +1,3 @@
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import questionary
 from core.database import load_data, save_data
 from rich.console import Console
@@ -78,26 +74,40 @@ def get_recommendations():
     history = data.get("history", [])
     agents = data["agents"]
     
-    # إذا لم تكن هناك مشتريات سابقة، نقترح الأفضل تقييماً
     if not history:
         return sorted(agents, key=lambda x: x["success_rate"], reverse=True)[:2]
     
-    # اقتراح وكلاء غير موجودين في السجل
     bought_ids = {item["id"] for item in history}
     recommended = [a for a in agents if a["id"] not in bought_ids]
     return recommended[:2] if recommended else agents[:2]
 
 def top_up_tokens():
-    """شحن رصيد المحفظة بالتوكنز"""
+    """ميزة شحن الرصيد مع التحقق الصارم من الاسم ورقم البطاقة (10 أرقام بالضبط)"""
     data = load_data()
-    amount_str = questionary.text("Enter amount of Tokens (TC) to top-up:").ask()
-    try:
+    current_tokens = data.get("tokens", 0)
+    
+    console.print(f"\n[cyan]💳 Your Current Balance:[/cyan] [bold yellow]{current_tokens} TC[/bold yellow]")
+    
+    # 1. طلب اسم المستخدم والتحقق من أنه حروف فقط
+    name = questionary.text("Enter your full name for billing:").ask()
+    if not name or not name.strip() or not name.replace(" ", "").isalpha():
+        console.print("[red]❌ Invalid Name! Name must contain letters only (no numbers or special symbols). Top-up canceled.[/red]\n")
+        return
+        
+    # 2. طلب رقم البطاقة والتحقق من طوله (10 أرقام بالضبط)
+    card_number = questionary.text("Enter 10-Digit Card Number:").ask()
+    if not card_number or not card_number.isdigit() or len(card_number) != 10:
+        console.print("[red]❌ Invalid Card Number! It must be exactly 10 digits (less or more is rejected). Top-up canceled.[/red]\n")
+        return
+        
+    # 3. طلب كمية الـ Tokens
+    amount_str = questionary.text("Enter Token amount to top-up (e.g. 1000):").ask()
+    if amount_str and amount_str.isdigit():
         amount = int(amount_str)
-        if amount <= 0:
-            console.print("[red]❌ Amount must be greater than zero.[/red]")
+        if amount > 0:
+            data["tokens"] = current_tokens + amount
+            save_data(data)
+            console.print(f"[bold green]✔ Thank you, {name.strip()}! Successfully added {amount} TC! New Balance: {data['tokens']} TC[/bold green]\n")
             return
-        data["tokens"] = data.get("tokens", 2000) + amount
-        save_data(data)
-        console.print(f"[green]✔ Successfully added {amount} TC! New Wallet Balance: {data['tokens']} TC[/green]")
-    except ValueError:
-        console.print("[red]❌ Invalid numeric value entered.[/red]")
+            
+    console.print("[red]❌ Invalid token amount entered. Top-up canceled.[/red]\n")

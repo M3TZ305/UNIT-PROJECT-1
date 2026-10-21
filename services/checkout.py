@@ -13,7 +13,7 @@ from rich.text import Text
 console = Console()
 
 def process_checkout(endpoint_address):
-    """إتمام عملية الشراء، خصم الرصيد، حفظ التاريخ، وعرض الاحتفال والفاتورة"""
+    """إتمام عملية الشراء مع خطوات سينمائية بطيئة وملاحظة بوضوح للمستخدم"""
     data = load_data()
     cart = data["cart"]
     
@@ -28,7 +28,7 @@ def process_checkout(endpoint_address):
         console.print(f"[red]❌ Insufficient tokens! You have {current_tokens} TC, but need {total_price} TC.[/red]")
         return False
         
-    # خصم الرصيد وتفريغ السلة ونقل المنتجات للسجل (History)
+    # خصم الرصيد وتفريغ السلة ونقل المنتجات للسجل
     data["tokens"] -= total_price
     for item in cart:
         data["history"].append(item)
@@ -36,34 +36,39 @@ def process_checkout(endpoint_address):
     data["cart"] = []
     save_data(data)
     
-    # محاكاة تجهيز النشر
-    console.print("\n[bold yellow]⚡ Processing Quantum Payment & Cluster Allocation...[/bold yellow]")
-    time.sleep(1)
+    # 1. مرحلة معالجة الدفع ببطء ملحوظ
+    console.print("\n")
+    with console.status("[bold yellow]⚡ Processing Quantum Payment & Cluster Allocation...[/bold yellow]", spinner="dots"):
+        time.sleep(2.0)  # توقف واضح ليقرأ المستخدم الرسالة
     
-    # 🌟 عرض شاشة الاحتفال الاحتفالية الجديدة (Success Celebration Badge)
+    # 2. مرحلة شاشة الاحتفال والوميض الحركي
     display_success_celebration()
     
-    # عرض الفاتورة وطباعتها وتخزينها في السجل
+    # 3. توقف قصير مريح قبل طباعة الفاتورة على الشاشة
+    with console.status("[bold cyan]📜 Compiling Official Spacetime Receipt...[/bold cyan]", spinner="arc"):
+        time.sleep(1.8)
+    
     generate_receipt(cart, total_price, endpoint_address)
+    
+    # 4. توقف قبل حفظ الملف وتأكيد السجل
+    with console.status("[bold green]💾 Exporting & Syncing Receipts Ledger...[/bold green]", spinner="line"):
+        time.sleep(1.5)
+        
     save_receipt_to_file(cart, total_price, endpoint_address)
     return True
 
 def display_success_celebration():
-    """أنيميشن احتفالي حركي ومبهر مع تأثير الوميض والسبينر ببطء ملحوظ للمستخدم"""
-    # 1. سبينر تفاعلي يأخذ وقتاً كافياً ليلاحظه المستخدم (2.5 ثانية)
+    """أنيميشن احتفالي حركي ومبهر مع تأثير الوميض ببطء ملحوظ"""
     with console.status("[bold yellow]🎆 Launching Cluster Fireworks & Generating License...[/bold yellow]", spinner="earth"):
-        time.sleep(2.5)
+        time.sleep(2.2)
     
-    # 2. أنيميشن وميض ملون أبطأ قليلاً ليكون ملاحظاً بوضوح (0.35 ثانية لكل ومضة)
     colors = ["green", "cyan", "yellow", "green", "cyan", "green"]
     for color in colors:
         console.print(Text("✨ SUCCESS! ALL NODES DEPLOYED & SYNCED ✨", style=f"bold {color}"), justify="center")
         time.sleep(0.35)
         
-    # فاصل قصير مريح للبصر قبل إظهار الصندوق النهائي
-    time.sleep(0.4)
+    time.sleep(0.5)
         
-    # 3. صندوق الاحتفال والترخيص النهائي المتوهج
     celebration_box = Panel(
         "[bold green]✨ TRANSACTION COMPLETE & CLUSTER DEPLOYED ✨[/bold green]\n"
         "[cyan]═══════════════════════════════════════════════[/cyan]\n"
@@ -75,6 +80,7 @@ def display_success_celebration():
     console.print("\n")
     console.print(celebration_box)
     console.print("\n")
+    time.sleep(1.0)  # وقفة بعد عرض صندوق الاحتفال ليتمكن المستخدم من تأمله
 
 def generate_receipt(cart, total_price, endpoint_address):
     """طباعة إيصال رقمي فاخر على الشاشة"""
@@ -94,6 +100,7 @@ def generate_receipt(cart, total_price, endpoint_address):
         title="[cyan]Transaction Details[/cyan]",
         border_style="green"
     ))
+    time.sleep(1.5)  # وقفة لتأمل الفاتورة قبل إكمال أي عملية أخرى
 
 def save_receipt_to_file(cart, total_price, endpoint_address):
     """حفظ وتخزين جميع عمليات الشراء وتراكمها في سجل الفواتير"""
@@ -120,7 +127,8 @@ STATUS: SUCCESSFUL & DEPLOYED
     try:
         with open(filename, "a", encoding="utf-8") as f:
             f.write(content)
-        console.print(f"[bold green]📄 Receipt logged & saved to '{filename}'![/bold green]")
+        console.print(f"[bold green]📄 Receipt logged & saved to '{filename}'![/bold green]\n")
+        time.sleep(1.0)
     except Exception as e:
         console.print(f"[red]⚠️ Failed to export receipt file: {e}[/red]")
 
@@ -132,6 +140,9 @@ def track_deployment_status():
     if not history:
         console.print("[yellow]📦 No active or past deployments found in history.[/yellow]")
         return
+        
+    with console.status("[bold cyan]Querying Cluster Deployment Nodes...[/bold cyan]", spinner="dots"):
+        time.sleep(1.2)
         
     table = Table(title="[bold cyan]Active AI Cluster Deployments[/bold cyan]", show_header=True)
     table.add_column("Agent Name", style="bold green")

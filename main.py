@@ -3,7 +3,7 @@ import os
 os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data
-from ui.animations import cinematic_startup_sequence, show_deployment_animation
+from ui.animations import cinematic_startup_sequence, show_deployment_animation, smooth_menu_transition
 from ui.menus import main_menu, display_agent_table, select_theme_menu
 from ui.dashboard import display_live_dashboard
 from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
@@ -28,12 +28,14 @@ def run_app():
         data = load_data()
         
         if choice == "🛒 Browse AI Agents Catalogue":
+            smooth_menu_transition("AI Catalogue")
             display_agent_table(data["agents"])
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter to go back):").ask()
             if agent_id:
                 add_to_cart(agent_id.strip())
                 
         elif choice == "🔍 Search for an Agent":
+            smooth_menu_transition("Agent Search Engine")
             query = questionary.text("Enter search keyword (name or specialty):").ask()
             if query:
                 results = search_agents(query)
@@ -46,6 +48,7 @@ def run_app():
                     console.print("[yellow]No agents found matching your query.[/yellow]")
                     
         elif choice == "💡 Get AI Recommendations":
+            smooth_menu_transition("Neural Recommendation Hub")
             recs = get_recommendations()
             console.print("\n[bold cyan]✨ Recommended AI Agents For Your Next Deployment:[/bold cyan]")
             display_agent_table(recs)
@@ -54,12 +57,15 @@ def run_app():
                 add_to_cart(agent_id.strip())
                 
         elif choice == "📊 View Live System Dashboard":
+            smooth_menu_transition("Live System Dashboard")
             display_live_dashboard()
                 
         elif choice == "📜 View Past Receipts & History":
+            smooth_menu_transition("Past Receipts Ledger")
             view_purchase_history()
                 
         elif choice == "🛍️ View My Cart & Checkout":
+            smooth_menu_transition("Shopping Cart & Checkout")
             total = list_cart()
             if total > 0:
                 sub_choice = questionary.select(
@@ -79,15 +85,19 @@ def run_app():
                         remove_from_cart(item_id.strip())
                         
         elif choice == "💳 Top-Up Wallet Tokens":
+            smooth_menu_transition("Token Wallet Top-Up")
             top_up_tokens()
             
         elif choice == "🎨 Switch Terminal Theme":
+            smooth_menu_transition("Terminal Theme Engine")
             select_theme_menu()
             
         elif choice == "📦 Track Deployment Status":
+            smooth_menu_transition("Cluster Deployment Status")
             track_deployment_status()
             
         elif choice == "⚙️ [Manager Portal] Manage Agents & Stock":
+            smooth_menu_transition("Manager Administrator Portal")
             manager_dashboard()
             
         elif choice == "🚪 Exit" or choice is None:
