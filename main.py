@@ -1,9 +1,11 @@
 import sys
+import os
+os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data
 from ui.animations import display_banner, show_deployment_animation
 from ui.menus import main_menu, display_agent_table
-from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations
+from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
 from services.checkout import process_checkout, track_deployment_status
 from services.manager import manager_dashboard
 from rich.console import Console
@@ -68,6 +70,9 @@ def run_app():
                     if item_id:
                         remove_from_cart(item_id.strip())
                         
+        elif choice == "💳 Top-Up Wallet Tokens":
+            top_up_tokens()
+            
         elif choice == "📦 Track Deployment Status":
             track_deployment_status()
             

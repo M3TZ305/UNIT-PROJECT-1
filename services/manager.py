@@ -1,3 +1,6 @@
+import sys
+import os
+os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data, save_data
 from rich.console import Console

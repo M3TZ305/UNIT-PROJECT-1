@@ -17,6 +17,12 @@ def display_agent_table(agents):
     console.print(table)
 
 def main_menu():
+    from core.database import load_data
+    data = load_data()
+    tokens = data.get("tokens", 0)
+    
+    console.print(f"\n[bold yellow]💰 Wallet Balance: {tokens} TC[/bold yellow]")
+    
     return questionary.select(
         "Choose your AI Orchestration Action:",
         choices=[
@@ -24,6 +30,7 @@ def main_menu():
             "🔍 Search for an Agent",
             "💡 Get AI Recommendations",
             "🛍️ View My Cart & Checkout",
+            "💳 Top-Up Wallet Tokens",
             "📦 Track Deployment Status",
             "⚙️ [Manager Portal] Manage Agents & Stock",
             "🚪 Exit"

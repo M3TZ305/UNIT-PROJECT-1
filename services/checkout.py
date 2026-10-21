@@ -1,4 +1,9 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import time
+from datetime import datetime
 from core.database import load_data, save_data
 from rich.console import Console
 from rich.panel import Panel
@@ -34,12 +39,13 @@ def process_checkout(endpoint_address):
     console.print("\n[bold yellow]⚡ Processing Quantum Payment & Cluster Allocation...[/bold yellow]")
     time.sleep(1)
     
-    # عرض الفاتورة (Receipt)
+    # عرض الفاتورة وطباعتها
     generate_receipt(cart, total_price, endpoint_address)
+    save_receipt_to_file(cart, total_price, endpoint_address)
     return True
 
 def generate_receipt(cart, total_price, endpoint_address):
-    """طباعة إيصال رقمي فاخر بعمليات الشراء"""
+    """طباعة إيصال رقمي على الشاشة"""
     receipt_table = Table(title="[bold green]📜 OFFICIAL SPACETIME & AI RECEIPT[/bold green]", show_header=True)
     receipt_table.add_column("Item Name", style="cyan")
     receipt_table.add_column("Type", style="yellow")
@@ -56,6 +62,37 @@ def generate_receipt(cart, total_price, endpoint_address):
         title="[cyan]Transaction Details[/cyan]",
         border_style="green"
     ))
+
+def save_receipt_to_file(cart, total_price, endpoint_address):
+    """حفظ وتخزين جميع عمليات الشراء وتراكمها في سجل الفواتير"""
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    filename = "receipts_log.txt"  # اسم سجل الفواتير الشامل
+    
+    content = f"""==================================================
+           OFFICIAL AI MARKETPLACE RECEIPT        
+==================================================
+Date/Time: {timestamp}
+Target Endpoint: {endpoint_address}
+--------------------------------------------------
+PURCHASED AGENTS:
+"""
+    for item in cart:
+        content += f"- {item['name']} ({item['specialty']}) | Price: {item['price']} TC\n"
+        
+    content += f"""--------------------------------------------------
+TOTAL PAID: {total_price} TC
+STATUS: SUCCESSFUL & DEPLOYED
+==================================================
+
+"""
+    
+    try:
+        # لاحظ استخدام Mode "a" بدلاً من "w" لكي يضيف للأسفل ولا يمسح السابق
+        with open(filename, "a", encoding="utf-8") as f:
+            f.write(content)
+        console.print(f"[bold green]📄 Receipt logged & saved to '{filename}'![/bold green]")
+    except Exception as e:
+        console.print(f"[red]⚠️ Failed to export receipt file: {e}[/red]")
 
 def track_deployment_status():
     """تتبع حالة نشر وشحن الوكلاء"""

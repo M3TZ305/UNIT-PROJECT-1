@@ -1,3 +1,8 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import questionary
 from core.database import load_data, save_data
 from rich.console import Console
 from rich.table import Table
@@ -81,3 +86,18 @@ def get_recommendations():
     bought_ids = {item["id"] for item in history}
     recommended = [a for a in agents if a["id"] not in bought_ids]
     return recommended[:2] if recommended else agents[:2]
+
+def top_up_tokens():
+    """شحن رصيد المحفظة بالتوكنز"""
+    data = load_data()
+    amount_str = questionary.text("Enter amount of Tokens (TC) to top-up:").ask()
+    try:
+        amount = int(amount_str)
+        if amount <= 0:
+            console.print("[red]❌ Amount must be greater than zero.[/red]")
+            return
+        data["tokens"] = data.get("tokens", 2000) + amount
+        save_data(data)
+        console.print(f"[green]✔ Successfully added {amount} TC! New Wallet Balance: {data['tokens']} TC[/green]")
+    except ValueError:
+        console.print("[red]❌ Invalid numeric value entered.[/red]")
