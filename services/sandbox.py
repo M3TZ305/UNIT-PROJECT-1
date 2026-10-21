@@ -6,16 +6,8 @@ from rich.panel import Panel
 
 console = Console()
 
-# محاكاة الاستجابات الذكية بناءً على تخصص الوكيل
-AGENT_RESPONSES = {
-    "Architecture": "[DeepCode-V4] 🏗️ Analyzing repository structural patterns...\n>> Suggested Refactoring: Convert monolithic dependencies into modular clean packages.",
-    "Cyber Defense": "[SecGuard-X] 🛡️ Scanning target network for CVE vulnerabilities...\n>> Threat Status: Zero critical vulnerabilities detected. Firewall grid active.",
-    "Analytics": "[DataVision-Pro] 📊 Aggregating multi-source token usage trends...\n>> Insights: High efficiency detected in batch GPU allocations.",
-    "Content Generation": "[NeuralWriter] ✍️ Generating optimized technical summary...\n>> Output: System operating at optimal neural throughput with minimal latency."
-}
-
 def run_agent_sandbox():
-    """ساحة اختبار وتجربة الوكلاء الذكيين المشتراة حياً"""
+    """ساحة اختبار وتجربة الوكلاء الذكيين محلياً وبشكل تفاعلي ذكي"""
     data = load_data()
     history = data.get("history", [])
     
@@ -23,7 +15,6 @@ def run_agent_sandbox():
         console.print("[yellow]⚠️ You haven't deployed any AI Agents yet! Buy an agent first to unlock the Sandbox.[/yellow]")
         return
 
-    # استخراج قائمة الأسماء المتاحة في السجل
     choices = [f"{item['id']} - {item['name']} ({item['specialty']})" for item in history]
     choices.append("🔙 Return to Main Menu")
     
@@ -35,7 +26,6 @@ def run_agent_sandbox():
     if not selected or selected == "🔙 Return to Main Menu":
         return
         
-    # معرفة الوكيل المختار
     selected_id = selected.split(" - ")[0]
     agent = next((a for a in history if a["id"] == selected_id), None)
     
@@ -43,7 +33,7 @@ def run_agent_sandbox():
         return
 
     console.print(Panel(
-        f"[bold cyan]🤖 Connected to {agent['name']} Sandbox Environment[/bold cyan]\n"
+        f"[bold cyan]🤖 Connected to {agent['name']} Live AI Sandbox[/bold cyan]\n"
         f"[dim]Specialty: {agent['specialty']} | Success Rate: {agent['success_rate']}%[/dim]\n"
         f"[yellow]Type your prompt/command to execute on the agent (or 'exit' to quit):[/yellow]",
         border_style="cyan"
@@ -56,19 +46,21 @@ def run_agent_sandbox():
             console.print(f"[dim]Disconnecting from {agent['name']} Sandbox...[/dim]")
             break
             
-        # محاكاة التفكير والتوليد للـ AI
-        with console.status(f"[bold green]🧠 {agent['name']} is processing prompt...[/bold green]", spinner="dots"):
-            time.sleep(1.2)
+        with console.status(f"[bold green]🧠 {agent['name']} is processing neural prompt...[/bold green]", spinner="dots"):
+            time.sleep(1.0) # محاكاة وقت التفكير البشري
             
-        # جلب الاستجابة بناءً على التخصص
-        response = AGENT_RESPONSES.get(
-            agent['specialty'], 
-            f"[{agent['name']}] Successfully processed prompt: '{prompt}'. Executed with 100% accuracy."
-        )
+        # توليد رد ذكي بناءً على إدخال المستخدم وتخصص الوكيل
+        user_input_lower = prompt.lower()
+        if "hi" in user_input_lower or "hello" in user_input_lower or "مرحبا" in user_input_lower:
+            ai_output = f"Hello Operator! As {agent['name']}, I am fully online and ready to assist you with {agent['specialty']} tasks."
+        elif "code" in user_input_lower:
+            ai_output = f"[{agent['name']}] Analyzing code syntax... All structures are optimized for high-performance deployment."
+        else:
+            ai_output = f"[{agent['name']}] Successfully analyzed query: '{prompt}'. Executing specialized protocols for {agent['specialty']} with 99.8% precision."
         
         console.print(Panel(
-            f"[bold white]{response}[/bold white]",
-            title="[bold green]🤖 AI Output[/bold green]",
+            f"[bold white]{ai_output}[/bold white]",
+            title=f"[bold green]🤖 {agent['name']} Output[/bold green]",
             border_style="green"
         ))
         console.print()
