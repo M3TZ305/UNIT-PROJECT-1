@@ -16,15 +16,20 @@ def load_data():
             "agents": DEFAULT_AGENTS,
             "cart": [],
             "history": [],
-            "tokens": 2000
+            "tokens": 2000,
+            "theme": "Cyberpunk Neon"
         }
         save_data(initial_data)
         return initial_data
+    
     try:
         with open(DB_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+            if "theme" not in data:
+                data["theme"] = "Cyberpunk Neon"
+            return data
     except:
-        return {"agents": DEFAULT_AGENTS, "cart": [], "history": [], "tokens": 2000}
+        return {"agents": DEFAULT_AGENTS, "cart": [], "history": [], "tokens": 2000, "theme": "Cyberpunk Neon"}
 
 def save_data(data):
     with open(DB_FILE, "w", encoding="utf-8") as f:

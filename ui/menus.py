@@ -1,6 +1,7 @@
 import questionary
 from rich.table import Table
 from rich.console import Console
+from core.database import load_data, save_data
 
 console = Console()
 
@@ -17,11 +18,11 @@ def display_agent_table(agents):
     console.print(table)
 
 def main_menu():
-    from core.database import load_data
     data = load_data()
     tokens = data.get("tokens", 0)
+    current_theme = data.get("theme", "Cyberpunk Neon")
     
-    console.print(f"\n[bold yellow]💰 Wallet Balance: {tokens} TC[/bold yellow]")
+    console.print(f"\n[bold yellow]💰 Wallet Balance: {tokens} TC | 🎨 Theme: {current_theme}[/bold yellow]")
     
     return questionary.select(
         "Choose your AI Orchestration Action:",
@@ -31,8 +32,26 @@ def main_menu():
             "💡 Get AI Recommendations",
             "🛍️ View My Cart & Checkout",
             "💳 Top-Up Wallet Tokens",
+            "🎨 Switch Terminal Theme",
             "📦 Track Deployment Status",
             "⚙️ [Manager Portal] Manage Agents & Stock",
             "🚪 Exit"
         ]
     ).ask()
+
+def select_theme_menu():
+    """قائمة اختيار الثيمات"""
+    choice = questionary.select(
+        "Choose a Visual Theme Style:",
+        choices=[
+            "Cyberpunk Neon",
+            "Matrix Hacker",
+            "Gold Luxury"
+        ]
+    ).ask()
+    
+    if choice:
+        data = load_data()
+        data["theme"] = choice
+        save_data(data)
+        console.print(f"[bold green]✔ Theme changed to '{choice}'! Re-open or refresh to apply full banner styles.[/bold green]")
