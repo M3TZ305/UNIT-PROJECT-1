@@ -1,44 +1,93 @@
-# UNIT-PROJECT-1
+Markdown
 
+# 🤖 Autonomous AI Agent Orchestra & Marketplace (CLI)
 
-## Based on what you’ve learned until now , create a project of your choosing (impress us with your imagination) . This project must at least satisfy the following minimum requirements :
+> An advanced, interactive command-line interface (CLI) platform designed for managing, purchasing, and deploying AI agent clusters. Built with Python, featuring rich terminal UI, interactive menus, and modular software architecture.
 
-- Must be interactive on CLI.
-- Use your coding skills in Python accurately.
-- Organize Your Code into modules & (or packages)
-- Use git & Github to track changes in your code.
+---
 
-## Example Project :  An online Grocery Store :
+## 📌 Project Overview
 
-#### Overview : An online store that sells fruits to customers. This online store has 2 main users. The customer and the manager of the store . Each one of them should be able to do the following tasks for the store to function properly . 
+The **AI Agent Marketplace** is a futuristic terminal-based application that allows developers and administrators to browse, configure, purchase, and deploy autonomous artificial intelligence agents. The system features two distinct user roles: **Customers (Developers)** and **Managers (Administrators)**, ensuring full e-commerce and cluster management functionality.
 
-### Features & User Stories
-#### As a customer I should be able to do the following :
-- Browse  Products . 
-- View the product info (summary, specs, price, quantity , etc.)
-- Search for Products.
-- Get recommendations for my next purchase based on my purchase history.
-- Add Products to the shopping cart .
-- Remove a product from the shopping cart.
-- List the products in my shopping cart. 
-- Continue to checkout . 
-- Fill in my address for delivery.
-- Get receipt of my purchases.
-- Check delivery status . 
+---
 
+## 👥 Features & User Stories
 
+### As a Customer (Developer), I should be able to:
 
-#### Usage :
- Explain to the user how to use your project . 
- for example:
- - type in search product_name to search for a product.
- - type in list_products to show all the products in the grocery.
- - type in show product_name to get information about this product.
- - type in buy product_name to buy the product . 
- - and so on...
+- **Browse Products:** View the available catalogue of AI agents and their specializations.
+- **View Product Info:** Inspect deep specifications, success rates, token prices, and stock levels.
+- **Search for Products:** Instantly search for specific AI agents by name or specialization keyword.
+- **Get Recommendations:** Receive smart AI recommendations for the next deployment based on past history.
+- **Add to Cart:** Select and add desired AI agents to the shopping cart.
+- **Remove from Cart:** Modify the cart by removing unwanted agents.
+- **List Cart Products:** View all items currently in the shopping cart with total token calculations.
+- **Proceed to Checkout:** Complete purchases securely using platform tokens.
+- **Fill Delivery Address:** Provide target cluster endpoint/IP addresses for deployment.
+- **Get Purchase Receipt:** Receive an official digital receipt with transaction details.
+- **Check Deployment Status:** Monitor real-time synchronization and deployment status of purchased agents.
 
+### As a Manager (Administrator), I should be able to:
 
-### For your project. Edit this README.md file to include your own project name,  overview, user stories, and usage. 
+- **Access Manager Portal:** Securely log in using administrator credentials.
+- **View Inventory & Stock:** Monitor active stock quantities and marketplace performance.
+- **Register New Agents:** Add new AI models and agents to the live marketplace catalogue.
 
-### NOTE: before submitting the final project, please do the following command:
-`pip freeze > requirements.txt` to enable use to know & use the packages used in your project.
+---
+
+## 📂 Project Architecture (Modules & Packages)
+
+The project follows a clean separation of concerns, organized into robust packages and modules:
+ai_agent_marketplace/
+│
+├── core/ # Core system logic & database
+│ ├── init.py
+│ └── database.py # Local JSON state management
+│
+├── ui/ # Visual interface & animations
+│ ├── init.py
+│ ├── animations.py # Rich terminal spinners and banners
+│ └── menus.py # Interactive questionary menus and tables
+│
+├── services/ # Business logic & operations
+│ ├── init.py
+│ ├── store.py # Cart, search, and recommendations
+│ ├── checkout.py # Payment processing and receipts
+│ └── manager.py # Administrator inventory control
+│
+├── main.py # Main application entry point
+├── requirements.txt # Project Python dependencies
+└── README.md # Project documentation
+
+---
+
+## ⚙️ Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repository-url>
+   cd ai_agent_marketplace
+   Install required dependencies:
+   ```
+
+Bash
+pip install -r requirements.txt
+Run the application:
+
+Bash
+python main.py
+🕹️ Usage Guide
+When you run python main.py, an interactive terminal dashboard will launch. Use your keyboard Arrow Keys to navigate and Enter to select options:
+
+Browse AI Agents Catalogue: View all available AI agents in a structured rich table.
+
+Search for an Agent: Type keywords (e.g., Architecture, Security) to filter agents.
+
+Get AI Recommendations: Discover tailored agent suggestions for your infrastructure.
+
+View My Cart & Checkout: Manage your selected items, input your target IP/Endpoint, and execute deployment.
+
+Track Deployment Status: Review your active cluster node sync states.
+
+Manager Portal: Enter access key (1234) to manage inventory and register new agents.
