@@ -3,7 +3,7 @@ import os
 os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data
-from ui.animations import display_banner, show_deployment_animation, cyber_matrix_intro
+from ui.animations import cinematic_startup_sequence, show_deployment_animation
 from ui.menus import main_menu, display_agent_table, select_theme_menu
 from ui.dashboard import display_live_dashboard
 from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
@@ -20,8 +20,8 @@ if hasattr(sys.stdout, 'reconfigure'):
 console = Console()
 
 def run_app():
-    display_banner()
-    cyber_matrix_intro()
+    # استدعاء شاشة الإطلاق السينمائية الضخمة والواضحة
+    cinematic_startup_sequence()
     
     while True:
         choice = main_menu()

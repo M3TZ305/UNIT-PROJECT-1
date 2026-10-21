@@ -1,18 +1,19 @@
+import time
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import time
 from datetime import datetime
 from core.database import load_data, save_data
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+from rich.text import Text
 
 console = Console()
 
 def process_checkout(endpoint_address):
-    """إتمام عملية الشراء، خصم الرصيد، حفظ التاريخ، وإصدار الفاتورة"""
+    """إتمام عملية الشراء، خصم الرصيد، حفظ التاريخ، وعرض الاحتفال والفاتورة"""
     data = load_data()
     cart = data["cart"]
     
@@ -39,13 +40,44 @@ def process_checkout(endpoint_address):
     console.print("\n[bold yellow]⚡ Processing Quantum Payment & Cluster Allocation...[/bold yellow]")
     time.sleep(1)
     
-    # عرض الفاتورة وطباعتها
+    # 🌟 عرض شاشة الاحتفال الاحتفالية الجديدة (Success Celebration Badge)
+    display_success_celebration()
+    
+    # عرض الفاتورة وطباعتها وتخزينها في السجل
     generate_receipt(cart, total_price, endpoint_address)
     save_receipt_to_file(cart, total_price, endpoint_address)
     return True
 
+def display_success_celebration():
+    """أنيميشن احتفالي حركي ومبهر مع تأثير الوميض والسبينر ببطء ملحوظ للمستخدم"""
+    # 1. سبينر تفاعلي يأخذ وقتاً كافياً ليلاحظه المستخدم (2.5 ثانية)
+    with console.status("[bold yellow]🎆 Launching Cluster Fireworks & Generating License...[/bold yellow]", spinner="earth"):
+        time.sleep(2.5)
+    
+    # 2. أنيميشن وميض ملون أبطأ قليلاً ليكون ملاحظاً بوضوح (0.35 ثانية لكل ومضة)
+    colors = ["green", "cyan", "yellow", "green", "cyan", "green"]
+    for color in colors:
+        console.print(Text("✨ SUCCESS! ALL NODES DEPLOYED & SYNCED ✨", style=f"bold {color}"), justify="center")
+        time.sleep(0.35)
+        
+    # فاصل قصير مريح للبصر قبل إظهار الصندوق النهائي
+    time.sleep(0.4)
+        
+    # 3. صندوق الاحتفال والترخيص النهائي المتوهج
+    celebration_box = Panel(
+        "[bold green]✨ TRANSACTION COMPLETE & CLUSTER DEPLOYED ✨[/bold green]\n"
+        "[cyan]═══════════════════════════════════════════════[/cyan]\n"
+        "[bold yellow]🔐 SECURE LICENSE BADGE GENERATED SUCCESSFULLY[/bold yellow]\n"
+        "[dim]Status: Verified by Quantum Ledger. All nodes are active & synced.[/dim]",
+        title="[bold green]🎉 SUCCESS CELEBRATION[/bold green]",
+        border_style="bold green"
+    )
+    console.print("\n")
+    console.print(celebration_box)
+    console.print("\n")
+
 def generate_receipt(cart, total_price, endpoint_address):
-    """طباعة إيصال رقمي على الشاشة"""
+    """طباعة إيصال رقمي فاخر على الشاشة"""
     receipt_table = Table(title="[bold green]📜 OFFICIAL SPACETIME & AI RECEIPT[/bold green]", show_header=True)
     receipt_table.add_column("Item Name", style="cyan")
     receipt_table.add_column("Type", style="yellow")
@@ -66,7 +98,7 @@ def generate_receipt(cart, total_price, endpoint_address):
 def save_receipt_to_file(cart, total_price, endpoint_address):
     """حفظ وتخزين جميع عمليات الشراء وتراكمها في سجل الفواتير"""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    filename = "receipts_log.txt"  # اسم سجل الفواتير الشامل
+    filename = "receipts_log.txt"
     
     content = f"""==================================================
            OFFICIAL AI MARKETPLACE RECEIPT        
@@ -85,9 +117,7 @@ STATUS: SUCCESSFUL & DEPLOYED
 ==================================================
 
 """
-    
     try:
-        # لاحظ استخدام Mode "a" بدلاً من "w" لكي يضيف للأسفل ولا يمسح السابق
         with open(filename, "a", encoding="utf-8") as f:
             f.write(content)
         console.print(f"[bold green]📄 Receipt logged & saved to '{filename}'![/bold green]")
