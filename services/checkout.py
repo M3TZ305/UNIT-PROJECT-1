@@ -142,3 +142,28 @@ def track_deployment_status():
         table.add_row(item["name"], item["specialty"], "🟢 ONLINE / SYNCED (100%)")
         
     console.print(table)
+
+def view_purchase_history():
+    """عرض سجل المشتريات والفواتير السابقة داخل جدول أنيق في البرنامج"""
+    data = load_data()
+    history = data.get("history", [])
+    
+    if not history:
+        console.print("[yellow]📜 No purchase history or receipts found yet.[/yellow]")
+        return
+        
+    table = Table(title="[bold cyan]📜 Past Purchase History & Deployed Receipts[/bold cyan]", show_header=True)
+    table.add_column("#", style="dim", width=4)
+    table.add_column("Agent Name", style="bold green")
+    table.add_column("Specialty", style="yellow")
+    table.add_column("Price Paid", justify="right", style="cyan")
+    
+    for idx, item in enumerate(history, 1):
+        table.add_row(
+            str(idx),
+            item["name"],
+            item["specialty"],
+            f"{item['price']} TC"
+        )
+    console.print(table)
+    console.print("[dim]💡 Tip: Full text receipts are also automatically appended to 'receipts_log.txt'.[/dim]\n")

@@ -31,6 +31,7 @@ def main_menu():
             "🔍 Search for an Agent",
             "💡 Get AI Recommendations",
             "📊 View Live System Dashboard",
+            "📜 View Past Receipts & History",
             "🛍️ View My Cart & Checkout",
             "💳 Top-Up Wallet Tokens",
             "🎨 Switch Terminal Theme",
