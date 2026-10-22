@@ -3,6 +3,7 @@ import os
 os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data, save_data
+from services.export import export_data_to_csv
 from rich.console import Console
 from rich.table import Table
 
@@ -29,6 +30,7 @@ def manager_dashboard():
             choices=[
                 "📊 View All Inventory & Stock",
                 "➕ Register New AI Agent",
+                "📁 Export System Data to CSV (report.csv)",
                 "🔙 Back to Main Menu"
             ]
         ).ask()
@@ -37,6 +39,8 @@ def manager_dashboard():
             show_inventory()
         elif choice == "➕ Register New AI Agent":
             add_new_agent()
+        elif choice == "📁 Export System Data to CSV (report.csv)":
+            export_data_to_csv()
         else:
             break
 

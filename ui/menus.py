@@ -35,6 +35,7 @@ def main_menu():
             "🧪 Launch AI Agent Sandbox Playground",
             "📊 View Live System Dashboard",
             "📜 View Past Receipts & History",
+            "📁 Export Data Report to CSV",
             "🛍️ View My Cart & Checkout",
             "💳 Top-Up Wallet Tokens",
             "🎨 Switch Terminal Theme",

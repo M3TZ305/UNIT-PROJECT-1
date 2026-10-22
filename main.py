@@ -12,6 +12,7 @@ from services.checkout import process_checkout, track_deployment_status, view_pu
 from services.manager import manager_dashboard
 from services.sandbox import run_agent_sandbox
 from services.minigame import run_hacking_minigame
+from services.export import export_data_to_csv
 from rich.console import Console
 
 if hasattr(sys.stdout, 'reconfigure'):
@@ -78,6 +79,10 @@ def run_app():
         elif choice == "📜 View Past Receipts & History":
             smooth_menu_transition("Past Receipts Ledger")
             view_purchase_history()
+                
+        elif choice == "📁 Export Data Report to CSV":
+            smooth_menu_transition("CSV Data Exporter")
+            export_data_to_csv()
                 
         elif choice == "🛍️ View My Cart & Checkout":
             smooth_menu_transition("Shopping Cart & Checkout")

@@ -146,8 +146,18 @@
             "success_rate": 97.2,
             "price": 350,
             "stock": 8
+        },
+        {
+            "id": "01",
+            "name": "DeepCode-V4",
+            "specialty": "Architecture",
+            "success_rate": 99.4,
+            "price": 450,
+            "stock": 10,
+            "buyer": "Mutaz",
+            "timestamp": "2026-10-22 10:46:06"
         }
     ],
-    "tokens": 550,
+    "tokens": 100,
     "theme": "Matrix Hacker"
 }

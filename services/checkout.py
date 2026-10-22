@@ -32,10 +32,15 @@ def process_checkout(endpoint_address):
     if not buyer_name or not buyer_name.strip():
         buyer_name = "Authorized Developer"
 
-    # خصم الرصيد وتفريغ السلة ونقل المنتجات للسجل
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # خصم الرصيد وتفريغ السلة ونقل المنتجات للسجل مع اسم المشتري وتاريخ الشراء
     data["tokens"] -= total_price
     for item in cart:
-        data["history"].append(item)
+        item_copy = item.copy()
+        item_copy["buyer"] = buyer_name.strip()
+        item_copy["timestamp"] = timestamp
+        data["history"].append(item_copy)
         
     data["cart"] = []
     save_data(data)
@@ -149,15 +154,19 @@ def view_purchase_history():
     table = Table(title="[bold cyan]📜 Past Purchase History & Deployed Receipts[/bold cyan]", show_header=True)
     table.add_column("#", style="dim", width=4)
     table.add_column("Agent Name", style="bold green")
+    table.add_column("Buyer Name", style="magenta")
     table.add_column("Specialty", style="yellow")
+    table.add_column("Purchase Time", style="blue")
     table.add_column("Price Paid", justify="right", style="cyan")
     
     for idx, item in enumerate(history, 1):
         table.add_row(
             str(idx),
-            item["name"],
-            item["specialty"],
-            f"{item['price']} TC"
+            item.get("name", "N/A"),
+            item.get("buyer", "Authorized Developer"),
+            item.get("specialty", "N/A"),
+            item.get("timestamp", "N/A"),
+            f"{item.get('price', 0)} TC"
         )
     console.print(table)
     console.print("[dim]💡 Tip: Full text receipts are also automatically appended to 'receipts_log.txt'.[/dim]\n")
