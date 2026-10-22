@@ -1,19 +1,18 @@
 import time
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+import random
+import uuid
 from datetime import datetime
 from core.database import load_data, save_data
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
+import questionary
 
 console = Console()
 
 def process_checkout(endpoint_address):
-    """إتمام عملية الشراء مع خطوات سينمائية بطيئة وملاحظة بوضوح للمستخدم"""
+    """إتمام عملية الشراء، توليد شهادة الترخيص الرقمية ASCII Art، وحفظها"""
     data = load_data()
     cart = data["cart"]
     
@@ -28,6 +27,11 @@ def process_checkout(endpoint_address):
         console.print(f"[red]❌ Insufficient tokens! You have {current_tokens} TC, but need {total_price} TC.[/red]")
         return False
         
+    # طلب اسم المشتري لإصدار شهادة الترخيص الرسمية
+    buyer_name = questionary.text("Enter License Holder Full Name:").ask()
+    if not buyer_name or not buyer_name.strip():
+        buyer_name = "Authorized Developer"
+
     # خصم الرصيد وتفريغ السلة ونقل المنتجات للسجل
     data["tokens"] -= total_price
     for item in cart:
@@ -36,29 +40,34 @@ def process_checkout(endpoint_address):
     data["cart"] = []
     save_data(data)
     
-    # 1. مرحلة معالجة الدفع ببطء ملحوظ
+    # 1. معالجة الدفع السينمائية
     console.print("\n")
     with console.status("[bold yellow]⚡ Processing Quantum Payment & Cluster Allocation...[/bold yellow]", spinner="dots"):
-        time.sleep(2.0)  # توقف واضح ليقرأ المستخدم الرسالة
+        time.sleep(2.0)
     
-    # 2. مرحلة شاشة الاحتفال والوميض الحركي
+    # 2. شاشة الاحتفال والحركات الحركية
     display_success_celebration()
     
-    # 3. توقف قصير مريح قبل طباعة الفاتورة على الشاشة
-    with console.status("[bold cyan]📜 Compiling Official Spacetime Receipt...[/bold cyan]", spinner="arc"):
-        time.sleep(1.8)
-    
-    generate_receipt(cart, total_price, endpoint_address)
-    
-    # 4. توقف قبل حفظ الملف وتأكيد السجل
-    with console.status("[bold green]💾 Exporting & Syncing Receipts Ledger...[/bold green]", spinner="line"):
+    # 3. توليد وعرض شهادة الترخيص الرقمية بـ ASCII Art
+    with console.status("[bold cyan]🎨 Generating Encrypted ASCII Digital License...[/bold cyan]", spinner="arc"):
         time.sleep(1.5)
         
-    save_receipt_to_file(cart, total_price, endpoint_address)
+    cert_text, ref_id = generate_ascii_certificate(buyer_name.strip(), endpoint_address)
+    
+    # طباعة الشهادة بألوان متوهجة فخمة
+    console.print(Panel(
+        f"[bold bright_cyan]{cert_text}[/bold bright_cyan]",
+        title="[bold green]🏆 OFFICIAL DIGITAL LICENSE CERTIFICATE[/bold green]",
+        border_style="bold bright_cyan"
+    ))
+    time.sleep(2.0)
+    
+    # 4. حفظ الفاتورة والشهادة في ملف السجل
+    save_receipt_to_file(cart, total_price, endpoint_address, buyer_name.strip(), ref_id, cert_text)
     return True
 
 def display_success_celebration():
-    """أنيميشن احتفالي حركي ومبهر مع تأثير الوميض ببطء ملحوظ"""
+    """أنيميشن احتفالي حركي ومبهر مع تأثير الوميض"""
     with console.status("[bold yellow]🎆 Launching Cluster Fireworks & Generating License...[/bold yellow]", spinner="earth"):
         time.sleep(2.2)
     
@@ -68,69 +77,43 @@ def display_success_celebration():
         time.sleep(0.35)
         
     time.sleep(0.5)
-        
-    celebration_box = Panel(
-        "[bold green]✨ TRANSACTION COMPLETE & CLUSTER DEPLOYED ✨[/bold green]\n"
-        "[cyan]═══════════════════════════════════════════════[/cyan]\n"
-        "[bold yellow]🔐 SECURE LICENSE BADGE GENERATED SUCCESSFULLY[/bold yellow]\n"
-        "[dim]Status: Verified by Quantum Ledger. All nodes are active & synced.[/dim]",
-        title="[bold green]🎉 SUCCESS CELEBRATION[/bold green]",
-        border_style="bold green"
-    )
-    console.print("\n")
-    console.print(celebration_box)
-    console.print("\n")
-    time.sleep(1.0)  # وقفة بعد عرض صندوق الاحتفال ليتمكن المستخدم من تأمله
 
-def generate_receipt(cart, total_price, endpoint_address):
-    """طباعة إيصال رقمي فاخر على الشاشة"""
-    receipt_table = Table(title="[bold green]📜 OFFICIAL SPACETIME & AI RECEIPT[/bold green]", show_header=True)
-    receipt_table.add_column("Item Name", style="cyan")
-    receipt_table.add_column("Type", style="yellow")
-    receipt_table.add_column("Price", justify="right", style="green")
+def generate_ascii_certificate(buyer_name, endpoint_address):
+    """توليد شهادة ترخيص رقمية ضخمة بتصميم ASCII Art فريد ومشفر"""
+    ref_id = f"CRN-{uuid.uuid4().hex[:6].upper()}-{random.randint(1000, 9999)}"
+    barcode = "█ █║█║█ █║█ █║█║█ █║█ █║█║█ █ █║██"
     
-    for item in cart:
-        receipt_table.add_row(item["name"], item["specialty"], f"{item['price']} TC")
-        
-    console.print(receipt_table)
-    console.print(Panel(
-        f"[bold]Target Endpoint Address:[/bold] {endpoint_address}\n"
-        f"[bold]Total Paid:[/bold] {total_price} TC\n"
-        f"[bold]Status:[/bold] [green]SUCCESSFULLY DEPLOYED & LICENSED[/green]",
-        title="[cyan]Transaction Details[/cyan]",
-        border_style="green"
-    ))
-    time.sleep(1.5)  # وقفة لتأمل الفاتورة قبل إكمال أي عملية أخرى
+    ascii_cert = f"""
+  +------------------------------------------------------------------+
+  |                   AI CLUSTER LICENSE CERTIFICATE                 |
+  +------------------------------------------------------------------+
+  |  HOLDER NAME  : {buyer_name:<45} |
+  |  REFERENCE ID : {ref_id:<45} |
+  |  ENDPOINT IP  : {endpoint_address:<45} |
+  |  STATUS       : [ SECURED & VERIFIED BY QUANTUM CORE ]           |
+  |                                                                  |
+  |  SECURE BARCODE: {barcode}                 |
+  +------------------------------------------------------------------+
+    """
+    return ascii_cert, ref_id
 
-def save_receipt_to_file(cart, total_price, endpoint_address):
-    """حفظ وتخزين جميع عمليات الشراء وتراكمها في سجل الفواتير"""
+def save_receipt_to_file(cart, total_price, endpoint_address, buyer_name, ref_id, cert_text):
+    """حفظ شهادة الترخيص والفاتورة تراكمياً في سجل الفواتير"""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     filename = "receipts_log.txt"
     
-    content = f"""==================================================
-           OFFICIAL AI MARKETPLACE RECEIPT        
-==================================================
-Date/Time: {timestamp}
-Target Endpoint: {endpoint_address}
+    content = f"""{cert_text}
+Timestamp: {timestamp}
+Total Paid: {total_price} TC
 --------------------------------------------------
-PURCHASED AGENTS:
-"""
-    for item in cart:
-        content += f"- {item['name']} ({item['specialty']}) | Price: {item['price']} TC\n"
-        
-    content += f"""--------------------------------------------------
-TOTAL PAID: {total_price} TC
-STATUS: SUCCESSFUL & DEPLOYED
-==================================================
-
 """
     try:
         with open(filename, "a", encoding="utf-8") as f:
             f.write(content)
-        console.print(f"[bold green]📄 Receipt logged & saved to '{filename}'![/bold green]\n")
+        console.print(f"[bold green]📄 Digital Certificate & Receipt successfully logged to '{filename}'![/bold green]\n")
         time.sleep(1.0)
     except Exception as e:
-        console.print(f"[red]⚠️ Failed to export receipt file: {e}[/red]")
+        console.print(f"[red]⚠️ Failed to export certificate file: {e}[/red]")
 
 def track_deployment_status():
     """تتبع حالة نشر وشحن الوكلاء"""

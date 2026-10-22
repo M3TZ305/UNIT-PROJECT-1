@@ -27,6 +27,7 @@ def main_menu():
     return questionary.select(
         "Choose your AI Orchestration Action:",
         choices=[
+            "🖥️ Live Split-Screen Dashboard Matrix",
             "🛒 Browse AI Agents Catalogue",
             "🔍 Search for an Agent",
             "💡 Get AI Recommendations",

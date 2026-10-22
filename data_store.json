@@ -138,8 +138,16 @@
             "success_rate": 97.2,
             "price": 350,
             "stock": 8
+        },
+        {
+            "id": "03",
+            "name": "DataVision-Pro",
+            "specialty": "Analytics",
+            "success_rate": 97.2,
+            "price": 350,
+            "stock": 8
         }
     ],
-    "tokens": 900,
+    "tokens": 550,
     "theme": "Matrix Hacker"
 }

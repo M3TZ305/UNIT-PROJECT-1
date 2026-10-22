@@ -6,6 +6,7 @@ from core.database import load_data
 from ui.animations import cinematic_startup_sequence, show_deployment_animation, smooth_menu_transition
 from ui.menus import main_menu, display_agent_table, select_theme_menu
 from ui.dashboard import display_live_dashboard
+from ui.dashboard_matrix import run_live_matrix_dashboard
 from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
 from services.checkout import process_checkout, track_deployment_status, view_purchase_history
 from services.manager import manager_dashboard
@@ -29,7 +30,11 @@ def run_app():
         choice = main_menu()
         data = load_data()
         
-        if choice == "🛒 Browse AI Agents Catalogue":
+        if choice == "🖥️ Live Split-Screen Dashboard Matrix":
+            smooth_menu_transition("Live Split-Screen Matrix")
+            run_live_matrix_dashboard()
+                
+        elif choice == "🛒 Browse AI Agents Catalogue":
             smooth_menu_transition("AI Catalogue")
             display_agent_table(data["agents"])
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter to go back):").ask()
