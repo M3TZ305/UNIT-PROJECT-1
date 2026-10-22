@@ -1,6 +1,7 @@
 import pytest
 from core.database import load_data, save_data
 from services.store import search_agents, add_to_cart, remove_from_cart
+from ui.menus import calculate_operator_rank
 
 def test_database_structure():
     """التحقق من أن قاعدة البيانات تحمل الهيكل الأساسي بشكل صحيح"""
@@ -37,3 +38,10 @@ def test_cart_flow():
     
     data_final = load_data()
     assert len(data_final["cart"]) == 0
+
+def test_operator_rank():
+    """اختبار حساب رتبة المستخدم بناءً على سجل المشتريات"""
+    assert "Novice Operator" in calculate_operator_rank({"history": []})
+    assert "Cyber Specialist" in calculate_operator_rank({"history": [{}]})
+    assert "Elite Hacker" in calculate_operator_rank({"history": [{}, {}, {}]})
+    assert "Master Architect" in calculate_operator_rank({"history": [{}, {}, {}, {}, {}, {}]})

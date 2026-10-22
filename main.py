@@ -31,18 +31,18 @@ def run_app():
         choice = main_menu()
         data = load_data()
         
-        if choice == "🖥️ Live Split-Screen Dashboard Matrix":
+        if choice == "🖥️  Live Split-Screen Dashboard Matrix":
             smooth_menu_transition("Live Split-Screen Matrix")
             run_live_matrix_dashboard()
                 
-        elif choice == "🛒 Browse AI Agents Catalogue":
+        elif choice == "🛒  Browse AI Agents Catalogue":
             smooth_menu_transition("AI Catalogue")
             display_agent_table(data["agents"])
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter to go back):").ask()
             if agent_id:
                 add_to_cart(agent_id.strip())
                 
-        elif choice == "🔍 Search for an Agent":
+        elif choice == "🔍  Search for an Agent":
             smooth_menu_transition("Agent Search Engine")
             query = questionary.text("Enter search keyword (name or specialty):").ask()
             if query:
@@ -55,7 +55,7 @@ def run_app():
                 else:
                     console.print("[yellow]No agents found matching your query.[/yellow]")
                     
-        elif choice == "💡 Get AI Recommendations":
+        elif choice == "💡  Get AI Recommendations":
             smooth_menu_transition("Neural Recommendation Hub")
             recs = get_recommendations()
             console.print("\n[bold cyan]✨ Recommended AI Agents For Your Next Deployment:[/bold cyan]")
@@ -64,27 +64,27 @@ def run_app():
             if agent_id:
                 add_to_cart(agent_id.strip())
                 
-        elif choice == "🌐 Hack Dark Web for Free Tokens (Mini-Game)":
+        elif choice == "🌐  Hack Dark Web for Free Tokens (Mini-Game)":
             smooth_menu_transition("Dark Web Hacking Terminal")
             run_hacking_minigame()
                 
-        elif choice == "🧪 Launch AI Agent Sandbox Playground":
+        elif choice == "🧪  Launch AI Agent Sandbox Playground":
             smooth_menu_transition("AI Agent Sandbox Playground")
             run_agent_sandbox()
                 
-        elif choice == "📊 View Live System Dashboard":
+        elif choice == "📊  View Live System Dashboard":
             smooth_menu_transition("Live System Dashboard")
             display_live_dashboard()
                 
-        elif choice == "📜 View Past Receipts & History":
+        elif choice == "📜  View Past Receipts & History":
             smooth_menu_transition("Past Receipts Ledger")
             view_purchase_history()
                 
-        elif choice == "📁 Export Data Report to CSV":
+        elif choice == "📁  Export Data Report to CSV":
             smooth_menu_transition("CSV Data Exporter")
             export_data_to_csv()
                 
-        elif choice == "🛍️ View My Cart & Checkout":
+        elif choice == "🛍️  View My Cart & Checkout":
             smooth_menu_transition("Shopping Cart & Checkout")
             total = list_cart()
             if total > 0:
@@ -104,23 +104,23 @@ def run_app():
                     if item_id:
                         remove_from_cart(item_id.strip())
                         
-        elif choice == "💳 Top-Up Wallet Tokens":
+        elif choice == "💳  Top-Up Wallet Tokens":
             smooth_menu_transition("Token Wallet Top-Up")
             top_up_tokens()
             
-        elif choice == "🎨 Switch Terminal Theme":
+        elif choice == "🎨  Switch Terminal Theme":
             smooth_menu_transition("Terminal Theme Engine")
             select_theme_menu()
             
-        elif choice == "📦 Track Deployment Status":
+        elif choice == "📦  Track Deployment Status":
             smooth_menu_transition("Cluster Deployment Status")
             track_deployment_status()
             
-        elif choice == "⚙️ [Manager Portal] Manage Agents & Stock":
+        elif choice == "⚙️  Manager Portal":
             smooth_menu_transition("Manager Administrator Portal")
             manager_dashboard()
             
-        elif choice == "🚪 Exit" or choice is None:
+        elif choice == "🚪  Exit" or choice is None:
             console.print("[bold cyan]Exiting AI Orchestration Grid. Goodbye![/bold cyan]")
             break
         
