@@ -10,6 +10,7 @@ from services.store import search_agents, add_to_cart, remove_from_cart, list_ca
 from services.checkout import process_checkout, track_deployment_status, view_purchase_history
 from services.manager import manager_dashboard
 from services.sandbox import run_agent_sandbox
+from services.minigame import run_hacking_minigame
 from rich.console import Console
 
 if hasattr(sys.stdout, 'reconfigure'):
@@ -56,6 +57,10 @@ def run_app():
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter):").ask()
             if agent_id:
                 add_to_cart(agent_id.strip())
+                
+        elif choice == "🌐 Hack Dark Web for Free Tokens (Mini-Game)":
+            smooth_menu_transition("Dark Web Hacking Terminal")
+            run_hacking_minigame()
                 
         elif choice == "🧪 Launch AI Agent Sandbox Playground":
             smooth_menu_transition("AI Agent Sandbox Playground")

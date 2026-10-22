@@ -30,6 +30,7 @@ def main_menu():
             "🛒 Browse AI Agents Catalogue",
             "🔍 Search for an Agent",
             "💡 Get AI Recommendations",
+            "🌐 Hack Dark Web for Free Tokens (Mini-Game)",
             "🧪 Launch AI Agent Sandbox Playground",
             "📊 View Live System Dashboard",
             "📜 View Past Receipts & History",
