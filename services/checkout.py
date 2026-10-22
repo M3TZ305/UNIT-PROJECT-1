@@ -8,6 +8,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 import questionary
+from services.synergy import display_synergy_report
 
 console = Console()
 
@@ -170,3 +171,6 @@ def view_purchase_history():
         )
     console.print(table)
     console.print("[dim]💡 Tip: Full text receipts are also automatically appended to 'receipts_log.txt'.[/dim]\n")
+    
+    # عرض تقرير التناغم الاستراتيجي للوكلاء المملوكين
+    display_synergy_report(history)

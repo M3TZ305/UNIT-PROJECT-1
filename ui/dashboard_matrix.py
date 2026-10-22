@@ -7,6 +7,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.live import Live
 from core.database import load_data
+from ui.animations import clear_screen
 
 console = Console()
 
@@ -20,7 +21,7 @@ def generate_dashboard_layout():
     # هيكل الشاشة الأساسي (تقسيم عامودي: علوي وسفلي)
     layout = Layout()
     layout.split_column(
-        Layout(name="upper", ratio=4),
+        Layout(name="upper", ratio=3),
         Layout(name="lower", ratio=1)
     )
 
@@ -72,9 +73,10 @@ def generate_dashboard_layout():
     return layout
 
 def run_live_matrix_dashboard():
-    """تشغيل الشاشة التفاعلية المقسمة مع إمكانية الخروج بالضغط على q أو Enter أو Ctrl+C"""
+    """تشغيل الشاشة التفاعلية المقسمة بشكل مستقر ودون مشاكل في التيرمينال"""
+    clear_screen()
     console.print("[bold yellow]🚀 Launching Live Split-Screen Dashboard Matrix...[/bold yellow]")
-    console.print("[dim]Press [bold red]q[/bold red], [bold red]Enter[/bold red], or [bold red]Ctrl + C[/bold red] at any time to return to the main menu.[/dim]\n")
+    console.print("[dim]Press [bold red]Ctrl + C[/bold red] or [bold red]q[/bold red] to return to the main menu.[/dim]\n")
     time.sleep(1.0)
 
     is_windows = platform.system() == "Windows"
@@ -82,18 +84,24 @@ def run_live_matrix_dashboard():
         import msvcrt
 
     try:
-        with Live(generate_dashboard_layout(), refresh_per_second=4, screen=True) as live:
+        # استخدام screen=False لمنع مشاكل الـ Buffer واختفاء الشاشة في التيرمينال
+        with Live(generate_dashboard_layout(), refresh_per_second=2, screen=False) as live:
             while True:
                 if is_windows:
                     if msvcrt.kbhit():
-                        key = msvcrt.getch()
-                        if key in (b'q', b'Q', b'\r', b'\n', b'\x1b'):
-                            break
-                time.sleep(0.2)
+                        try:
+                            key = msvcrt.getch()
+                            if key in (b'\xe0', b'\x00'):
+                                msvcrt.getch()  # تفريغ مفاتيح الأسهم المزدوجة
+                            elif key in (b'q', b'Q', b'\r', b'\n', b'\x1b'):
+                                break
+                        except Exception:
+                            pass
+                time.sleep(0.5)
                 live.update(generate_dashboard_layout())
     except KeyboardInterrupt:
         pass
     
-    console.clear()
+    clear_screen()
     console.print("[green]✔ Exiting Live Dashboard Matrix. Returning to main menu...[/green]\n")
     time.sleep(0.8)

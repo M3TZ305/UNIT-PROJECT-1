@@ -5,6 +5,7 @@ from rich.panel import Panel
 from rich.align import Align
 from rich.text import Text
 from core.database import load_data, save_data
+from ui.animations import clear_screen
 
 console = Console()
 
@@ -55,70 +56,69 @@ def display_status_panel():
     console.print(panel)
 
 def main_menu():
-    display_status_panel()
-    
-    category = questionary.select(
-        "Choose AI Orchestration Category:",
-        choices=[
-            "🛒  Store & Shopping",
-            "🧪  AI Sandbox & Mini-games",
-            "📊  Wallet, Dashboards & Reports",
-            "⚙️  Manager Portal",
-            "🚪  Exit"
-        ]
-    ).ask()
-    
-    if category == "🛒  Store & Shopping":
-        sub_choice = questionary.select(
-            "Store & Shopping Menu:",
+    while True:
+        clear_screen()
+        display_status_panel()
+        
+        category = questionary.select(
+            "Choose AI Orchestration Category:",
             choices=[
-                "🛒  Browse AI Agents Catalogue",
-                "🔍  Search for an Agent",
-                "💡  Get AI Recommendations",
-                "🛍️  View My Cart & Checkout",
-                "📦  Track Deployment Status",
-                "⬅️  Back to Main Menu"
+                "🛒  Store & Shopping",
+                "🧪  AI Sandbox & Mini-games",
+                "📊  Wallet, Dashboards & Reports",
+                "⚙️  Manager Portal",
+                "🚪  Exit"
             ]
         ).ask()
-        if sub_choice == "⬅️  Back to Main Menu" or sub_choice is None:
-            return main_menu()
-        return sub_choice
         
-    elif category == "🧪  AI Sandbox & Mini-games":
-        sub_choice = questionary.select(
-            "AI Sandbox & Mini-games Menu:",
-            choices=[
-                "🖥️  Live Split-Screen Dashboard Matrix",
-                "🌐  Hack Dark Web for Free Tokens (Mini-Game)",
-                "🧪  Launch AI Agent Sandbox Playground",
-                "⬅️  Back to Main Menu"
-            ]
-        ).ask()
-        if sub_choice == "⬅️  Back to Main Menu" or sub_choice is None:
-            return main_menu()
-        return sub_choice
-        
-    elif category == "📊  Wallet, Dashboards & Reports":
-        sub_choice = questionary.select(
-            "Wallet, Dashboards & Reports Menu:",
-            choices=[
-                "📊  View Live System Dashboard",
-                "📜  View Past Receipts & History",
-                "📁  Export Data Report to CSV",
-                "💳  Top-Up Wallet Tokens",
-                "🎨  Switch Terminal Theme",
-                "⬅️  Back to Main Menu"
-            ]
-        ).ask()
-        if sub_choice == "⬅️  Back to Main Menu" or sub_choice is None:
-            return main_menu()
-        return sub_choice
-        
-    elif category == "⚙️  Manager Portal":
-        return "⚙️  Manager Portal"
-        
-    else:
-        return "🚪  Exit"
+        if category is None or category == "🚪  Exit":
+            return "🚪  Exit"
+            
+        if category == "🛒  Store & Shopping":
+            sub_choice = questionary.select(
+                "Store & Shopping Menu:",
+                choices=[
+                    "🛒  Browse AI Agents Catalogue",
+                    "🔍  Search for an Agent",
+                    "💡  Get AI Recommendations",
+                    "🛍️  View My Cart & Checkout",
+                    "📦  Track Deployment Status",
+                    "⬅️  Back to Main Menu"
+                ]
+            ).ask()
+            if sub_choice and sub_choice != "⬅️  Back to Main Menu":
+                return sub_choice
+                
+        elif category == "🧪  AI Sandbox & Mini-games":
+            sub_choice = questionary.select(
+                "AI Sandbox & Mini-games Menu:",
+                choices=[
+                    "🖥️  Live Split-Screen Dashboard Matrix",
+                    "🌐  Hack Dark Web for Free Tokens (Mini-Game)",
+                    "🧪  Launch AI Agent Sandbox Playground",
+                    "⬅️  Back to Main Menu"
+                ]
+            ).ask()
+            if sub_choice and sub_choice != "⬅️  Back to Main Menu":
+                return sub_choice
+                
+        elif category == "📊  Wallet, Dashboards & Reports":
+            sub_choice = questionary.select(
+                "Wallet, Dashboards & Reports Menu:",
+                choices=[
+                    "📊  View Live System Dashboard",
+                    "📜  View Past Receipts & History",
+                    "📁  Export Data Report to CSV",
+                    "💳  Top-Up Wallet Tokens",
+                    "🎨  Switch Terminal Theme",
+                    "⬅️  Back to Main Menu"
+                ]
+            ).ask()
+            if sub_choice and sub_choice != "⬅️  Back to Main Menu":
+                return sub_choice
+                
+        elif category == "⚙️  Manager Portal":
+            return "⚙️  Manager Portal"
 
 def select_theme_menu():
     """قائمة اختيار الثيمات"""

@@ -4,19 +4,45 @@ os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data, save_data
 from services.export import export_data_to_csv
+from ui.animations import clear_screen, smooth_menu_transition
 from rich.console import Console
 from rich.table import Table
+from rich.panel import Panel
+import time
 
 console = Console()
 
+# رمز الدخول الافتراضي للمدير
+MANAGER_PIN = "1234"
+
 def manager_login():
-    """التحقق البسيط من صلاحيات المدير"""
-    password = questionary.password("Enter Manager Access Key (Hint: 1234):").ask()
-    if password == "1234":
-        console.print("[green]✔ Manager access granted![/green]")
+    """بوابة دخول المدير مع ضبط العرض وتثبيت الشاشة"""
+    clear_screen()
+    
+    console.print(
+        Panel(
+            "[bold cyan]🔒 RESTRICTED AREA: MANAGER PORTAL[/bold cyan]\n"
+            "[dim]Please authenticate to gain administrative access.[/dim]\n"
+            "[yellow]💡 Hint: Default PIN is 1234[/yellow]",
+            border_style="cyan",
+            expand=False
+        )
+    )
+    
+    pin = console.input("\n[bold yellow]🔑 Enter Manager Access PIN (or type 'hint'):[/bold yellow] ")
+    
+    if pin.strip().lower() == "hint":
+        console.print("\n[bold yellow]💡 Hint Reminder: The manager PIN is 1234[/bold yellow]\n")
+        time.sleep(1.5)
+        pin = console.input("\n[bold yellow]🔑 Enter Manager Access PIN:[/bold yellow] ")
+
+    if pin == MANAGER_PIN:
+        console.print("\n[bold green]✔ ACCESS GRANTED. Welcome, Manager.[/bold green]\n")
+        time.sleep(0.8)
         return True
     else:
-        console.print("[red]❌ Incorrect access key. Access denied.[/red]")
+        console.print("\n[bold red]❌ ACCESS DENIED: Invalid Security PIN.[/bold red]\n")
+        time.sleep(1.0)
         return False
 
 def manager_dashboard():
@@ -25,6 +51,7 @@ def manager_dashboard():
         return
         
     while True:
+        clear_screen()
         choice = questionary.select(
             "Manager Control Panel:",
             choices=[
@@ -36,11 +63,17 @@ def manager_dashboard():
         ).ask()
         
         if choice == "📊 View All Inventory & Stock":
+            smooth_menu_transition("Manager Inventory")
             show_inventory()
+            console.input("\n[dim]Press Enter to continue...[/dim]")
         elif choice == "➕ Register New AI Agent":
+            smooth_menu_transition("Register New Agent")
             add_new_agent()
+            console.input("\n[dim]Press Enter to continue...[/dim]")
         elif choice == "📁 Export System Data to CSV (report.csv)":
+            smooth_menu_transition("CSV Exporter")
             export_data_to_csv()
+            console.input("\n[dim]Press Enter to continue...[/dim]")
         else:
             break
 

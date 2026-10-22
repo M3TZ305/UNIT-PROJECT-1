@@ -2,6 +2,7 @@ import pytest
 from core.database import load_data, save_data
 from services.store import search_agents, add_to_cart, remove_from_cart
 from ui.menus import calculate_operator_rank
+from services.synergy import check_agent_synergy
 
 def test_database_structure():
     """التحقق من أن قاعدة البيانات تحمل الهيكل الأساسي بشكل صحيح"""
@@ -45,3 +46,16 @@ def test_operator_rank():
     assert "Cyber Specialist" in calculate_operator_rank({"history": [{}]})
     assert "Elite Hacker" in calculate_operator_rank({"history": [{}, {}, {}]})
     assert "Master Architect" in calculate_operator_rank({"history": [{}, {}, {}, {}, {}, {}]})
+
+def test_synergy_logic():
+    """اختبار حساب قواعد التناغم الاستراتيجي للوكلاء"""
+    # اختبار تداخل البرمجة والأمان
+    agents = [{"name": "DeepCode-V4"}, {"name": "SecGuard"}]
+    synergies = check_agent_synergy(agents)
+    assert len(synergies) == 1
+    assert "Cyber-Defense Grid" in synergies[0]["title"]
+    
+    # اختبار امتلاك 3 وكلاء أو أكثر
+    agents_swarm = [{"name": "Agent1"}, {"name": "Agent2"}, {"name": "Agent3"}]
+    synergies_swarm = check_agent_synergy(agents_swarm)
+    assert any("Neural Swarm" in s["title"] for s in synergies_swarm)

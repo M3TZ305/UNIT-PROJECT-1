@@ -3,7 +3,7 @@ import os
 os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data
-from ui.animations import cinematic_startup_sequence, show_deployment_animation, smooth_menu_transition
+from ui.animations import cinematic_startup_sequence, show_deployment_animation, smooth_menu_transition, clear_screen, cinematic_exit
 from ui.menus import main_menu, display_agent_table, select_theme_menu
 from ui.dashboard import display_live_dashboard
 from ui.dashboard_matrix import run_live_matrix_dashboard
@@ -24,8 +24,11 @@ if hasattr(sys.stdout, 'reconfigure'):
 console = Console()
 
 def run_app():
-    # استدعاء شاشة الإطلاق السينمائية الضخمة والواضحة
+    # إطلاق شاشة البداية السينمائية لمرة واحدة فقط
     cinematic_startup_sequence()
+    
+    # انتقال سينمائي سلس إلى القائمة الرئيسية بدلاً من الفتح المفاجئ
+    smooth_menu_transition("Main Orchestration Grid")
     
     while True:
         choice = main_menu()
@@ -41,6 +44,7 @@ def run_app():
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter to go back):").ask()
             if agent_id:
                 add_to_cart(agent_id.strip())
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "🔍  Search for an Agent":
             smooth_menu_transition("Agent Search Engine")
@@ -54,6 +58,7 @@ def run_app():
                         add_to_cart(agent_id.strip())
                 else:
                     console.print("[yellow]No agents found matching your query.[/yellow]")
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
                     
         elif choice == "💡  Get AI Recommendations":
             smooth_menu_transition("Neural Recommendation Hub")
@@ -63,10 +68,12 @@ def run_app():
             agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter):").ask()
             if agent_id:
                 add_to_cart(agent_id.strip())
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "🌐  Hack Dark Web for Free Tokens (Mini-Game)":
             smooth_menu_transition("Dark Web Hacking Terminal")
             run_hacking_minigame()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "🧪  Launch AI Agent Sandbox Playground":
             smooth_menu_transition("AI Agent Sandbox Playground")
@@ -75,14 +82,17 @@ def run_app():
         elif choice == "📊  View Live System Dashboard":
             smooth_menu_transition("Live System Dashboard")
             display_live_dashboard()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "📜  View Past Receipts & History":
             smooth_menu_transition("Past Receipts Ledger")
             view_purchase_history()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "📁  Export Data Report to CSV":
             smooth_menu_transition("CSV Data Exporter")
             export_data_to_csv()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "🛍️  View My Cart & Checkout":
             smooth_menu_transition("Shopping Cart & Checkout")
@@ -103,28 +113,30 @@ def run_app():
                     item_id = questionary.text("Enter Agent ID to remove from cart:").ask()
                     if item_id:
                         remove_from_cart(item_id.strip())
-                        
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
+                
         elif choice == "💳  Top-Up Wallet Tokens":
             smooth_menu_transition("Token Wallet Top-Up")
             top_up_tokens()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
             
         elif choice == "🎨  Switch Terminal Theme":
             smooth_menu_transition("Terminal Theme Engine")
             select_theme_menu()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
             
         elif choice == "📦  Track Deployment Status":
             smooth_menu_transition("Cluster Deployment Status")
             track_deployment_status()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
             
         elif choice == "⚙️  Manager Portal":
             smooth_menu_transition("Manager Administrator Portal")
             manager_dashboard()
             
         elif choice == "🚪  Exit" or choice is None:
-            console.print("[bold cyan]Exiting AI Orchestration Grid. Goodbye![/bold cyan]")
+            cinematic_exit()
             break
-        
-        console.print("\n" + "─" * 80 + "\n")
 
 if __name__ == "__main__":
     run_app()
