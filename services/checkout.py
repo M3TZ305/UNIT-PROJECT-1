@@ -3,6 +3,7 @@ import random
 import uuid
 from datetime import datetime
 from core.database import load_data, save_data
+from core.logger import log_action
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -28,6 +29,7 @@ def process_checkout(endpoint_address):
     
     if current_tokens < total_price:
         console.print(Panel(f"[bold red]❌ Insufficient tokens! You have {current_tokens} TC, but need {total_price} TC.[/bold red]", title="[bold red]Checkout Failed[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", f"Checkout failed: Insufficient tokens (Have {current_tokens} TC, Need {total_price} TC).")
         return False
         
     buyer_name = questionary.text("Enter License Holder Full Name:", style=CYBERPUNK_STYLE).ask()
@@ -43,8 +45,11 @@ def process_checkout(endpoint_address):
         item_copy["timestamp"] = timestamp
         data["history"].append(item_copy)
         
+    agent_names = ", ".join([a["name"] for a in cart])
     data["cart"] = []
     save_data(data)
+    
+    log_action("TRANSACTION", f"Successful checkout: Purchased [{agent_names}] for {total_price} TC. Holder: {buyer_name.strip()}. Endpoint: {endpoint_address}")
     
     console.print("\n")
     with console.status("[bold #ffb700]⚡ Processing Quantum Payment & Cluster Allocation...[/bold #ffb700]", spinner="dots"):
@@ -124,6 +129,7 @@ def track_deployment_status():
     
     if not history:
         console.print(Panel("[bold #ffb700]📦 No active or past deployments found in history.[/bold #ffb700]", title="[bold #ffb700]Deployments[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
+        log_action("SYSTEM", "Tracked deployment status: No active history found.")
         return
         
     with console.status("[bold #00f3ff]Querying Cluster Deployment Nodes...[/bold #00f3ff]", spinner="dots"):
@@ -138,6 +144,7 @@ def track_deployment_status():
         table.add_row(item["name"], item["specialty"], "🟢 ONLINE / SYNCED (100%)")
         
     console.print(table)
+    log_action("SYSTEM", f"Tracked deployment status for {len(history)} deployed agents.")
 
 def view_purchase_history():
     """عرض سجل المشتريات والفواتير السابقة داخل جدول أنيق في البرنامج"""
@@ -146,6 +153,7 @@ def view_purchase_history():
     
     if not history:
         console.print(Panel("[bold #ffb700]📜 No purchase history or receipts found yet.[/bold #ffb700]", title="[bold #ffb700]History Ledger[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
+        log_action("SYSTEM", "Viewed purchase history: Ledger is empty.")
         return
         
     table = Table(title="[bold #00f3ff]📜 Past Purchase History & Deployed Receipts[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
@@ -167,5 +175,6 @@ def view_purchase_history():
         )
     console.print(table)
     console.print("[dim]💡 Tip: Full text receipts are also automatically appended to 'receipts_log.txt'.[/dim]\n")
+    log_action("SYSTEM", f"Viewed purchase history ledger containing {len(history)} past receipts.")
     
     display_synergy_report(history)

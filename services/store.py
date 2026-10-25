@@ -1,6 +1,7 @@
 import random
 import questionary
 from core.database import load_data, save_data
+from core.logger import log_action
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -43,6 +44,7 @@ def search_agents(query):
     data = load_data()
     query = query.lower()
     results = [a for a in data["agents"] if query in a["name"].lower() or query in a["specialty"].lower()]
+    log_action("SYSTEM", f"Searched agents catalogue with query: '{query}' (Found {len(results)} results)")
     return results
 
 def add_to_cart(agent_id):
@@ -60,6 +62,7 @@ def add_to_cart(agent_id):
         
     data["cart"].append(agent)
     save_data(data)
+    log_action("SUCCESS", f"Added agent '{agent['name']}' (ID: {agent_id}) to shopping cart.")
     console.print(Panel(f"[bold #00ff66]✔ Added {agent['name']} to cart successfully![/bold #00ff66]", title="[bold #00ff66]Success[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
     return True
 
@@ -75,6 +78,7 @@ def remove_from_cart(agent_id):
         
     data["cart"] = new_cart
     save_data(data)
+    log_action("SYSTEM", f"Removed agent ID '{agent_id}' from shopping cart.")
     console.print(Panel("[bold #00ff66]✔ Agent removed from cart successfully![/bold #00ff66]", title="[bold #00ff66]Success[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
     return True
 
@@ -108,11 +112,14 @@ def get_recommendations():
     agents = data["agents"]
     
     if not history:
-        return sorted(agents, key=lambda x: x["success_rate"], reverse=True)[:2]
-    
-    bought_ids = {item["id"] for item in history}
-    recommended = [a for a in agents if a["id"] not in bought_ids]
-    return recommended[:2] if recommended else agents[:2]
+        recs = sorted(agents, key=lambda x: x["success_rate"], reverse=True)[:2]
+    else:
+        bought_ids = {item["id"] for item in history}
+        recommended = [a for a in agents if a["id"] not in bought_ids]
+        recs = recommended[:2] if recommended else agents[:2]
+        
+    log_action("SYSTEM", f"Generated {len(recs)} AI recommendations for operator.")
+    return recs
 
 def top_up_tokens():
     """ميزة شحن الرصيد مع التحقق الصارم من الاسم ورقم البطاقة (10 أرقام بالضبط)"""
@@ -124,11 +131,13 @@ def top_up_tokens():
     name = questionary.text("Enter your full name for billing:", style=CYBERPUNK_STYLE).ask()
     if not name or not name.strip() or not name.replace(" ", "").isalpha():
         console.print(Panel("[bold red]❌ Invalid Name! Name must contain letters only. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Top-up attempt failed due to invalid operator name.")
         return
         
     card_number = questionary.text("Enter 10-Digit Card Number:", style=CYBERPUNK_STYLE).ask()
     if not card_number or not card_number.isdigit() or len(card_number) != 10:
         console.print(Panel("[bold red]❌ Invalid Card Number! It must be exactly 10 digits. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Top-up attempt failed due to invalid card number format.")
         return
         
     amount_str = questionary.text("Enter Token amount to top-up (e.g. 1000):", style=CYBERPUNK_STYLE).ask()
@@ -137,10 +146,12 @@ def top_up_tokens():
         if amount > 0:
             data["tokens"] = current_tokens + amount
             save_data(data)
+            log_action("TRANSACTION", f"Wallet top-up successful: +{amount} TC added by operator {name.strip()}. New balance: {data['tokens']} TC")
             console.print(Panel(f"[bold #00ff66]✔ Thank you, {name.strip()}! Successfully added {amount} TC! New Balance: {data['tokens']} TC[/bold #00ff66]", title="[bold #00ff66]Top-Up Successful[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
             return
             
     console.print(Panel("[bold red]❌ Invalid token amount entered. Top-up canceled.[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+    log_action("WARNING", "Top-up attempt failed due to invalid token amount.")
 
 def redeem_promo_code():
     """Redeem discount coupons/promo codes (e.g., 'GRAD2026', 'CYBER100', 'VIP2026') to add bonus credits to wallet."""
@@ -180,6 +191,7 @@ def redeem_promo_code():
             box=ROUNDED,
             expand=False
         ))
+        log_action("WARNING", f"Attempted to redeem invalid promo code: '{code}'")
         return
         
     if clean_code in data["redeemed_codes"]:
@@ -191,6 +203,7 @@ def redeem_promo_code():
             box=ROUNDED,
             expand=False
         ))
+        log_action("WARNING", f"Attempted to re-redeem already claimed promo code: '{clean_code}'")
         return
         
     bonus = promo_rewards[clean_code]
@@ -199,6 +212,7 @@ def redeem_promo_code():
     save_data(data)
     
     new_balance = data["tokens"]
+    log_action("TRANSACTION", f"Promo code '{clean_code}' redeemed successfully. Bonus: +{bonus} TC. New balance: {new_balance} TC")
     
     success_banner = (
         f"[bold #00ff66]🎉 PROMO CODE SUCCESSFULLY REDEEMED! 🎉[/bold #00ff66]\n\n"

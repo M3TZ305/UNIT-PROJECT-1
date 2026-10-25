@@ -118,6 +118,7 @@ def main_menu():
                 choices=[
                     "📊  View Live System Dashboard",
                     "📜  View Past Receipts & History",
+                    "📋  View System Audit Logs",
                     "📁  Export Data Report to CSV",
                     "💳  Top-Up Wallet Tokens",
                     "🎟️  Redeem Promo Code",

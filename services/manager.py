@@ -3,6 +3,7 @@ import os
 os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data, save_data
+from core.logger import log_action
 from services.export import export_data_to_csv
 from ui.animations import clear_screen, smooth_menu_transition, CYBERPUNK_STYLE
 from rich.console import Console
@@ -40,10 +41,12 @@ def manager_login():
 
     if pin == MANAGER_PIN:
         console.print(Panel("[bold #00ff66]✔ ACCESS GRANTED. Welcome, Manager.[/bold #00ff66]", title="[bold #00ff66]Authentication Success[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
+        log_action("SUCCESS", "Manager successfully authenticated into the Manager Portal.")
         time.sleep(0.8)
         return True
     else:
         console.print(Panel("[bold red]❌ ACCESS DENIED: Invalid Security PIN.[/bold red]", title="[bold red]Authentication Failed[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Manager authentication failed: Invalid security PIN entered.")
         time.sleep(1.0)
         return False
 
@@ -78,6 +81,7 @@ def manager_dashboard():
             export_data_to_csv()
             console.input("\n[dim]Press Enter to continue...[/dim]")
         else:
+            log_action("SYSTEM", "Manager exited Administrator Portal and returned to main orchestration grid.")
             break
 
 def show_inventory():
@@ -101,6 +105,7 @@ def show_inventory():
             f"{agent['price']} TC"
         )
     console.print(table)
+    log_action("SYSTEM", f"Manager viewed inventory table containing {len(agents)} agents.")
 
 def add_new_agent():
     """إضافة وكيل ذكاء اصطناعي جديد للمتجر"""
@@ -115,6 +120,7 @@ def add_new_agent():
         stock = int(questionary.text("Enter Initial Stock Quantity:", style=CYBERPUNK_STYLE).ask())
     except ValueError:
         console.print(Panel("[bold red]❌ Invalid numeric values entered. Aborted.[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Agent registration failed due to invalid numeric inputs.")
         return
         
     new_id = str(len(data["agents"]) + 1).zfill(2)
@@ -129,4 +135,5 @@ def add_new_agent():
     
     data["agents"].append(new_agent)
     save_data(data)
+    log_action("SUCCESS", f"Registered new AI Agent '{name}' (Specialty: {specialty}, Price: {price} TC, Stock: {stock}) to marketplace.")
     console.print(Panel(f"[bold #00ff66]✔ Agent '{name}' successfully registered to the marketplace catalogue![/bold #00ff66]", title="[bold #00ff66]Registration Successful[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))

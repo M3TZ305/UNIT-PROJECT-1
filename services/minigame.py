@@ -3,6 +3,7 @@ import time
 import random
 import msvcrt
 from core.database import load_data, save_data
+from core.logger import log_action
 from rich.console import Console
 from rich.panel import Panel
 from rich.live import Live
@@ -26,14 +27,15 @@ def run_ascii_glitch_restorer():
     try:
         console.print(Panel(
             "[bold #00f3ff]🎨 ASCII GLITCH RESTORER // PROTOCOL 🎨[/bold #00f3ff]\n"
-            "[bold #ffb700]Move your repair scanner [bold]🟩[/bold] across the glitched AI canvas using [bold]Arrow Keys[/bold].\n"
-            "Restore corrupted pixels back to original art to achieve 100% integrity within [bold]15 seconds[/bold].\n"
-            "Press [bold red]Q[/bold] to abort at any time.[/bold #ffb700]",
+            "[bold #ffb700]Move your repair scanner [#00ff66]🟩[/#00ff66] across the glitched AI canvas using [#00f3ff]Arrow Keys[/#00f3ff].\n"
+            "Restore corrupted pixels back to original art to achieve 100% integrity within [#00ff66]15 seconds[/#00ff66].\n"
+            "Press [red]Q[/red] to abort at any time.[/bold #ffb700]",
             title="[bold #ffb700]🖼️ RESTORATION ARENA INTRO[/bold #ffb700]",
             border_style="#ffb700",
             box=ROUNDED
         ))
         console.input("\n[bold #00ff66]Press Enter to launch ASCII Glitch Restorer...[/bold #00ff66]")
+        log_action("SYSTEM", "Launched ASCII Glitch Restorer mini-game arena.")
         
         target_grid = [list(row) for row in BASE_ART]
         height = len(target_grid)
@@ -134,6 +136,8 @@ def run_ascii_glitch_restorer():
         data["tokens"] = data.get("tokens", 0) + earned_tokens
         save_data(data)
         
+        log_action("TRANSACTION", f"Mini-game reward: ASCII Glitch Restorer completed with {final_pct}% integrity. Credited +{earned_tokens} TC tokens.")
+        
         status_style = "#00ff66" if final_pct >= 80 else ("#ffb700" if final_pct >= 40 else "red")
         title_text = "🎉 ARTWORK RESTORATION SUCCESSFUL" if final_pct >= 80 else "⚡ RESTORATION PARTIAL"
         
@@ -157,6 +161,7 @@ def run_ascii_glitch_restorer():
 
     except (KeyboardInterrupt, EOFError):
         console.print(Panel("[bold #ffb700]⚠️ ASCII Glitch Restorer aborted by Operator. Returning to main menu...[/bold #ffb700]", title="[bold #ffb700]Aborted[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
+        log_action("WARNING", "ASCII Glitch Restorer mini-game aborted by operator.")
         time.sleep(1.0)
         return False
 
