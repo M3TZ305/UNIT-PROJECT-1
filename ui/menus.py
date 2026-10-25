@@ -4,8 +4,9 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
 from rich.text import Text
+from rich.box import ROUNDED
 from core.database import load_data, save_data
-from ui.animations import clear_screen
+from ui.animations import clear_screen, CYBERPUNK_STYLE
 
 console = Console()
 
@@ -13,12 +14,12 @@ def display_agent_table(agents):
     from services.store import get_fluctuated_market_agents
     market_agents = get_fluctuated_market_agents(agents)
     
-    table = Table(title="[bold cyan]Available AI Agents Marketplace (Live Stock Exchange)[/bold cyan]", show_header=True, header_style="bold magenta")
+    table = Table(title="[bold #00f3ff]Available AI Agents Marketplace (Live Stock Exchange)[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
     table.add_column("ID", style="dim", width=4)
-    table.add_column("Agent Name", style="bold green")
-    table.add_column("Specialty", style="yellow")
-    table.add_column("Success Rate", style="blue")
-    table.add_column("Market Price (TC)", justify="right", style="cyan")
+    table.add_column("Agent Name", style="bold #00ff66")
+    table.add_column("Specialty", style="bold #ffb700")
+    table.add_column("Success Rate", style="bold #00f3ff")
+    table.add_column("Market Price (TC)", justify="right", style="bold #ffb700")
 
     for agent in market_agents:
         price_str = agent.get("price_display", f"{agent['price']} TC")
@@ -31,11 +32,11 @@ def calculate_operator_rank(data):
     count = len(history)
     
     if count >= 6:
-        return "👑 [bold gold1]Master Architect[/bold gold1]"
+        return "👑 [bold #ffb700]Master Architect[/bold #ffb700]"
     elif count >= 3:
-        return "⚡ [bold green]Elite Hacker[/bold green]"
+        return "⚡ [bold #00ff66]Elite Hacker[/bold #00ff66]"
     elif count >= 1:
-        return "💻 [bold cyan]Cyber Specialist[/bold cyan]"
+        return "💻 [bold #00f3ff]Cyber Specialist[/bold #00f3ff]"
     else:
         return "🌱 [dim]Novice Operator[/dim]"
 
@@ -46,14 +47,15 @@ def display_status_panel():
     operator_rank = calculate_operator_rank(data)
     
     status_text = (
-        f"[bold gold1]💰 WALLET:[/bold gold1] [bold green]{tokens} TC[/bold green]  │  "
-        f"[bold cyan]🎨 THEME:[/bold cyan] [bold white]{current_theme}[/bold white]  │  "
-        f"[bold magenta]RANK:[/bold magenta] {operator_rank}"
+        f"[bold #ffb700]💰 WALLET:[/bold #ffb700] [bold #00ff66]{tokens} TC[/bold #00ff66]  │  "
+        f"[bold #00f3ff]🎨 THEME:[/bold #00f3ff] [bold white]{current_theme}[/bold white]  │  "
+        f"[bold #00f3ff]RANK:[/bold #00f3ff] {operator_rank}"
     )
     panel = Panel(
         Align.center(Text.from_markup(status_text)),
-        title="[bold magenta]✦ OMNI-CLUSTER STATUS PANEL ✦[/bold magenta]",
-        border_style="magenta",
+        title="[bold #00f3ff]✦ OMNI-CLUSTER STATUS PANEL ✦[/bold #00f3ff]",
+        border_style="#00f3ff",
+        box=ROUNDED,
         padding=(0, 1),
         expand=False
     )
@@ -72,7 +74,8 @@ def main_menu():
                 "📊  Wallet, Dashboards & Reports",
                 "⚙️  Manager Portal",
                 "🚪  Exit"
-            ]
+            ],
+            style=CYBERPUNK_STYLE
         ).ask()
         
         if category is None or category == "🚪  Exit":
@@ -89,7 +92,8 @@ def main_menu():
                     "🛍️  View My Cart & Checkout",
                     "📦  Track Deployment Status",
                     "⬅️  Back to Main Menu"
-                ]
+                ],
+                style=CYBERPUNK_STYLE
             ).ask()
             if sub_choice and sub_choice != "⬅️  Back to Main Menu":
                 return sub_choice
@@ -99,10 +103,11 @@ def main_menu():
                 "AI Sandbox & Mini-games Menu:",
                 choices=[
                     "🖥️  Live Split-Screen Dashboard Matrix",
-                    "🌐  Hack Dark Web for Free Tokens (Mini-Game)",
+                    "🎨 ASCII Glitch Restorer (Mini-Game)",
                     "🤖 Test AI Model (Sandbox)",
                     "⬅️  Back to Main Menu"
-                ]
+                ],
+                style=CYBERPUNK_STYLE
             ).ask()
             if sub_choice and sub_choice != "⬅️  Back to Main Menu":
                 return sub_choice
@@ -118,7 +123,8 @@ def main_menu():
                     "🎟️  Redeem Promo Code",
                     "🎨  Switch Terminal Theme",
                     "⬅️  Back to Main Menu"
-                ]
+                ],
+                style=CYBERPUNK_STYLE
             ).ask()
             if sub_choice and sub_choice != "⬅️  Back to Main Menu":
                 return sub_choice
@@ -134,11 +140,12 @@ def select_theme_menu():
             "Cyberpunk Neon",
             "Matrix Hacker",
             "Gold Luxury"
-        ]
+        ],
+        style=CYBERPUNK_STYLE
     ).ask()
     
     if choice:
         data = load_data()
         data["theme"] = choice
         save_data(data)
-        console.print(f"[bold green]✔ Theme changed to '{choice}'! Re-open or refresh to apply full banner styles.[/bold green]")
+        console.print(f"[bold #00ff66]✔ Theme changed to '{choice}'! Re-open or refresh to apply full banner styles.[/bold #00ff66]")

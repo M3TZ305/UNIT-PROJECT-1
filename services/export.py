@@ -2,6 +2,8 @@ import csv
 from datetime import datetime
 from core.database import load_data
 from rich.console import Console
+from rich.panel import Panel
+from rich.box import ROUNDED
 
 console = Console()
 
@@ -17,13 +19,11 @@ def export_data_to_csv():
         with open(filename, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             
-            # 1. كتابة الترويسة والبيانات العامة
             writer.writerow(["=== AI MARKETPLACE EXPORT REPORT ==="])
             writer.writerow(["Generated At", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
             writer.writerow(["Total Tokens Remaining", data.get("tokens", 0)])
-            writer.writerow([])  # سطر فارغ للترتيب
+            writer.writerow([])
             
-            # 2. كتابة جدول سجل المشتريات (Transaction History)
             writer.writerow(["--- TRANSACTION & DEPLOYMENT HISTORY ---"])
             writer.writerow(["Transaction #", "Agent ID", "Agent Name", "Buyer Name", "Specialty", "Purchase Time", "Price (TC)"])
             
@@ -43,7 +43,6 @@ def export_data_to_csv():
                 
             writer.writerow([])
             
-            # 3. كتابة جدول كتالوج الوكلاء والمخزون الحالي (Catalog Inventory)
             writer.writerow(["--- LIVE AGENTS INVENTORY ---"])
             writer.writerow(["Agent ID", "Agent Name", "Specialty", "Success Rate (%)", "Price (TC)", "Stock"])
             
@@ -57,9 +56,21 @@ def export_data_to_csv():
                     agent.get("stock", 10)
                 ])
                 
-        console.print(f"\n[bold green]📊 Report successfully exported to '{filename}'![/bold green]")
-        console.print("[dim]You can now open 'report.csv' in Excel or any data viewer.[/dim]\n")
+        console.print(Panel(
+            f"[bold #00ff66]📊 Report successfully exported to '{filename}'![/bold #00ff66]\n"
+            "[dim]You can now open 'report.csv' in Excel or any data viewer.[/dim]",
+            title="[bold #00ff66]CSV Export Successful[/bold #00ff66]",
+            border_style="#00ff66",
+            box=ROUNDED,
+            expand=False
+        ))
         return True
     except Exception as e:
-        console.print(f"[red]❌ Failed to export CSV report: {e}[/red]\n")
+        console.print(Panel(
+            f"[bold red]❌ Failed to export CSV report: {e}[/bold red]",
+            title="[bold red]Export Failed[/bold red]",
+            border_style="red",
+            box=ROUNDED,
+            expand=False
+        ))
         return False

@@ -7,8 +7,10 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
+from rich.box import ROUNDED
 import questionary
 from services.synergy import display_synergy_report
+from ui.animations import CYBERPUNK_STYLE
 
 console = Console()
 
@@ -18,24 +20,22 @@ def process_checkout(endpoint_address):
     cart = data["cart"]
     
     if not cart:
-        console.print("[yellow]🛒 Your cart is empty. Add agents before checkout.[/yellow]")
+        console.print(Panel("[bold #ffb700]🛒 Your cart is empty. Add agents before checkout.[/bold #ffb700]", title="[bold #ffb700]Cart Empty[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
         return False
         
     total_price = sum(item["price"] for item in cart)
     current_tokens = data.get("tokens", 2000)
     
     if current_tokens < total_price:
-        console.print(f"[red]❌ Insufficient tokens! You have {current_tokens} TC, but need {total_price} TC.[/red]")
+        console.print(Panel(f"[bold red]❌ Insufficient tokens! You have {current_tokens} TC, but need {total_price} TC.[/bold red]", title="[bold red]Checkout Failed[/bold red]", border_style="red", box=ROUNDED, expand=False))
         return False
         
-    # طلب اسم المشتري لإصدار شهادة الترخيص الرسمية
-    buyer_name = questionary.text("Enter License Holder Full Name:").ask()
+    buyer_name = questionary.text("Enter License Holder Full Name:", style=CYBERPUNK_STYLE).ask()
     if not buyer_name or not buyer_name.strip():
         buyer_name = "Authorized Developer"
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # خصم الرصيد وتفريغ السلة ونقل المنتجات للسجل مع اسم المشتري وتاريخ الشراء
     data["tokens"] -= total_price
     for item in cart:
         item_copy = item.copy()
@@ -46,38 +46,34 @@ def process_checkout(endpoint_address):
     data["cart"] = []
     save_data(data)
     
-    # 1. معالجة الدفع السينمائية
     console.print("\n")
-    with console.status("[bold yellow]⚡ Processing Quantum Payment & Cluster Allocation...[/bold yellow]", spinner="dots"):
+    with console.status("[bold #ffb700]⚡ Processing Quantum Payment & Cluster Allocation...[/bold #ffb700]", spinner="dots"):
         time.sleep(2.0)
     
-    # 2. شاشة الاحتفال والحركات الحركية
     display_success_celebration()
     
-    # 3. توليد وعرض شهادة الترخيص الرقمية بـ ASCII Art
-    with console.status("[bold cyan]🎨 Generating Encrypted ASCII Digital License...[/bold cyan]", spinner="arc"):
+    with console.status("[bold #00f3ff]🎨 Generating Encrypted ASCII Digital License...[/bold #00f3ff]", spinner="arc"):
         time.sleep(1.5)
         
     cert_text, ref_id = generate_ascii_certificate(buyer_name.strip(), endpoint_address)
     
-    # طباعة الشهادة بألوان متوهجة فخمة
     console.print(Panel(
-        f"[bold bright_cyan]{cert_text}[/bold bright_cyan]",
-        title="[bold green]🏆 OFFICIAL DIGITAL LICENSE CERTIFICATE[/bold green]",
-        border_style="bold bright_cyan"
+        f"[bold #00f3ff]{cert_text}[/bold #00f3ff]",
+        title="[bold #00ff66]🏆 OFFICIAL DIGITAL LICENSE CERTIFICATE[/bold #00ff66]",
+        border_style="#00f3ff",
+        box=ROUNDED
     ))
     time.sleep(2.0)
     
-    # 4. حفظ الفاتورة والشهادة في ملف السجل
     save_receipt_to_file(cart, total_price, endpoint_address, buyer_name.strip(), ref_id, cert_text)
     return True
 
 def display_success_celebration():
     """أنيميشن احتفالي حركي ومبهر مع تأثير الوميض"""
-    with console.status("[bold yellow]🎆 Launching Cluster Fireworks & Generating License...[/bold yellow]", spinner="earth"):
+    with console.status("[bold #ffb700]🎆 Launching Cluster Fireworks & Generating License...[/bold #ffb700]", spinner="earth"):
         time.sleep(2.2)
     
-    colors = ["green", "cyan", "yellow", "green", "cyan", "green"]
+    colors = ["#00ff66", "#00f3ff", "#ffb700", "#00ff66", "#00f3ff", "#00ff66"]
     for color in colors:
         console.print(Text("✨ SUCCESS! ALL NODES DEPLOYED & SYNCED ✨", style=f"bold {color}"), justify="center")
         time.sleep(0.35)
@@ -116,10 +112,10 @@ Total Paid: {total_price} TC
     try:
         with open(filename, "a", encoding="utf-8") as f:
             f.write(content)
-        console.print(f"[bold green]📄 Digital Certificate & Receipt successfully logged to '{filename}'![/bold green]\n")
+        console.print(Panel(f"[bold #00ff66]📄 Digital Certificate & Receipt successfully logged to '{filename}'![/bold #00ff66]", title="[bold #00ff66]Receipt Saved[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
         time.sleep(1.0)
     except Exception as e:
-        console.print(f"[red]⚠️ Failed to export certificate file: {e}[/red]")
+        console.print(Panel(f"[bold red]⚠️ Failed to export certificate file: {e}[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
 
 def track_deployment_status():
     """تتبع حالة نشر وشحن الوكلاء"""
@@ -127,16 +123,16 @@ def track_deployment_status():
     history = data.get("history", [])
     
     if not history:
-        console.print("[yellow]📦 No active or past deployments found in history.[/yellow]")
+        console.print(Panel("[bold #ffb700]📦 No active or past deployments found in history.[/bold #ffb700]", title="[bold #ffb700]Deployments[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
         return
         
-    with console.status("[bold cyan]Querying Cluster Deployment Nodes...[/bold cyan]", spinner="dots"):
+    with console.status("[bold #00f3ff]Querying Cluster Deployment Nodes...[/bold #00f3ff]", spinner="dots"):
         time.sleep(1.2)
         
-    table = Table(title="[bold cyan]Active AI Cluster Deployments[/bold cyan]", show_header=True)
-    table.add_column("Agent Name", style="bold green")
-    table.add_column("Specialty", style="yellow")
-    table.add_column("Deployment Status", style="bold blue")
+    table = Table(title="[bold #00f3ff]Active AI Cluster Deployments[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
+    table.add_column("Agent Name", style="bold #00ff66")
+    table.add_column("Specialty", style="bold #ffb700")
+    table.add_column("Deployment Status", style="bold #00f3ff")
     
     for item in history:
         table.add_row(item["name"], item["specialty"], "🟢 ONLINE / SYNCED (100%)")
@@ -149,16 +145,16 @@ def view_purchase_history():
     history = data.get("history", [])
     
     if not history:
-        console.print("[yellow]📜 No purchase history or receipts found yet.[/yellow]")
+        console.print(Panel("[bold #ffb700]📜 No purchase history or receipts found yet.[/bold #ffb700]", title="[bold #ffb700]History Ledger[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
         return
         
-    table = Table(title="[bold cyan]📜 Past Purchase History & Deployed Receipts[/bold cyan]", show_header=True)
+    table = Table(title="[bold #00f3ff]📜 Past Purchase History & Deployed Receipts[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
     table.add_column("#", style="dim", width=4)
-    table.add_column("Agent Name", style="bold green")
-    table.add_column("Buyer Name", style="magenta")
-    table.add_column("Specialty", style="yellow")
-    table.add_column("Purchase Time", style="blue")
-    table.add_column("Price Paid", justify="right", style="cyan")
+    table.add_column("Agent Name", style="bold #00ff66")
+    table.add_column("Buyer Name", style="bold #ffb700")
+    table.add_column("Specialty", style="bold #ffb700")
+    table.add_column("Purchase Time", style="bold #00f3ff")
+    table.add_column("Price Paid", justify="right", style="bold #ffb700")
     
     for idx, item in enumerate(history, 1):
         table.add_row(
@@ -172,5 +168,4 @@ def view_purchase_history():
     console.print(table)
     console.print("[dim]💡 Tip: Full text receipts are also automatically appended to 'receipts_log.txt'.[/dim]\n")
     
-    # عرض تقرير التناغم الاستراتيجي للوكلاء المملوكين
     display_synergy_report(history)

@@ -6,6 +6,7 @@ from rich.layout import Layout
 from rich.panel import Panel
 from rich.table import Table
 from rich.live import Live
+from rich.box import ROUNDED
 from core.database import load_data
 from ui.animations import clear_screen
 
@@ -32,28 +33,28 @@ def generate_dashboard_layout():
     )
 
     # --- 1. قسم الكتالوج (Catalog Section) ---
-    table = Table(title="[bold cyan]Live AI Agents Catalog[/bold cyan]", show_header=True, expand=True)
+    table = Table(title="[bold #00f3ff]Live AI Agents Catalog[/bold #00f3ff]", show_header=True, expand=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
     table.add_column("ID", style="dim", width=4)
-    table.add_column("Agent Name", style="bold green")
-    table.add_column("Specialty", style="yellow")
-    table.add_column("Price", justify="right", style="cyan")
+    table.add_column("Agent Name", style="bold #00ff66")
+    table.add_column("Specialty", style="bold #ffb700")
+    table.add_column("Price", justify="right", style="bold #00f3ff")
 
     for agent in agents:
         table.add_row(agent["id"], agent["name"], agent["specialty"], f"{agent['price']} TC")
     
-    catalog_panel = Panel(table, title="[bold green]📦 1. Catalog Section[/bold green]", border_style="green")
+    catalog_panel = Panel(table, title="[bold #00ff66]📦 1. Catalog Section[/bold #00ff66]", border_style="#00ff66", box=ROUNDED)
 
     # --- 2. قسم السجل الحي للعمليات (Live Logs Section) ---
     current_time = datetime.now().strftime("%H:%M:%S")
     logs_content = (
         f"[dim]{current_time} - Core neural bridge online[/dim]\n"
-        f"[green]{current_time} - Cluster node US-East synced[/green]\n"
-        f"[cyan]{current_time} - Token ledger verified securely[/cyan]\n"
-        f"[yellow]{current_time} - Active deployments: {len(history)} nodes[/yellow]\n"
-        f"[magenta]{current_time} - Monitoring background threads...[/magenta]\n"
-        f"[bold green]>> Matrix stream running smoothly...[/bold green]"
+        f"[bold #00ff66]{current_time} - Cluster node US-East synced[/bold #00ff66]\n"
+        f"[bold #00f3ff]{current_time} - Token ledger verified securely[/bold #00f3ff]\n"
+        f"[bold #ffb700]{current_time} - Active deployments: {len(history)} nodes[/bold #ffb700]\n"
+        f"[bold #00ff66]{current_time} - Monitoring background threads...[/bold #00ff66]\n"
+        f"[bold #00ff66]>> Matrix stream running smoothly...[/bold #00ff66]"
     )
-    logs_panel = Panel(logs_content, title="[bold yellow]⚡ 2. Live Logs Matrix[/bold yellow]", border_style="yellow")
+    logs_panel = Panel(logs_content, title="[bold #ffb700]⚡ 2. Live Logs Matrix[/bold #ffb700]", border_style="#ffb700", box=ROUNDED)
 
     # ربط القسم العُلوي
     layout["upper"]["catalog"].update(catalog_panel)
@@ -61,12 +62,12 @@ def generate_dashboard_layout():
 
     # --- 3. قسم استهلاك الـ GPU والسيرفرات في الأسفل (GPU & Server Indicators) ---
     gpu_info = (
-        f" [bold magenta]GPU Load:[/bold magenta] 48% | "
-        f"[bold cyan]VRAM Usage:[/bold cyan] 11.2 / 16.0 GB | "
-        f"[bold yellow]Wallet Balance:[/bold yellow] {tokens} TC | "
-        f"[bold green]Servers Status:[/bold green] ALL NODES OPTIMAL (100%)"
+        f" [bold #ffb700]GPU Load:[/bold #ffb700] 48% | "
+        f"[bold #00f3ff]VRAM Usage:[/bold #00f3ff] 11.2 / 16.0 GB | "
+        f"[bold #ffb700]Wallet Balance:[/bold #ffb700] {tokens} TC | "
+        f"[bold #00ff66]Servers Status:[/bold #00ff66] ALL NODES OPTIMAL (100%)"
     )
-    bottom_panel = Panel(gpu_info, title="[bold magenta]💻 3. GPU & Server Performance Indicators[/bold magenta]", border_style="magenta")
+    bottom_panel = Panel(gpu_info, title="[bold #00f3ff]💻 3. GPU & Server Performance Indicators[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED)
     
     layout["lower"].update(bottom_panel)
 
@@ -75,7 +76,7 @@ def generate_dashboard_layout():
 def run_live_matrix_dashboard():
     """تشغيل الشاشة التفاعلية المقسمة بشكل مستقر ودون مشاكل في التيرمينال"""
     clear_screen()
-    console.print("[bold yellow]🚀 Launching Live Split-Screen Dashboard Matrix...[/bold yellow]")
+    console.print("[bold #ffb700]🚀 Launching Live Split-Screen Dashboard Matrix...[/bold #ffb700]")
     console.print("[dim]Press [bold red]Ctrl + C[/bold red] or [bold red]q[/bold red] to return to the main menu.[/dim]\n")
     time.sleep(1.0)
 
@@ -84,7 +85,6 @@ def run_live_matrix_dashboard():
         import msvcrt
 
     try:
-        # استخدام screen=False لمنع مشاكل الـ Buffer واختفاء الشاشة في التيرمينال
         with Live(generate_dashboard_layout(), refresh_per_second=2, screen=False) as live:
             while True:
                 if is_windows:
@@ -92,7 +92,7 @@ def run_live_matrix_dashboard():
                         try:
                             key = msvcrt.getch()
                             if key in (b'\xe0', b'\x00'):
-                                msvcrt.getch()  # تفريغ مفاتيح الأسهم المزدوجة
+                                msvcrt.getch()
                             elif key in (b'q', b'Q', b'\r', b'\n', b'\x1b'):
                                 break
                         except Exception:
@@ -103,5 +103,5 @@ def run_live_matrix_dashboard():
         pass
     
     clear_screen()
-    console.print("[green]✔ Exiting Live Dashboard Matrix. Returning to main menu...[/green]\n")
+    console.print("[bold #00ff66]✔ Exiting Live Dashboard Matrix. Returning to main menu...[/bold #00ff66]\n")
     time.sleep(0.8)
