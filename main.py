@@ -7,7 +7,7 @@ from ui.animations import cinematic_startup_sequence, show_deployment_animation,
 from ui.menus import main_menu, display_agent_table, select_theme_menu
 from ui.dashboard import display_live_dashboard
 from ui.dashboard_matrix import run_live_matrix_dashboard
-from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
+from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens, redeem_promo_code
 from services.checkout import process_checkout, track_deployment_status, view_purchase_history
 from services.manager import manager_dashboard
 from services.sandbox import launch_sandbox
@@ -118,6 +118,11 @@ def run_app():
         elif choice == "💳  Top-Up Wallet Tokens":
             smooth_menu_transition("Token Wallet Top-Up")
             top_up_tokens()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
+            
+        elif "Redeem Promo Code" in choice:
+            smooth_menu_transition("Promo Code Redemption Hub")
+            redeem_promo_code()
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
             
         elif choice == "🎨  Switch Terminal Theme":

@@ -1,6 +1,6 @@
 import pytest
 from core.database import load_data, save_data
-from services.store import search_agents, add_to_cart, remove_from_cart
+from services.store import search_agents, add_to_cart, remove_from_cart, get_fluctuated_market_agents, redeem_promo_code
 from ui.menus import calculate_operator_rank
 from services.synergy import check_agent_synergy
 
@@ -59,3 +59,38 @@ def test_synergy_logic():
     agents_swarm = [{"name": "Agent1"}, {"name": "Agent2"}, {"name": "Agent3"}]
     synergies_swarm = check_agent_synergy(agents_swarm)
     assert any("Neural Swarm" in s["title"] for s in synergies_swarm)
+
+def test_market_price_fluctuation():
+    """اختبار نظام تقلب الأسعار الديناميكي في السوق ووجود شارات التغير"""
+    agents = [{"id": "01", "name": "DeepCode-V4", "specialty": "Architecture", "success_rate": 99.4, "price": 450, "stock": 10}]
+    market_agents = get_fluctuated_market_agents(agents)
+    
+    assert len(market_agents) == 1
+    assert "price_display" in market_agents[0]
+    assert "fluctuation_pct" in market_agents[0]
+    assert "TC" in market_agents[0]["price_display"]
+    assert "▲" in market_agents[0]["price_display"] or "▼" in market_agents[0]["price_display"]
+
+def test_promo_code_redemption():
+    """اختبار استرداد رموز الترويج وإضافة الرصيد ومراعاة عدم تكرار الاستخدام"""
+    data = load_data()
+    data["tokens"] = 2000
+    data["redeemed_codes"] = []
+    save_data(data)
+    
+    code = "GRAD2026"
+    reward = 1000
+    assert code not in data["redeemed_codes"]
+    
+    data["tokens"] += reward
+    data["redeemed_codes"].append(code)
+    save_data(data)
+    
+    updated_data = load_data()
+    assert updated_data["tokens"] == 3000
+    assert code in updated_data["redeemed_codes"]
+    
+    # تنظيف
+    updated_data["tokens"] = 2000
+    updated_data["redeemed_codes"] = []
+    save_data(updated_data)

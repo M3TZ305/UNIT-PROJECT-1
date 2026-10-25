@@ -10,15 +10,19 @@ from ui.animations import clear_screen
 console = Console()
 
 def display_agent_table(agents):
-    table = Table(title="[bold cyan]Available AI Agents Marketplace[/bold cyan]", show_header=True, header_style="bold magenta")
+    from services.store import get_fluctuated_market_agents
+    market_agents = get_fluctuated_market_agents(agents)
+    
+    table = Table(title="[bold cyan]Available AI Agents Marketplace (Live Stock Exchange)[/bold cyan]", show_header=True, header_style="bold magenta")
     table.add_column("ID", style="dim", width=4)
     table.add_column("Agent Name", style="bold green")
     table.add_column("Specialty", style="yellow")
     table.add_column("Success Rate", style="blue")
-    table.add_column("Price (TC)", justify="right", style="cyan")
+    table.add_column("Market Price (TC)", justify="right", style="cyan")
 
-    for agent in agents:
-        table.add_row(agent["id"], agent["name"], agent["specialty"], f"{agent['success_rate']}%", f"{agent['price']} TC")
+    for agent in market_agents:
+        price_str = agent.get("price_display", f"{agent['price']} TC")
+        table.add_row(agent["id"], agent["name"], agent["specialty"], f"{agent['success_rate']}%", price_str)
     console.print(table)
 
 def calculate_operator_rank(data):
@@ -81,6 +85,7 @@ def main_menu():
                     "🛒  Browse AI Agents Catalogue",
                     "🔍  Search for an Agent",
                     "💡  Get AI Recommendations",
+                    "🎟️  Redeem Promo Code",
                     "🛍️  View My Cart & Checkout",
                     "📦  Track Deployment Status",
                     "⬅️  Back to Main Menu"
@@ -110,6 +115,7 @@ def main_menu():
                     "📜  View Past Receipts & History",
                     "📁  Export Data Report to CSV",
                     "💳  Top-Up Wallet Tokens",
+                    "🎟️  Redeem Promo Code",
                     "🎨  Switch Terminal Theme",
                     "⬅️  Back to Main Menu"
                 ]

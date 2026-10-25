@@ -158,6 +158,9 @@
             "timestamp": "2026-10-22 10:46:06"
         }
     ],
-    "tokens": 600,
-    "theme": "Cyberpunk Neon"
+    "tokens": 2500,
+    "theme": "Cyberpunk Neon",
+    "redeemed_codes": [
+        "OGB500"
+    ]
 }

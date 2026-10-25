@@ -1,9 +1,41 @@
+import random
 import questionary
 from core.database import load_data, save_data
 from rich.console import Console
+from rich.panel import Panel
 from rich.table import Table
 
 console = Console()
+
+def get_fluctuated_market_agents(agents=None):
+    """Calculate dynamic market price fluctuations and generate Rich markup badges for agents."""
+    if agents is None:
+        data = load_data()
+        agents = data.get("agents", [])
+        
+    fluctuated_list = []
+    for agent in agents:
+        agent_copy = agent.copy()
+        if "base_price" not in agent_copy:
+            agent_copy["base_price"] = agent_copy["price"]
+            
+        # Realistic market fluctuation between -3.5% and +3.5%
+        pct = round(random.uniform(-3.5, 3.5), 1)
+        if pct == 0.0:
+            pct = 1.5
+            
+        new_price = max(10, int(round(agent_copy["base_price"] * (1 + pct / 100))))
+        agent_copy["price"] = new_price
+        agent_copy["fluctuation_pct"] = pct
+        
+        if pct >= 0:
+            agent_copy["price_display"] = f"{new_price} TC [bold green]▲ +{pct:.1f}%[/bold green]"
+        else:
+            agent_copy["price_display"] = f"{new_price} TC [bold red]▼ {pct:.1f}%[/bold red]"
+            
+        fluctuated_list.append(agent_copy)
+        
+    return fluctuated_list
 
 def search_agents(query):
     """البحث عن وكيل بالاسم أو التخصص"""
@@ -111,3 +143,73 @@ def top_up_tokens():
             return
             
     console.print("[red]❌ Invalid token amount entered. Top-up canceled.[/red]\n")
+
+def redeem_promo_code():
+    """Redeem discount coupons/promo codes (e.g., 'GRAD2026', 'CYBER100', 'VIP2026') to add bonus credits to wallet."""
+    data = load_data()
+    if "redeemed_codes" not in data:
+        data["redeemed_codes"] = []
+        
+    console.print(Panel(
+        "[bold cyan]🎟️ OMNI-CLUSTER PROMO CODE REDEMPTION PORTAL[/bold cyan]\n"
+        "[dim]Enter valid promotional codes to inject bonus tokens directly into your wallet.[/dim]\n"
+        "[yellow]💡 Hint: Try codes like 'GRAD2026', 'CYBER100', 'OGB500', or 'VIP2026'[/yellow]",
+        title="[bold magenta]Promo Code Hub[/bold magenta]",
+        border_style="cyan",
+        expand=False
+    ))
+    
+    code = questionary.text("Enter Promo Code:").ask()
+    if not code:
+        return
+        
+    clean_code = code.strip().upper()
+    
+    promo_rewards = {
+        "GRAD2026": 1000,
+        "CYBER100": 500,
+        "OGB500": 500,
+        "VIP2026": 2000
+    }
+    
+    if clean_code not in promo_rewards:
+        console.print(Panel(
+            f"[bold red]❌ INVALID PROMO CODE: '{code}'[/bold red]\n"
+            "[dim]The code entered does not exist or has expired in the neural registry.[/dim]",
+            title="[bold red]Redemption Failed[/bold red]",
+            border_style="red",
+            expand=False
+        ))
+        return
+        
+    if clean_code in data["redeemed_codes"]:
+        console.print(Panel(
+            f"[bold yellow]⚠️ PROMO CODE ALREADY REDEEMED[/bold yellow]\n"
+            f"[dim]You have already claimed the reward for '{clean_code}'. Each code can only be used once per operator.[/dim]",
+            title="[bold yellow]Already Claimed[/bold yellow]",
+            border_style="yellow",
+            expand=False
+        ))
+        return
+        
+    bonus = promo_rewards[clean_code]
+    data["tokens"] = data.get("tokens", 2000) + bonus
+    data["redeemed_codes"].append(clean_code)
+    save_data(data)
+    
+    new_balance = data["tokens"]
+    
+    success_banner = (
+        f"[bold bright_green]🎉 PROMO CODE SUCCESSFULLY REDEEMED! 🎉[/bold bright_green]\n\n"
+        f"[bold white]Redeemed Code:[/bold white] [cyan]{clean_code}[/cyan]\n"
+        f"[bold white]Bonus Awarded:[/bold white] [bold green]+{bonus} TC[/bold green]\n"
+        f"[bold white]New Wallet Balance:[/bold white] [bold yellow]{new_balance} TC[/bold yellow]\n\n"
+        f"[dim]Credits have been securely injected into your account.[/dim]"
+    )
+    
+    console.print(Panel(
+        success_banner,
+        title="[bold green]🏆 REWARD GRANTED[/bold green]",
+        border_style="bold green",
+        expand=False
+    ))
