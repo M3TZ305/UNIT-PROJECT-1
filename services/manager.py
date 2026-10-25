@@ -17,7 +17,7 @@ console = Console()
 MANAGER_PIN = "1234"
 
 def manager_login():
-    """بوابة دخول المدير مع ضبط العرض وتثبيت الشاشة"""
+    """Manager login portal with view adjustment and screen fixing"""
     clear_screen()
     
     console.print(
@@ -51,7 +51,7 @@ def manager_login():
         return False
 
 def manager_dashboard():
-    """لوحة تحكم المدير لإدارة المخزون وإضافة وكلاء جدد"""
+    """Manager dashboard for inventory management and registering new agents"""
     if not manager_login():
         return
         
@@ -63,6 +63,7 @@ def manager_dashboard():
                 "📊 View All Inventory & Stock",
                 "➕ Register New AI Agent",
                 "📁 Export System Data to CSV (report.csv)",
+                "🗑️  Data Reset (Clear History & Logs)",
                 "🔙 Back to Main Menu"
             ],
             style=CYBERPUNK_STYLE
@@ -80,12 +81,68 @@ def manager_dashboard():
             smooth_menu_transition("CSV Exporter")
             export_data_to_csv()
             console.input("\n[dim]Press Enter to continue...[/dim]")
+        elif choice == "🗑️  Data Reset (Clear History & Logs)":
+            smooth_menu_transition("System Data Reset")
+            reset_system_data()
+            console.input("\n[dim]Press Enter to continue...[/dim]")
         else:
             log_action("SYSTEM", "Manager exited Administrator Portal and returned to main orchestration grid.")
             break
 
+def reset_system_data():
+    """Reset system data and clear logs and receipts"""
+    confirm = questionary.confirm(
+        "⚠️ WARNING: This will permanently wipe all history, cart items, encrypted receipts (receipts.json), audit logs (audit_logs.json), text receipts (receipts_log.txt), and reset wallet tokens to default (2000 TC). Proceed?",
+        default=False,
+        style=CYBERPUNK_STYLE
+    ).ask()
+    
+    if not confirm:
+        console.print(Panel("[bold #ffb700]ℹ️ Data reset canceled by operator.[/bold #ffb700]", title="[bold #ffb700]Action Aborted[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
+        return
+
+    from core.database import DEFAULT_AGENTS
+    fresh_data = {
+        "agents": DEFAULT_AGENTS,
+        "cart": [],
+        "history": [],
+        "tokens": 2000,
+        "theme": "Cyberpunk Neon",
+        "redeemed_codes": []
+    }
+    save_data(fresh_data)
+
+    files_to_remove = ["receipts.json", "audit_logs.json", "receipts_log.txt"]
+    removed_count = 0
+    for f_name in files_to_remove:
+        if os.path.exists(f_name):
+            try:
+                os.remove(f_name)
+                removed_count += 1
+            except Exception:
+                pass
+
+    log_action("SUCCESS", "System Data Reset executed: History, cart, receipts, and audit logs cleared.")
+    
+    success_panel = (
+        f"[bold #00ff66]✨ SYSTEM DATA RESET COMPLETE ✨[/bold #00ff66]\n\n"
+        f"[bold white]• Wallet Tokens:[/bold white] [bold #ffb700]2000 TC (Default)[/bold #ffb700]\n"
+        f"[bold white]• Shopping Cart:[/bold white] [bold #00f3ff]Cleared (0 items)[/bold #00f3ff]\n"
+        f"[bold white]• Purchase History:[/bold white] [bold #00f3ff]Reset (0 records)[/bold #00f3ff]\n"
+        f"[bold white]• Purged Files:[/bold white] [bold #00f3ff]{removed_count} ledger files (receipts.json, audit_logs.json, receipts_log.txt)[/bold #00f3ff]\n\n"
+        f"[dim]AgentOS has been initialized with a clean slate.[/dim]"
+    )
+    
+    console.print(Panel(
+        success_panel,
+        title="[bold #00ff66]🧹 CLEAN SLATE RESTORED[/bold #00ff66]",
+        border_style="#00ff66",
+        box=ROUNDED,
+        expand=False
+    ))
+
 def show_inventory():
-    """عرض جدول المخزون الحالي"""
+    """Display current inventory table"""
     data = load_data()
     agents = data["agents"]
     
@@ -108,7 +165,7 @@ def show_inventory():
     log_action("SYSTEM", f"Manager viewed inventory table containing {len(agents)} agents.")
 
 def add_new_agent():
-    """إضافة وكيل ذكاء اصطناعي جديد للمتجر"""
+    """Register a new AI agent to the store"""
     data = load_data()
     
     name = questionary.text("Enter Agent Name:", style=CYBERPUNK_STYLE).ask()

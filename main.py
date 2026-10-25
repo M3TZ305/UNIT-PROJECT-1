@@ -26,11 +26,11 @@ if hasattr(sys.stdout, 'reconfigure'):
 console = Console()
 
 def run_app():
-    # إطلاق شاشة البداية السينمائية لمرة واحدة فقط
+    # Cinematic startup sequence
     cinematic_startup_sequence()
     
-    # انتقال سينمائي سلس إلى القائمة الرئيسية بدلاً من الفتح المفاجئ
-    smooth_menu_transition("[AgentOSا] Main Grid")
+    # Smooth transition to main menu
+    smooth_menu_transition("[AgentOS] Main Grid")
     
     while True:
         choice = main_menu()

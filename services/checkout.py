@@ -17,7 +17,7 @@ from ui.animations import CYBERPUNK_STYLE
 console = Console()
 
 def process_checkout(endpoint_address):
-    """إتمام عملية الشراء، توليد شهادة الترخيص الرقمية ASCII Art، وحفظها"""
+    """Complete checkout, generate ASCII Art digital license certificate, and save it"""
     data = load_data()
     cart = data["cart"]
     
@@ -76,7 +76,7 @@ def process_checkout(endpoint_address):
     return True
 
 def display_success_celebration():
-    """أنيميشن احتفالي حركي ومبهر مع تأثير الوميض"""
+    """Display animated success celebration with blinking effect"""
     with console.status("[bold #ffb700]🎆 Launching Cluster Fireworks & Generating License...[/bold #ffb700]", spinner="earth"):
         time.sleep(2.2)
     
@@ -88,13 +88,13 @@ def display_success_celebration():
     time.sleep(0.5)
 
 def generate_ascii_certificate(buyer_name, endpoint_address):
-    """توليد شهادة ترخيص رقمية ضخمة بتصميم ASCII Art فريد ومشفر"""
+    """Generate large digital ASCII Art license certificate"""
     ref_id = f"CRN-{uuid.uuid4().hex[:6].upper()}-{random.randint(1000, 9999)}"
     barcode = "█ █║█║█ █║█ █║█║█ █║█ █║█║█ █ █║██"
     
     ascii_cert = f"""
   +------------------------------------------------------------------+
-  |                 [AgentOSا] CLUSTER LICENSE CERTIFICATE           |
+  |                 [AgentOS] CLUSTER LICENSE CERTIFICATE            |
   +------------------------------------------------------------------+
   |  HOLDER NAME  : {buyer_name:<45} |
   |  REFERENCE ID : {ref_id:<45} |
@@ -107,7 +107,7 @@ def generate_ascii_certificate(buyer_name, endpoint_address):
     return ascii_cert, ref_id
 
 def save_receipt_to_file(cart, total_price, endpoint_address, buyer_name, ref_id, cert_text):
-    """حفظ شهادة الترخيص والفاتورة تراكمياً في سجل الفواتير"""
+    """Save license certificate and receipt cumulatively to receipts log"""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     filename = "receipts_log.txt"
     
@@ -125,7 +125,7 @@ Total Paid: {total_price} TC
         console.print(Panel(f"[bold red]⚠️ Failed to export certificate file: {e}[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
 
 def track_deployment_status():
-    """تتبع حالة نشر وشحن الوكلاء"""
+    """Track deployment status of deployed agents"""
     data = load_data()
     history = data.get("history", [])
     
@@ -149,7 +149,7 @@ def track_deployment_status():
     log_action("SYSTEM", f"Tracked deployment status for {len(history)} deployed agents.")
 
 def view_purchase_history():
-    """عرض سجل المشتريات والفواتير السابقة داخل جدول أنيق في البرنامج"""
+    """Display past purchase history and receipts inside a sleek table"""
     data = load_data()
     history = data.get("history", [])
     

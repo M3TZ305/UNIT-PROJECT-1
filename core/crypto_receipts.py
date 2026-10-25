@@ -36,7 +36,7 @@ def get_or_create_secret_key() -> bytes:
             
     return key.encode("utf-8") if isinstance(key, str) else key
 
-def create_encrypted_receipt(transaction_id: str, item_name: str, amount: str, timestamp: str = None, receipt_type: str = "TRANSACTION"):
+def create_encrypted_receipt(transaction_id: str, item_name: str, amount: str, timestamp: str = None, receipt_type: str = "TRANSACTION", extra_data: dict = None):
     """Build a receipt dictionary, encrypt it using Fernet, and append to receipts.json."""
     if not timestamp:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -48,6 +48,8 @@ def create_encrypted_receipt(transaction_id: str, item_name: str, amount: str, t
         "timestamp": timestamp,
         "type": receipt_type
     }
+    if extra_data:
+        receipt_data.update(extra_data)
     
     try:
         secret_key = get_or_create_secret_key()
@@ -121,7 +123,7 @@ def display_encrypted_receipts():
         return
         
     table = Table(
-        title="[bold #00f3ff]📜 [AgentOSا] ENCRYPTED PURCHASE RECEIPTS LEDGER[/bold #00f3ff]",
+        title="[bold #00f3ff]📜 [AgentOS] ENCRYPTED PURCHASE RECEIPTS LEDGER[/bold #00f3ff]",
         show_header=True,
         box=ROUNDED,
         border_style="#00f3ff",

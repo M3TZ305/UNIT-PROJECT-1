@@ -8,7 +8,7 @@ from rich.box import ROUNDED
 console = Console()
 
 def export_data_to_csv():
-    """تصدير سجل المشتريات والبيانات إلى ملف report.csv حقيقي"""
+    """Export purchase history and system data to report.csv"""
     data = load_data()
     history = data.get("history", [])
     agents = data.get("agents", [])
@@ -19,7 +19,7 @@ def export_data_to_csv():
         with open(filename, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             
-            writer.writerow(["=== [AgentOSا] EXPORT REPORT ==="])
+            writer.writerow(["=== [AgentOS] EXPORT REPORT ==="])
             writer.writerow(["Generated At", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
             writer.writerow(["Total Tokens Remaining", data.get("tokens", 0)])
             writer.writerow([])

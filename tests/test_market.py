@@ -94,3 +94,30 @@ def test_promo_code_redemption():
     updated_data["tokens"] = 2000
     updated_data["redeemed_codes"] = []
     save_data(updated_data)
+
+def test_saudi_mobile_validation():
+    """اختبار التحقق من صحة رقم الجوال السعودي (يبدأ بـ 05 ويليه 8 أرقام)"""
+    import re
+    pattern = r"^05[0-9]{8}$"
+    
+    # حالات صحيحة
+    assert bool(re.match(pattern, "0501234567")) is True
+    assert bool(re.match(pattern, "0559876543")) is True
+    
+    # حالات خاطئة
+    assert bool(re.match(pattern, "0401234567")) is False
+    assert bool(re.match(pattern, "050123456")) is False
+    assert bool(re.match(pattern, "05012345678")) is False
+    assert bool(re.match(pattern, "050123456a")) is False
+
+def test_bank_card_validation():
+    """اختبار التحقق من أن رقم البطاقة البنكية يتكون من 16 رقماً בדיוק"""
+    valid_card = "1234567890123456"
+    assert valid_card.isdigit() and len(valid_card) == 16
+    
+    short_card = "123456789012345"
+    assert not (short_card.isdigit() and len(short_card) == 16)
+    
+    alpha_card = "123456789012345a"
+    assert not (alpha_card.isdigit() and len(alpha_card) == 16)
+

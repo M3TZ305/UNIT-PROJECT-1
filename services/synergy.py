@@ -5,7 +5,7 @@ console = Console()
 
 def check_agent_synergy(agents_list):
     """
-    تحسب مؤشر التناغم الاستراتيجي (Synergy Multiplier) بناءً على الوكلاء في المخزون أو السلة
+    Calculate the strategic synergy multiplier based on agents in inventory or cart
     """
     if not agents_list:
         return []
@@ -13,7 +13,7 @@ def check_agent_synergy(agents_list):
     agent_names = [str(a.get("name", "")).lower() for a in agents_list]
     synergies_found = []
     
-    # القاعدة الأولى: دمج وكيل برمجة مع وكيل أمان (تفعيل درع الحماية السيبراني)
+    # Rule 1: Combining coding agent with security agent (Cyber-Defense Grid)
     has_code = any("code" in name or "dev" in name or "deep" in name for name in agent_names)
     has_sec = any("sec" in name or "guard" in name or "shield" in name for name in agent_names)
     
@@ -24,7 +24,7 @@ def check_agent_synergy(agents_list):
             "desc": "Combining software generation nodes with security guards locks down absolute system integrity."
         })
         
-    # القاعدة الثانية: امتلاك 3 وكلاء أو أكثر (تفعيل سرب الشبكة العصبية)
+    # Rule 2: Owning 3 or more agents (Neural Swarm)
     if len(agents_list) >= 3:
         synergies_found.append({
             "title": "🧠 [bold cyan]Omni-Cluster Neural Swarm[/bold cyan]",
@@ -35,7 +35,7 @@ def check_agent_synergy(agents_list):
     return synergies_found
 
 def display_synergy_report(agents_list):
-    """عرض تقرير التناغم بتنسيق سينمائي فاخر داخل واجهة التيرمينال"""
+    """Display synergy report in a cinematic format inside the terminal"""
     synergies = check_agent_synergy(agents_list)
     
     if not synergies:

@@ -1,4 +1,5 @@
 import random
+import re
 import questionary
 from core.database import load_data, save_data
 from core.logger import log_action
@@ -41,7 +42,7 @@ def get_fluctuated_market_agents(agents=None):
     return fluctuated_list
 
 def search_agents(query):
-    """البحث عن وكيل بالاسم أو التخصص"""
+    """Search for an agent by name or specialty"""
     data = load_data()
     query = query.lower()
     results = [a for a in data["agents"] if query in a["name"].lower() or query in a["specialty"].lower()]
@@ -49,7 +50,7 @@ def search_agents(query):
     return results
 
 def add_to_cart(agent_id):
-    """إضافة وكيل إلى سلة المشتريات"""
+    """Add an agent to the shopping cart"""
     data = load_data()
     agent = next((a for a in data["agents"] if a["id"] == agent_id), None)
     
@@ -68,7 +69,7 @@ def add_to_cart(agent_id):
     return True
 
 def remove_from_cart(agent_id):
-    """إزالة وكيل من السلة"""
+    """Remove an agent from the cart"""
     data = load_data()
     cart = data["cart"]
     new_cart = [item for item in cart if item["id"] != agent_id]
@@ -84,7 +85,7 @@ def remove_from_cart(agent_id):
     return True
 
 def list_cart():
-    """عرض محتويات سلة المشتريات"""
+    """Display shopping cart contents"""
     data = load_data()
     cart = data["cart"]
     
@@ -107,7 +108,7 @@ def list_cart():
     return total
 
 def get_recommendations():
-    """تقديم توصيات ذكية للمستخدم بناءً على سجل المشتريات"""
+    """Provide smart AI recommendations to the operator based on purchase history"""
     data = load_data()
     history = data.get("history", [])
     agents = data["agents"]
@@ -123,37 +124,74 @@ def get_recommendations():
     return recs
 
 def top_up_tokens():
-    """ميزة شحن الرصيد مع التحقق الصارم من الاسم ورقم البطاقة (10 أرقام بالضبط)"""
+    """Token top-up feature with validation for name, Saudi mobile number (^05[0-9]{8}$), and bank card (16 digits)"""
     data = load_data()
     current_tokens = data.get("tokens", 0)
     
-    console.print(Panel(f"[bold #00f3ff]💳 Your Current Balance:[/bold #00f3ff] [bold #ffb700]{current_tokens} TC[/bold #ffb700]", title="[bold #00f3ff]Token Wallet[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED, expand=False))
+    console.print(Panel(f"[bold #00f3ff]💳 Your Current Balance:[/bold #00f3ff] [bold #ffb700]{current_tokens} TC[/bold #ffb700]", title="[bold #00f3ff]Token Wallet Top-Up Portal[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED, expand=False))
     
-    name = questionary.text("Enter your full name for billing:", style=CYBERPUNK_STYLE).ask()
-    if not name or not name.strip() or not name.replace(" ", "").isalpha():
-        console.print(Panel("[bold red]❌ Invalid Name! Name must contain letters only. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
-        log_action("WARNING", "Top-up attempt failed due to invalid operator name.")
+    name = questionary.text("Full Name:", style=CYBERPUNK_STYLE).ask()
+    if not name or not name.strip():
+        console.print(Panel("[bold red]❌ Invalid Name! Name cannot be empty. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Top-up attempt failed due to empty operator name.")
         return
         
-    card_number = questionary.text("Enter 10-Digit Card Number:", style=CYBERPUNK_STYLE).ask()
-    if not card_number or not card_number.isdigit() or len(card_number) != 10:
-        console.print(Panel("[bold red]❌ Invalid Card Number! It must be exactly 10 digits. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
-        log_action("WARNING", "Top-up attempt failed due to invalid card number format.")
+    mobile = questionary.text("Saudi Mobile Number (e.g. 05XXXXXXXX):", style=CYBERPUNK_STYLE).ask()
+    if not mobile or not re.match(r"^05[0-9]{8}$", mobile.strip()):
+        console.print(Panel("[bold red]❌ Invalid Saudi Mobile Number! Must start with '05' followed by 8 digits (e.g., 0512345678). Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Top-up attempt failed due to invalid Saudi mobile number format.")
+        return
+        
+    card_number = questionary.text("Bank Card Number (16 digits):", style=CYBERPUNK_STYLE).ask()
+    if not card_number or not card_number.isdigit() or len(card_number) != 16:
+        console.print(Panel("[bold red]❌ Invalid Bank Card Number! Must be exactly 16 numeric digits. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Top-up attempt failed due to invalid bank card number format.")
         return
         
     amount_str = questionary.text("Enter Token amount to top-up (e.g. 1000):", style=CYBERPUNK_STYLE).ask()
-    if amount_str and amount_str.isdigit():
-        amount = int(amount_str)
-        if amount > 0:
-            data["tokens"] = current_tokens + amount
-            save_data(data)
-            create_encrypted_receipt(f"TOPUP-{random.randint(1000,9999)}", f"Wallet Top-Up ({name.strip()})", f"+{amount} TC", receipt_type="TOKEN TOP-UP")
-            log_action("TRANSACTION", f"Wallet top-up successful: +{amount} TC added by operator {name.strip()}. New balance: {data['tokens']} TC")
-            console.print(Panel(f"[bold #00ff66]✔ Thank you, {name.strip()}! Successfully added {amount} TC! New Balance: {data['tokens']} TC[/bold #00ff66]", title="[bold #00ff66]Top-Up Successful[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
-            return
-            
-    console.print(Panel("[bold red]❌ Invalid token amount entered. Top-up canceled.[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
-    log_action("WARNING", "Top-up attempt failed due to invalid token amount.")
+    if not amount_str or not amount_str.isdigit() or int(amount_str) <= 0:
+        console.print(Panel("[bold red]❌ Invalid token amount entered. Top-up canceled.[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", "Top-up attempt failed due to invalid token amount.")
+        return
+        
+    amount = int(amount_str)
+    data["tokens"] = current_tokens + amount
+    save_data(data)
+    
+    ref_id = f"TOPUP-{random.randint(1000,9999)}"
+    masked_card = f"****-****-****-{card_number[-4:]}"
+    
+    create_encrypted_receipt(
+        ref_id,
+        f"Wallet Top-Up ({name.strip()})",
+        f"+{amount} TC",
+        receipt_type="TOKEN TOP-UP",
+        extra_data={
+            "full_name": name.strip(),
+            "saudi_mobile": mobile.strip(),
+            "card_masked": masked_card
+        }
+    )
+    
+    log_action("TRANSACTION", f"Wallet top-up successful: +{amount} TC added by {name.strip()} (Mobile: {mobile.strip()}). New balance: {data['tokens']} TC")
+    
+    success_banner = (
+        f"[bold #00ff66]🎉 TOKEN RECHARGE SUCCESSFUL! 🎉[/bold #00ff66]\n\n"
+        f"[bold white]Full Name:[/bold white] [bold #00f3ff]{name.strip()}[/bold #00f3ff]\n"
+        f"[bold white]Saudi Mobile:[/bold white] [bold #00f3ff]{mobile.strip()}[/bold #00f3ff]\n"
+        f"[bold white]Bank Card:[/bold white] [bold #ffb700]{masked_card}[/bold #ffb700]\n"
+        f"[bold white]Amount Added:[/bold white] [bold #00ff66]+{amount} TC[/bold #00ff66]\n"
+        f"[bold white]New Wallet Balance:[/bold white] [bold #ffb700]{data['tokens']} TC[/bold #ffb700]\n\n"
+        f"[dim]Reference ID: {ref_id} │ Securely Logged & Encrypted[/dim]"
+    )
+    
+    console.print(Panel(
+        success_banner,
+        title="[bold #00ff66]💳 RECHARGE SECURED[/bold #00ff66]",
+        border_style="#00ff66",
+        box=ROUNDED,
+        expand=False
+    ))
 
 def redeem_promo_code():
     """Redeem discount coupons/promo codes (e.g., 'GRAD2026', 'CYBER100', 'VIP2026') to add bonus credits to wallet."""

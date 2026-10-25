@@ -1,17 +1,22 @@
 [
     {
-        "timestamp": "2026-10-25 23:48:52",
+        "timestamp": "2026-10-26 00:22:07",
         "type": "SYSTEM",
         "message": "Searched agents catalogue with query: 'deepcode' (Found 1 results)"
     },
     {
-        "timestamp": "2026-10-25 23:48:52",
+        "timestamp": "2026-10-26 00:22:07",
         "type": "SUCCESS",
         "message": "Added agent 'DeepCode-V4' (ID: 01) to shopping cart."
     },
     {
-        "timestamp": "2026-10-25 23:48:52",
+        "timestamp": "2026-10-26 00:22:07",
         "type": "SYSTEM",
         "message": "Removed agent ID '01' from shopping cart."
+    },
+    {
+        "timestamp": "2026-10-26 00:25:42",
+        "type": "WARNING",
+        "message": "Top-up attempt failed due to invalid Saudi mobile number format."
     }
 ]

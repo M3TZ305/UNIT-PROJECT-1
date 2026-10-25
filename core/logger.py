@@ -58,7 +58,7 @@ def display_audit_logs():
         return
         
     table = Table(
-        title="[bold #00f3ff]📋 [AgentOSا] SYSTEM AUDIT LOGS[/bold #00f3ff]",
+        title="[bold #00f3ff]📋 [AgentOS] SYSTEM AUDIT LOGS[/bold #00f3ff]",
         show_header=True,
         box=ROUNDED,
         border_style="#00f3ff",
