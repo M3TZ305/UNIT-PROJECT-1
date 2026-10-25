@@ -30,7 +30,7 @@ def run_app():
     cinematic_startup_sequence()
     
     # انتقال سينمائي سلس إلى القائمة الرئيسية بدلاً من الفتح المفاجئ
-    smooth_menu_transition("Main Orchestration Grid")
+    smooth_menu_transition("[AgentOSا] Main Grid")
     
     while True:
         choice = main_menu()

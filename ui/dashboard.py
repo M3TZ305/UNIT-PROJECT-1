@@ -16,7 +16,7 @@ def display_live_dashboard():
     cart = data.get("cart", [])
     agents = data.get("agents", [])
     
-    console.print("\n[bold #00f3ff]📊 LIVE SYSTEM ORCHESTRATION DASHBOARD[/bold #00f3ff]")
+    console.print("\n[bold #00f3ff]📊 [AgentOSا] LIVE SYSTEM DASHBOARD[/bold #00f3ff]")
     console.print("─" * 80, style="dim")
     
     # 1. بطاقات الإحصائيات السريعة (Stat Cards)

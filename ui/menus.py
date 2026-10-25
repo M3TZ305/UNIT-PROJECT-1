@@ -14,7 +14,7 @@ def display_agent_table(agents):
     from services.store import get_fluctuated_market_agents
     market_agents = get_fluctuated_market_agents(agents)
     
-    table = Table(title="[bold #00f3ff]Available AI Agents Marketplace (Live Stock Exchange)[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
+    table = Table(title="[bold #00f3ff]Available [AgentOSا] Agents Marketplace (Live Stock Exchange)[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
     table.add_column("ID", style="dim", width=4)
     table.add_column("Agent Name", style="bold #00ff66")
     table.add_column("Specialty", style="bold #ffb700")
@@ -53,7 +53,7 @@ def display_status_panel():
     )
     panel = Panel(
         Align.center(Text.from_markup(status_text)),
-        title="[bold #00f3ff]✦ OMNI-CLUSTER STATUS PANEL ✦[/bold #00f3ff]",
+        title="[bold #00f3ff]✦ [AgentOSا] STATUS PANEL ✦[/bold #00f3ff]",
         border_style="#00f3ff",
         box=ROUNDED,
         padding=(0, 1),

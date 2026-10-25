@@ -121,7 +121,7 @@ def display_encrypted_receipts():
         return
         
     table = Table(
-        title="[bold #00f3ff]📜 ENCRYPTED PURCHASE RECEIPTS LEDGER[/bold #00f3ff]",
+        title="[bold #00f3ff]📜 [AgentOSا] ENCRYPTED PURCHASE RECEIPTS LEDGER[/bold #00f3ff]",
         show_header=True,
         box=ROUNDED,
         border_style="#00f3ff",

@@ -94,7 +94,7 @@ def generate_ascii_certificate(buyer_name, endpoint_address):
     
     ascii_cert = f"""
   +------------------------------------------------------------------+
-  |                   AI CLUSTER LICENSE CERTIFICATE                 |
+  |                 [AgentOSا] CLUSTER LICENSE CERTIFICATE           |
   +------------------------------------------------------------------+
   |  HOLDER NAME  : {buyer_name:<45} |
   |  REFERENCE ID : {ref_id:<45} |

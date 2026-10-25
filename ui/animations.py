@@ -40,11 +40,11 @@ THEMES = {
 
 BANNER_TEXT = """
   ╔═════════════════════════════════════════════════════════════════════════════╗
-  ║    █████╗  ██████╗ ███████╗███╗   ██╗████████╗    ██████╗  ██████╗ ██████╗    ║
-  ║   ██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝   ██╔═══██╗██╔════╝ ██╔══██╗   ║
-  ║   ███████║██║  ███╗█████╗  ██╔██╗ ██║   ██║      ██║   ██║██║  ███╗██████╔╝   ║
-  ║   ██╔══██║██║   ██║██╔══╝  ██║╚██╗██║   ██║      ██║   ██║██║   ██║██╔══██╗   ║
-  ║   ██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║      ╚██████╔╝╚██████╔╝███████╗   ║
+  ║      █████╗   ██████╗ ███████╗███╗   ██╗████████╗ ██████╗  ███████╗         ║
+  ║     ██╔══██╗ ██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗ ██╔════╝         ║
+  ║     ███████║ ██║  ███╗█████╗  ██╔██╗ ██║   ██║   ██║   ██║ ███████╗         ║
+  ║     ██╔══██║ ██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║   ██║ ╚════██║         ║
+  ║     ██║  ██║ ╚██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝ ███████║         ║
   ╚═════════════════════════════════════════════════════════════════════════════╝
 """
 
@@ -68,7 +68,7 @@ def cinematic_startup_sequence():
     clear_screen()
     display_banner()
     
-    console.print("\n[bold #00f3ff]✨ OMNI-CLUSTER NEURAL ORCHESTRATION ENGINE INITIALIZING...[/bold #00f3ff]")
+    console.print("\n[bold #00f3ff]✨ [AgentOSا] NEURAL ORCHESTRATION ENGINE INITIALIZING...[/bold #00f3ff]")
     console.print("[dim]   [Please stand by while core systems and project branding load][/dim]\n")
     time.sleep(2.5)
     
@@ -147,7 +147,7 @@ def cinematic_exit():
     warning_panel = Panel(
         "[bold #ffb700]WARNING:[/bold #ffb700] Initiating emergency quantum core shutdown & local storage data encryption...\n"
         "[dim]Disconnecting neural nodes, flushing memory buffers, and securing local state.[/dim]",
-        title="[bold #ffb700]AGENT OGB // CRITICAL SHUTDOWN PROTOCOL[/bold #ffb700]",
+        title="[bold #ffb700][AgentOSا] // CRITICAL SHUTDOWN PROTOCOL[/bold #ffb700]",
         border_style="#ffb700",
         box=ROUNDED,
         padding=(1, 2)
@@ -188,7 +188,7 @@ def cinematic_exit():
     success_msg = "[🚀] SYSTEM OFFLINE. ALL NODES SECURED.\nHave a great day, Operator! See you at the top. ✨"
     success_panel = Panel(
         f"[bold #00ff66]{success_msg}[/bold #00ff66]",
-        title="[bold #00ff66]AGENT OGB // OFFLINE[/bold #00ff66]",
+        title="[bold #00ff66][AgentOSا] // OFFLINE[/bold #00ff66]",
         border_style="#00ff66",
         box=ROUNDED,
         padding=(1, 2)

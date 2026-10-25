@@ -162,9 +162,9 @@ def redeem_promo_code():
         data["redeemed_codes"] = []
         
     console.print(Panel(
-        "[bold #00f3ff]🎟️ OMNI-CLUSTER PROMO CODE REDEMPTION PORTAL[/bold #00f3ff]\n"
+        "[bold #00f3ff]🎟️ [AgentOSا] PROMO CODE REDEMPTION PORTAL[/bold #00f3ff]\n"
         "[dim]Enter valid promotional codes to inject bonus tokens directly into your wallet.[/dim]\n"
-        "[bold #ffb700]💡 Hint: Try codes like 'GRAD2026', 'CYBER100', 'OGB500', or 'VIP2026'[/bold #ffb700]",
+        "[bold #ffb700]💡 Hint: Try codes like 'GRAD2026', 'CYBER100', 'AGENTOS500', or 'VIP2026'[/bold #ffb700]",
         title="[bold #00f3ff]Promo Code Hub[/bold #00f3ff]",
         border_style="#00f3ff",
         box=ROUNDED,
@@ -180,6 +180,7 @@ def redeem_promo_code():
     promo_rewards = {
         "GRAD2026": 1000,
         "CYBER100": 500,
+        "AGENTOS500": 500,
         "OGB500": 500,
         "VIP2026": 2000
     }

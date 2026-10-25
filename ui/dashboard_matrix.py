@@ -33,7 +33,7 @@ def generate_dashboard_layout():
     )
 
     # --- 1. قسم الكتالوج (Catalog Section) ---
-    table = Table(title="[bold #00f3ff]Live AI Agents Catalog[/bold #00f3ff]", show_header=True, expand=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
+    table = Table(title="[bold #00f3ff][AgentOSا] Agents Catalog[/bold #00f3ff]", show_header=True, expand=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
     table.add_column("ID", style="dim", width=4)
     table.add_column("Agent Name", style="bold #00ff66")
     table.add_column("Specialty", style="bold #ffb700")
@@ -42,7 +42,7 @@ def generate_dashboard_layout():
     for agent in agents:
         table.add_row(agent["id"], agent["name"], agent["specialty"], f"{agent['price']} TC")
     
-    catalog_panel = Panel(table, title="[bold #00ff66]📦 1. Catalog Section[/bold #00ff66]", border_style="#00ff66", box=ROUNDED)
+    catalog_panel = Panel(table, title="[bold #00ff66]📦 1. [AgentOSا] Catalog Section[/bold #00ff66]", border_style="#00ff66", box=ROUNDED)
 
     # --- 2. قسم السجل الحي للعمليات (Live Logs Section) ---
     current_time = datetime.now().strftime("%H:%M:%S")
@@ -54,7 +54,7 @@ def generate_dashboard_layout():
         f"[bold #00ff66]{current_time} - Monitoring background threads...[/bold #00ff66]\n"
         f"[bold #00ff66]>> Matrix stream running smoothly...[/bold #00ff66]"
     )
-    logs_panel = Panel(logs_content, title="[bold #ffb700]⚡ 2. Live Logs Matrix[/bold #ffb700]", border_style="#ffb700", box=ROUNDED)
+    logs_panel = Panel(logs_content, title="[bold #ffb700]⚡ 2. [AgentOSا] Live Logs Matrix[/bold #ffb700]", border_style="#ffb700", box=ROUNDED)
 
     # ربط القسم العُلوي
     layout["upper"]["catalog"].update(catalog_panel)
@@ -67,7 +67,7 @@ def generate_dashboard_layout():
         f"[bold #ffb700]Wallet Balance:[/bold #ffb700] {tokens} TC | "
         f"[bold #00ff66]Servers Status:[/bold #00ff66] ALL NODES OPTIMAL (100%)"
     )
-    bottom_panel = Panel(gpu_info, title="[bold #00f3ff]💻 3. GPU & Server Performance Indicators[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED)
+    bottom_panel = Panel(gpu_info, title="[bold #00f3ff]💻 3. [AgentOSا] GPU & Server Performance Indicators[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED)
     
     layout["lower"].update(bottom_panel)
 

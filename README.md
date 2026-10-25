@@ -1,6 +1,4 @@
-Markdown
-
-# 🤖 Autonomous AI Agent Orchestra & Marketplace (CLI)
+# 🤖 [AgentOSا] - Autonomous AI Agent & System OS (CLI)
 
 > An advanced, interactive command-line interface (CLI) platform designed for managing, purchasing, and deploying AI agent clusters. Built with Python, featuring rich terminal UI, interactive menus, and modular software architecture.
 
@@ -8,7 +6,7 @@ Markdown
 
 ## 📌 Project Overview
 
-The **AI Agent Marketplace** is a futuristic terminal-based application that allows developers and administrators to browse, configure, purchase, and deploy autonomous artificial intelligence agents. The system features two distinct user roles: **Customers (Developers)** and **Managers (Administrators)**, ensuring full e-commerce and cluster management functionality.
+The **[AgentOSا]** platform is a futuristic terminal-based application that allows developers and administrators to browse, configure, purchase, and deploy autonomous artificial intelligence agents. The system features two distinct user roles: **Customers (Developers)** and **Managers (Administrators)**, ensuring full e-commerce and cluster management functionality.
 
 ---
 
@@ -39,26 +37,26 @@ The **AI Agent Marketplace** is a futuristic terminal-based application that all
 ## 📂 Project Architecture (Modules & Packages)
 
 The project follows a clean separation of concerns, organized into robust packages and modules:
-ai_agent_marketplace/
+agentos/
 │
-├── core/ # Core system logic & database
-│ ├── init.py
-│ └── database.py # Local JSON state management
+├── core/               # Core system logic & database
+│   ├── __init__.py
+│   └── database.py     # Local JSON state management
 │
-├── ui/ # Visual interface & animations
-│ ├── init.py
-│ ├── animations.py # Rich terminal spinners and banners
-│ └── menus.py # Interactive questionary menus and tables
+├── ui/                 # Visual interface & animations
+│   ├── __init__.py
+│   ├── animations.py   # Rich terminal spinners and banners
+│   └── menus.py        # Interactive questionary menus and tables
 │
-├── services/ # Business logic & operations
-│ ├── init.py
-│ ├── store.py # Cart, search, and recommendations
-│ ├── checkout.py # Payment processing and receipts
-│ └── manager.py # Administrator inventory control
+├── services/           # Business logic & operations
+│   ├── __init__.py
+│   ├── store.py        # Cart, search, and recommendations
+│   ├── checkout.py     # Payment processing and receipts
+│   └── manager.py      # Administrator inventory control
 │
-├── main.py # Main application entry point
-├── requirements.txt # Project Python dependencies
-└── README.md # Project documentation
+├── main.py             # Main application entry point
+├── requirements.txt    # Project Python dependencies
+└── README.md           # Project documentation
 
 ---
 
@@ -67,27 +65,24 @@ ai_agent_marketplace/
 1. **Clone the repository:**
    ```bash
    git clone <your-repository-url>
-   cd ai_agent_marketplace
-   Install required dependencies:
+   cd agentos
+   ```
+2. **Install required dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Run the application:**
+   ```bash
+   python main.py
    ```
 
-Bash
-pip install -r requirements.txt
-Run the application:
+## 🕹️ Usage Guide
 
-Bash
-python main.py
-🕹️ Usage Guide
-When you run python main.py, an interactive terminal dashboard will launch. Use your keyboard Arrow Keys to navigate and Enter to select options:
+When you run `python main.py`, an interactive terminal dashboard will launch. Use your keyboard Arrow Keys to navigate and Enter to select options:
 
-Browse AI Agents Catalogue: View all available AI agents in a structured rich table.
-
-Search for an Agent: Type keywords (e.g., Architecture, Security) to filter agents.
-
-Get AI Recommendations: Discover tailored agent suggestions for your infrastructure.
-
-View My Cart & Checkout: Manage your selected items, input your target IP/Endpoint, and execute deployment.
-
-Track Deployment Status: Review your active cluster node sync states.
-
-Manager Portal: Enter access key (1234) to manage inventory and register new agents.
+- **Browse AI Agents Catalogue:** View all available AI agents in a structured rich table.
+- **Search for an Agent:** Type keywords (e.g., Architecture, Security) to filter agents.
+- **Get AI Recommendations:** Discover tailored agent suggestions for your infrastructure.
+- **View My Cart & Checkout:** Manage your selected items, input your target IP/Endpoint, and execute deployment.
+- **Track Deployment Status:** Review your active cluster node sync states.
+- **Manager Portal:** Enter access key (1234) to manage inventory and register new agents.
