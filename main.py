@@ -10,7 +10,7 @@ from ui.dashboard_matrix import run_live_matrix_dashboard
 from services.store import search_agents, add_to_cart, remove_from_cart, list_cart, get_recommendations, top_up_tokens
 from services.checkout import process_checkout, track_deployment_status, view_purchase_history
 from services.manager import manager_dashboard
-from services.sandbox import run_agent_sandbox
+from services.sandbox import launch_sandbox
 from services.minigame import run_hacking_minigame
 from services.export import export_data_to_csv
 from rich.console import Console
@@ -75,9 +75,9 @@ def run_app():
             run_hacking_minigame()
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
-        elif choice == "🧪  Launch AI Agent Sandbox Playground":
+        elif "Test AI Model" in choice:
             smooth_menu_transition("AI Agent Sandbox Playground")
-            run_agent_sandbox()
+            launch_sandbox()
                 
         elif choice == "📊  View Live System Dashboard":
             smooth_menu_transition("Live System Dashboard")

@@ -95,7 +95,7 @@ def main_menu():
                 choices=[
                     "🖥️  Live Split-Screen Dashboard Matrix",
                     "🌐  Hack Dark Web for Free Tokens (Mini-Game)",
-                    "🧪  Launch AI Agent Sandbox Playground",
+                    "🤖 Test AI Model (Sandbox)",
                     "⬅️  Back to Main Menu"
                 ]
             ).ask()
