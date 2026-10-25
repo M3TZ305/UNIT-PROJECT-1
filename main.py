@@ -4,6 +4,7 @@ os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data
 from core.logger import display_audit_logs
+from core.crypto_receipts import display_encrypted_receipts
 from ui.animations import cinematic_startup_sequence, show_deployment_animation, smooth_menu_transition, clear_screen, cinematic_exit, CYBERPUNK_STYLE
 from ui.menus import main_menu, display_agent_table, select_theme_menu
 from ui.dashboard import display_live_dashboard
@@ -88,6 +89,11 @@ def run_app():
         elif choice == "📜  View Past Receipts & History":
             smooth_menu_transition("Past Receipts Ledger")
             view_purchase_history()
+            console.input("\n[dim]Press Enter to return to menu...[/dim]")
+                
+        elif choice == "🔐  View Encrypted Purchase Receipts":
+            smooth_menu_transition("Encrypted Purchase Receipts Ledger")
+            display_encrypted_receipts()
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "📋  View System Audit Logs":

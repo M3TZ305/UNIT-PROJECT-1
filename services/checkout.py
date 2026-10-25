@@ -4,6 +4,7 @@ import uuid
 from datetime import datetime
 from core.database import load_data, save_data
 from core.logger import log_action
+from core.crypto_receipts import create_encrypted_receipt
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -61,6 +62,7 @@ def process_checkout(endpoint_address):
         time.sleep(1.5)
         
     cert_text, ref_id = generate_ascii_certificate(buyer_name.strip(), endpoint_address)
+    create_encrypted_receipt(ref_id, agent_names, f"{total_price} TC", timestamp, "AGENT PURCHASE")
     
     console.print(Panel(
         f"[bold #00f3ff]{cert_text}[/bold #00f3ff]",

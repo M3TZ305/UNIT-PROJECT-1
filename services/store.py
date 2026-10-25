@@ -2,6 +2,7 @@ import random
 import questionary
 from core.database import load_data, save_data
 from core.logger import log_action
+from core.crypto_receipts import create_encrypted_receipt
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -146,6 +147,7 @@ def top_up_tokens():
         if amount > 0:
             data["tokens"] = current_tokens + amount
             save_data(data)
+            create_encrypted_receipt(f"TOPUP-{random.randint(1000,9999)}", f"Wallet Top-Up ({name.strip()})", f"+{amount} TC", receipt_type="TOKEN TOP-UP")
             log_action("TRANSACTION", f"Wallet top-up successful: +{amount} TC added by operator {name.strip()}. New balance: {data['tokens']} TC")
             console.print(Panel(f"[bold #00ff66]✔ Thank you, {name.strip()}! Successfully added {amount} TC! New Balance: {data['tokens']} TC[/bold #00ff66]", title="[bold #00ff66]Top-Up Successful[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
             return
@@ -210,6 +212,7 @@ def redeem_promo_code():
     data["tokens"] = data.get("tokens", 2000) + bonus
     data["redeemed_codes"].append(clean_code)
     save_data(data)
+    create_encrypted_receipt(f"PROMO-{clean_code}", f"Promo Code Reward ({clean_code})", f"+{bonus} TC", receipt_type="PROMO BONUS")
     
     new_balance = data["tokens"]
     log_action("TRANSACTION", f"Promo code '{clean_code}' redeemed successfully. Bonus: +{bonus} TC. New balance: {new_balance} TC")

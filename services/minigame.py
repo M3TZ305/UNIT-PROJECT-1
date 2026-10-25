@@ -4,6 +4,7 @@ import random
 import msvcrt
 from core.database import load_data, save_data
 from core.logger import log_action
+from core.crypto_receipts import create_encrypted_receipt
 from rich.console import Console
 from rich.panel import Panel
 from rich.live import Live
@@ -135,6 +136,7 @@ def run_ascii_glitch_restorer():
         data = load_data()
         data["tokens"] = data.get("tokens", 0) + earned_tokens
         save_data(data)
+        create_encrypted_receipt(f"GAME-{random.randint(1000,9999)}", f"ASCII Glitch Restorer ({final_pct}% Integrity)", f"+{earned_tokens} TC", receipt_type="MINIGAME REWARD")
         
         log_action("TRANSACTION", f"Mini-game reward: ASCII Glitch Restorer completed with {final_pct}% integrity. Credited +{earned_tokens} TC tokens.")
         
