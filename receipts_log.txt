@@ -1,0 +1,36 @@
+
+  +------------------------------------------------------------------+
+  |                 [AgentOS] CLUSTER LICENSE CERTIFICATE            |
+  +------------------------------------------------------------------+
+  |  HOLDER NAME  : Mutaz                                         |
+  |  REFERENCE ID : CRN-DC1313-9729                               |
+  |  PURCHASE TIME: 2026-10-26 22:49:39                           |
+  |  PURCHASED MOD: test                                          |
+  |  MODEL TYPE   : test                                          |
+  |  STATUS       : [ SECURED & VERIFIED BY QUANTUM CORE ]           |
+  |                                                                  |
+  |  SECURE BARCODE: █ █║█║█ █║█ █║█║█ █║█ █║█║█ █ █║██                 |
+  +------------------------------------------------------------------+
+    
+Timestamp: 2026-10-26 22:49:39
+Holder Name: Mutaz
+Total Paid: 100 TC
+--------------------------------------------------
+
+  +------------------------------------------------------------------+
+  |                 [AgentOS] CLUSTER LICENSE CERTIFICATE            |
+  +------------------------------------------------------------------+
+  |  HOLDER NAME  : KKa                                           |
+  |  REFERENCE ID : CRN-D6EA4C-6298                               |
+  |  PURCHASE TIME: 2026-10-26 23:04:49                           |
+  |  PURCHASED MOD: SecGuard-X                                    |
+  |  MODEL TYPE   : Cyber Defense                                 |
+  |  STATUS       : [ SECURED & VERIFIED BY QUANTUM CORE ]           |
+  |                                                                  |
+  |  SECURE BARCODE: █ █║█║█ █║█ █║█║█ █║█ █║█║█ █ █║██                 |
+  +------------------------------------------------------------------+
+    
+Timestamp: 2026-10-26 23:04:49
+Holder Name: KKa
+Total Paid: 600 TC
+--------------------------------------------------

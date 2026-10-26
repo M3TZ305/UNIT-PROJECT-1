@@ -6,7 +6,7 @@ from rich.align import Align
 from rich.text import Text
 from rich.box import ROUNDED, HEAVY, DOUBLE
 from core.database import load_data, save_data
-from ui.animations import clear_screen, CYBERPUNK_STYLE, display_banner
+from ui.animations import clear_screen, CYBERPUNK_STYLE, display_banner, get_current_theme_colors
 
 console = Console()
 
@@ -62,18 +62,19 @@ def display_status_panel():
     data = load_data()
     tokens = data.get("tokens", 0)
     current_theme = data.get("theme", "Cyberpunk Neon")
+    colors = get_current_theme_colors()
     operator_rank = calculate_operator_rank(data)
     
     status_text = (
-        f"[bold #ffb700]💰 WALLET:[/bold #ffb700] [bold #00ff66]{tokens} TC[/bold #00ff66]     │     "
-        f"[bold #00f3ff]🎨 THEME:[/bold #00f3ff] [bold white]{current_theme}[/bold white]     │     "
-        f"[bold #00f3ff]RANK:[/bold #00f3ff] {operator_rank}     │     "
+        f"[{colors['accent']}]💰 WALLET:[/{colors['accent']}] [bold #00ff66]{tokens} TC[/bold #00ff66]     │     "
+        f"[{colors['banner_style']}]🎨 THEME:[/{colors['banner_style']}] [bold white]{current_theme}[/bold white]     │     "
+        f"[{colors['banner_style']}]RANK:[/{colors['banner_style']}] {operator_rank}     │     "
         f"[bold #00ff66]⚡ STATUS: ONLINE (8K ULTRA)[/bold #00ff66]"
     )
     panel = Panel(
         Align.center(Text.from_markup(status_text)),
-        title="[bold #00f3ff]✦ [AgentOS] SYSTEM TELEMETRY & QUANTUM CORE STATUS ✦[/bold #00f3ff]",
-        border_style="#00f3ff",
+        title=f"[{colors['banner_style']}]✦ [AgentOS] SYSTEM TELEMETRY & QUANTUM CORE STATUS ✦[/{colors['banner_style']}]",
+        border_style=colors["border_style"],
         box=ROUNDED,
         padding=(1, 4),
         expand=True

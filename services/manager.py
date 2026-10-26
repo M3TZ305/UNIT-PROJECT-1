@@ -25,7 +25,7 @@ def manager_login():
         shield_panel = Panel(
             "[bold #00ff66]🛡️ SECURITY SHIELD: ACTIVE (100%) │ CLEARANCE: ALPHA-1 ROOT[/bold #00ff66]\n"
             "[dim]Authentication required for Cyber Security & Governance Command Center.[/dim]\n"
-            "[bold #ffb700]💡 Hint: Default PIN is 1234[/bold #ffb700]\n"
+            "[dim]💡 Type 'hint' below to reveal manager PIN hint[/dim]\n"
             "[dim]Press Enter to return to menu[/dim]",
             title="[bold #00ff66][AgentOS] // GOVERNANCE SECURITY GATEWAY[/bold #00ff66]",
             border_style="#00ff66",

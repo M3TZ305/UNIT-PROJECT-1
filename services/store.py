@@ -357,11 +357,30 @@ def redeem_promo_code():
             time.sleep(1.2)
             continue
             
+        name = questionary.text("Enter Full Name:", style=CYBERPUNK_STYLE).ask()
+        if not name or not name.strip():
+            return
+        mobile = questionary.text("Enter Mobile Number:", style=CYBERPUNK_STYLE).ask()
+        if not mobile or not mobile.strip():
+            return
+
         bonus = promo_rewards[clean_code]
         data["tokens"] = data.get("tokens", 2000) + bonus
         data["redeemed_codes"].append(clean_code)
         save_data(data)
-        create_encrypted_receipt(f"PROMO-{clean_code}", f"Promo Code Reward ({clean_code})", f"+{bonus} TC", receipt_type="PROMO BONUS")
+        
+        ref_id = f"PROMO-{clean_code}-{random.randint(100,999)}"
+        create_encrypted_receipt(
+            ref_id,
+            f"Promo Code Reward ({clean_code})",
+            f"+{bonus} TC",
+            receipt_type="PROMO CODE",
+            extra_data={
+                "full_name": name.strip(),
+                "saudi_mobile": mobile.strip(),
+                "promo_code": clean_code
+            }
+        )
         
         new_balance = data["tokens"]
         log_action("TRANSACTION", f"Promo code '{clean_code}' redeemed successfully. Bonus: +{bonus} TC. New balance: {new_balance} TC")

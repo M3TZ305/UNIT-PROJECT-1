@@ -2,6 +2,7 @@ import os
 import time
 import random
 import msvcrt
+import questionary
 from core.database import load_data, save_data
 from core.logger import log_action
 from core.crypto_receipts import create_encrypted_receipt
@@ -11,6 +12,7 @@ from rich.live import Live
 from rich.align import Align
 from rich.text import Text
 from rich.box import ROUNDED
+from ui.animations import CYBERPUNK_STYLE
 
 console = Console()
 
@@ -133,10 +135,26 @@ def run_ascii_glitch_restorer():
         final_pct = int((fixed_count / total_glitches) * 100) if total_glitches > 0 else 100
         earned_tokens = int(final_pct * 10)
         
+        console.print("\n[bold #00f3ff]🏆 Restoration Complete! Please register your performance reward:[/bold #00f3ff]")
+        player_name = questionary.text("Enter Player Name:", style=CYBERPUNK_STYLE).ask() or "Operator"
+        player_mobile = questionary.text("Enter Mobile Number:", style=CYBERPUNK_STYLE).ask() or "0500000000"
+
         data = load_data()
         data["tokens"] = data.get("tokens", 0) + earned_tokens
         save_data(data)
-        create_encrypted_receipt(f"GAME-{random.randint(1000,9999)}", f"ASCII Glitch Restorer ({final_pct}% Integrity)", f"+{earned_tokens} TC", receipt_type="MINIGAME REWARD")
+        
+        ref_id = f"GAME-{random.randint(1000,9999)}"
+        create_encrypted_receipt(
+            ref_id,
+            f"ASCII Glitch Restorer ({final_pct}% Integrity)",
+            f"+{earned_tokens} TC",
+            receipt_type="MINIGAME REWARD",
+            extra_data={
+                "full_name": player_name.strip(),
+                "saudi_mobile": player_mobile.strip(),
+                "performance": f"{final_pct}%"
+            }
+        )
         
         log_action("TRANSACTION", f"Mini-game reward: ASCII Glitch Restorer completed with {final_pct}% integrity. Credited +{earned_tokens} TC tokens.")
         
