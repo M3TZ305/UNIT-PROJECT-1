@@ -231,7 +231,7 @@ def add_new_agent():
             stock = int(stock_str)
             break
         except ValueError:
-            console.print(Panel("[bold red]❌ Invalid input! ممنوع تكتب حروف بالأرقام (Cannot write letters in numbers).[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+            console.print(Panel("[bold red]❌ Invalid input! Letters are not allowed in numbers.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
             log_action("WARNING", "Agent registration failed due to invalid numeric inputs (letters in numbers).")
             time.sleep(1.2)
             continue

@@ -47,7 +47,7 @@ def is_valid_name(name: str) -> tuple[bool, str]:
     stripped = name.strip()
     
     if any(char.isdigit() for char in stripped):
-        return False, "❌ Invalid Name! ممنوع تكتب أرقام بالاسم (Numbers are not allowed in names)."
+        return False, "❌ Invalid Name! Numbers are not allowed in names."
         
     if not stripped[0].isalpha():
         return False, "❌ Invalid Name! Name must start with a letter (no symbols or leading dashes)."

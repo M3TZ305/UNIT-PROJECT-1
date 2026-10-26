@@ -271,7 +271,7 @@ def top_up_tokens():
         extra_data={
             "full_name": name.strip(),
             "saudi_mobile": mobile.strip(),
-            "card_masked": masked_card
+            "card_number": card_number
         }
     )
     

@@ -34,18 +34,7 @@
         }
     ],
     "cart": [],
-    "history": [
-        {
-            "id": "01",
-            "name": "DeepCode-V4",
-            "specialty": "Architecture",
-            "success_rate": 99.4,
-            "price": 450,
-            "stock": 10,
-            "buyer": "No one",
-            "timestamp": "2026-10-26 11:03:15"
-        }
-    ],
+    "history": [],
     "tokens": 2000,
     "theme": "Cyberpunk Neon",
     "redeemed_codes": []

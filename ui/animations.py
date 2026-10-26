@@ -3,6 +3,7 @@ import sys
 import os
 from rich.console import Console
 from rich.panel import Panel
+from rich.align import Align
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 from rich.box import ROUNDED, DOUBLE
 from core.database import load_data
@@ -55,9 +56,17 @@ def get_current_theme_colors():
 
 def display_banner(breadcrumb="Main Grid"):
     colors = get_current_theme_colors()
-    console.print(Panel(BANNER_TEXT, style=colors["banner_style"], border_style=colors["border_style"], box=ROUNDED))
-    console.print(f" [bold #00f3ff]⚡ SYSTEM STATUS: ONLINE[/bold #00f3ff]  [bold #ffb700]🎨 ACTIVE THEME: {load_data().get('theme', 'Cyberpunk Neon')}[/bold #ffb700]  [bold white]📍 BREADCRUMB: [AgentOS] > {breadcrumb}[/bold white]", style=colors["accent"])
-    console.print("─" * 80, style="dim")
+    
+    typography_art = (
+        "[bold #00f3ff] █████╗   ██████╗ ███████╗███╗   ██╗████████╗ ██████╗  ███████╗\n"
+        "██╔══██╗ ██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗ ██╔════╝\n"
+        "███████║ ██║  ███╗█████╗  ██╔██╗ ██║   ██║   ██║   ██║ ███████╗\n"
+        "██╔══██║ ██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║   ██║ ╚╚══██║\n"
+        "██║  ██║ ╚██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝ ███████║[/bold #00f3ff]"
+    )
+    
+    console.print(Align.center(typography_art))
+    console.print()
 
 def cinematic_startup_sequence():
     global _BOOTED

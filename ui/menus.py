@@ -65,17 +65,18 @@ def display_status_panel():
     operator_rank = calculate_operator_rank(data)
     
     status_text = (
-        f"[bold #ffb700]💰 WALLET:[/bold #ffb700] [bold #00ff66]{tokens} TC[/bold #00ff66]  │  "
-        f"[bold #00f3ff]🎨 THEME:[/bold #00f3ff] [bold white]{current_theme}[/bold white]  │  "
-        f"[bold #00f3ff]RANK:[/bold #00f3ff] {operator_rank}"
+        f"[bold #ffb700]💰 WALLET:[/bold #ffb700] [bold #00ff66]{tokens} TC[/bold #00ff66]     │     "
+        f"[bold #00f3ff]🎨 THEME:[/bold #00f3ff] [bold white]{current_theme}[/bold white]     │     "
+        f"[bold #00f3ff]RANK:[/bold #00f3ff] {operator_rank}     │     "
+        f"[bold #00ff66]⚡ STATUS: ONLINE (8K ULTRA)[/bold #00ff66]"
     )
     panel = Panel(
         Align.center(Text.from_markup(status_text)),
-        title="[bold #00f3ff]✦ [AgentOS] OPERATOR TELEMETRY STATUS ✦[/bold #00f3ff]",
+        title="[bold #00f3ff]✦ [AgentOS] SYSTEM TELEMETRY & QUANTUM CORE STATUS ✦[/bold #00f3ff]",
         border_style="#00f3ff",
         box=ROUNDED,
-        padding=(0, 1),
-        expand=False
+        padding=(1, 4),
+        expand=True
     )
     console.print(panel)
 

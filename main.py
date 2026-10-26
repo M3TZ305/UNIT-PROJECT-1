@@ -59,12 +59,16 @@ def run_app():
         elif choice == "🔍  Search for an Agent":
             smooth_menu_transition("Agent Search Engine")
             while True:
-                clear_screen()
-                smooth_menu_transition("Agent Search Engine")
-                console.print("[dim]Press Enter to return to menu[/dim]\n")
+                console.print("\n[dim]Press Enter without text to return to menu[/dim]")
                 query = questionary.text("Enter search keyword (name or specialty):", style=CYBERPUNK_STYLE).ask()
                 if not query or not query.strip():
                     break
+                
+                if any(char.isdigit() for char in query.strip()):
+                    console.print(Panel("[bold red]❌ Error: Search query must be text only. Numbers are not allowed.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+                    console.print()
+                    continue
+
                 results = search_agents(query.strip())
                 if results:
                     display_agent_table(results)
@@ -79,9 +83,8 @@ def run_app():
                         time.sleep(1.2)
                     break
                 else:
-                    console.print(Panel("[bold #ffb700]No agents found matching your query.[/bold #ffb700]", title="[bold #ffb700]Search Notice[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
-                    time.sleep(1.2)
-            console.input("\n[dim]Press Enter to return to menu...[/dim]")
+                    console.print(Panel(f"[bold red]❌ Error: No agents found matching '{query.strip()}'.[/bold red]\n[dim]Please try another keyword or press Enter to return.[/dim]", title="[bold red]Search Error Notice[/bold red]", border_style="red", box=ROUNDED, expand=False))
+                    console.print()
                     
         elif choice == "💡  Get AI Recommendations":
             smooth_menu_transition("Neural Recommendation Hub")
@@ -139,10 +142,7 @@ def run_app():
                         smooth_menu_transition("Shopping Cart & Checkout")
                         list_cart()
                         console.print("[dim]Press Enter to return to menu[/dim]\n")
-                        endpoint = questionary.text("Enter Target Endpoint / IP Address for deployment:", style=CYBERPUNK_STYLE).ask()
-                        if not endpoint or not endpoint.strip():
-                            break
-                        success = process_checkout(endpoint.strip())
+                        success = process_checkout()
                         if success:
                             show_deployment_animation("Purchased Cluster Agents")
                             break

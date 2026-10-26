@@ -134,37 +134,49 @@ def display_encrypted_receipts():
         return
         
     table = Table(
-        title="[bold #00ff66]📜 [AgentOS] ENCRYPTED PURCHASE RECEIPTS LEDGER[/bold #00ff66]",
+        title="[bold #00ff66]📜 [AgentOS] ENCRYPTED SECURE RECEIPTS LEDGER[/bold #00ff66]",
         show_header=True,
         box=DOUBLE,
         border_style="#00ff66",
         header_style="bold #ffb700"
     )
-    table.add_column("Security Clearance Badge", width=26)
-    table.add_column("Tx ID", style="bold #00ff66", width=18)
+    table.add_column("Badge", width=14)
+    table.add_column("Tx ID", style="bold #00ff66", width=14)
     table.add_column("Type", style="bold #ffb700", width=14)
-    table.add_column("Item / Agent", style="bold white")
-    table.add_column("Amount", justify="right", style="bold #ffb700")
-    table.add_column("Timestamp", style="dim", width=20)
+    table.add_column("Name", style="bold white", width=14)
+    table.add_column("Mobile", style="bold #00f3ff", width=12)
+    table.add_column("Bank Card", style="dim", width=18)
+    table.add_column("Details", style="bold white", width=18)
+    table.add_column("Amount", justify="right", style="bold #ffb700", width=10)
+    table.add_column("Timestamp", style="dim", width=19)
     
     for res in results:
         if res["status"] == "VALID":
             d = res["data"]
-            badge = "[bold #00ff66]🟢 [ALPHA-1 // VALID][/bold #00ff66]"
+            badge = "[bold #00ff66]🟢 [VALID][/bold #00ff66]"
+            name = d.get("full_name", d.get("buyer_name", "N/A"))
+            mobile = d.get("saudi_mobile", d.get("phone_number", "N/A"))
+            card = d.get("card_number", d.get("card_masked", "N/A"))
             table.add_row(
                 badge,
                 d.get("transaction_id", "N/A"),
-                d.get("type", "PURCHASE"),
+                d.get("type", "TRANSACTION"),
+                name,
+                mobile,
+                card,
                 d.get("item_name", "N/A"),
                 str(d.get("amount", "0")),
                 d.get("timestamp", "N/A")
             )
         else:
-            badge = "[bold red]🚨 [TAMPERED // BREACH][/bold red]"
+            badge = "[bold red]🚨 [BREACH][/bold red]"
             table.add_row(
                 badge,
-                "CORRUPT-HASH",
+                "CORRUPT",
                 "UNKNOWN",
+                "N/A",
+                "N/A",
+                "N/A",
                 f"Raw: {res['raw']}",
                 "N/A",
                 "N/A"
