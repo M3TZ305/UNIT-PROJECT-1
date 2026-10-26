@@ -4,17 +4,35 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
 from rich.text import Text
-from rich.box import ROUNDED
+from rich.box import ROUNDED, HEAVY, DOUBLE
 from core.database import load_data, save_data
-from ui.animations import clear_screen, CYBERPUNK_STYLE
+from ui.animations import clear_screen, CYBERPUNK_STYLE, display_banner
 
 console = Console()
 
 def display_agent_table(agents):
+    """Display AI agents marketplace with Neon Cyan Cyberpunk Exchange theme."""
     from services.store import get_fluctuated_market_agents
     market_agents = get_fluctuated_market_agents(agents)
     
-    table = Table(title="[bold #00f3ff]Available [AgentOSا] Agents Marketplace (Live Stock Exchange)[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
+    ticker_panel = Panel(
+        "[bold #00f3ff]⚡ MARKET EXCHANGE: AI-X UP +2.4% │ TRADING DESK: ONLINE │ VOLUME: 48,290 TC[/bold #00f3ff]\n"
+        "[dim]Cyberpunk Neon Exchange // Real-time Fluctuating Agent Valuation & Quantum Pricing[/dim]",
+        title="[bold #00f3ff][AgentOS] // NEURAL EXCHANGE TRADING FLOOR[/bold #00f3ff]",
+        border_style="#00f3ff",
+        box=ROUNDED,
+        expand=False
+    )
+    console.print(ticker_panel)
+    console.print()
+
+    table = Table(
+        title="[bold #00f3ff]🛒 [AgentOS] AI AGENTS MARKETPLACE (LIVE STOCK EXCHANGE)[/bold #00f3ff]",
+        show_header=True,
+        box=DOUBLE,
+        border_style="#00f3ff",
+        header_style="bold #ffb700"
+    )
     table.add_column("ID", style="dim", width=4)
     table.add_column("Agent Name", style="bold #00ff66")
     table.add_column("Specialty", style="bold #ffb700")
@@ -27,7 +45,7 @@ def display_agent_table(agents):
     console.print(table)
 
 def calculate_operator_rank(data):
-    """تحتسب رتبة المستخدم بناءً على عدد عمليات الشراء والأنشطة في السجل"""
+    """Calculate operator rank based on purchase history and activity"""
     history = data.get("history", [])
     count = len(history)
     
@@ -53,7 +71,7 @@ def display_status_panel():
     )
     panel = Panel(
         Align.center(Text.from_markup(status_text)),
-        title="[bold #00f3ff]✦ [AgentOSا] STATUS PANEL ✦[/bold #00f3ff]",
+        title="[bold #00f3ff]✦ [AgentOS] OPERATOR TELEMETRY STATUS ✦[/bold #00f3ff]",
         border_style="#00f3ff",
         box=ROUNDED,
         padding=(0, 1),
@@ -64,80 +82,111 @@ def display_status_panel():
 def main_menu():
     while True:
         clear_screen()
+        display_banner("Main Grid")
         display_status_panel()
+        console.print()
         
         category = questionary.select(
-            "Choose AI Orchestration Category:",
+            "❯ Choose AI Orchestration Category:",
             choices=[
-                "🛒  Store & Shopping",
-                "🧪  AI Sandbox & Mini-games",
-                "📊  Wallet, Dashboards & Reports",
-                "⚙️  Manager Portal",
-                "🚪  Exit"
+                "🛒  Marketplace & Store (AI Agents & Cart)",
+                "🧪  AI Sandbox & Simulations",
+                "💳  Wallet & Finance Hub (Tokens & Promos)",
+                "📊  System Reports & Analytics",
+                "⚙️  Administration & Theme Engine",
+                "🚪  Exit AgentOS"
             ],
             style=CYBERPUNK_STYLE
         ).ask()
         
-        if category is None or category == "🚪  Exit":
+        if category is None or "Exit" in category:
             return "🚪  Exit"
             
-        if category == "🛒  Store & Shopping":
+        if "Marketplace & Store" in category:
             sub_choice = questionary.select(
-                "Store & Shopping Menu:",
+                "❯ Marketplace & Store Menu:",
                 choices=[
                     "🛒  Browse AI Agents Catalogue",
                     "🔍  Search for an Agent",
                     "💡  Get AI Recommendations",
-                    "🎟️  Redeem Promo Code",
                     "🛍️  View My Cart & Checkout",
                     "📦  Track Deployment Status",
                     "⬅️  Back to Main Menu"
                 ],
                 style=CYBERPUNK_STYLE
             ).ask()
-            if sub_choice and sub_choice != "⬅️  Back to Main Menu":
+            if sub_choice and "Back" not in sub_choice:
                 return sub_choice
                 
-        elif category == "🧪  AI Sandbox & Mini-games":
+        elif "Sandbox & Simulations" in category:
             sub_choice = questionary.select(
-                "AI Sandbox & Mini-games Menu:",
+                "❯ AI Sandbox & Simulations Menu:",
                 choices=[
+                    "🤖 Test AI Model (Sandbox)",
                     "🖥️  Live Split-Screen Dashboard Matrix",
                     "🎨 ASCII Glitch Restorer (Mini-Game)",
-                    "🤖 Test AI Model (Sandbox)",
                     "⬅️  Back to Main Menu"
                 ],
                 style=CYBERPUNK_STYLE
             ).ask()
-            if sub_choice and sub_choice != "⬅️  Back to Main Menu":
+            if sub_choice and "Back" not in sub_choice:
                 return sub_choice
-                
-        elif category == "📊  Wallet, Dashboards & Reports":
+
+        elif "Wallet & Finance Hub" in category:
             sub_choice = questionary.select(
-                "Wallet, Dashboards & Reports Menu:",
+                "❯ Wallet & Finance Menu:",
                 choices=[
-                    "📊  View Live System Dashboard",
-                    "📜  View Past Receipts & History",
-                    "🔐  View Encrypted Purchase Receipts",
-                    "📋  View System Audit Logs",
-                    "📁  Export Data Report to CSV",
                     "💳  Top-Up Wallet Tokens",
                     "🎟️  Redeem Promo Code",
+                    "⬅️  Back to Main Menu"
+                ],
+                style=CYBERPUNK_STYLE
+            ).ask()
+            if sub_choice and "Back" not in sub_choice:
+                return sub_choice
+                
+        elif "System Reports & Analytics" in category:
+            sub_choice = questionary.select(
+                "❯ System Reports & Analytics Menu:",
+                choices=[
+                    "📊  View Live System Dashboard",
+                    "📋  View System Audit Logs",
+                    "📁  Export Data Report to CSV",
+                    "⬅️  Back to Main Menu"
+                ],
+                style=CYBERPUNK_STYLE
+            ).ask()
+            if sub_choice and "Back" not in sub_choice:
+                return sub_choice
+                
+        elif "Administration & Theme" in category:
+            sub_choice = questionary.select(
+                "❯ Administration & Theme Menu:",
+                choices=[
+                    "⚙️  Manager Portal",
                     "🎨  Switch Terminal Theme",
                     "⬅️  Back to Main Menu"
                 ],
                 style=CYBERPUNK_STYLE
             ).ask()
-            if sub_choice and sub_choice != "⬅️  Back to Main Menu":
+            if sub_choice and "Back" not in sub_choice:
                 return sub_choice
-                
-        elif category == "⚙️  Manager Portal":
-            return "⚙️  Manager Portal"
 
 def select_theme_menu():
-    """قائمة اختيار الثيمات"""
+    """System Configuration Theme Engine under Gold Luxury / Industrial theme"""
+    control_panel = Panel(
+        "[bold #ffb700]⚙️ CONFIG BLOCK: VISUAL THEME ENGINE │ 🟢 CONTROL ACTIVE[/bold #ffb700]\n"
+        "[dim]Select terminal aesthetic styling across system modules.[/dim]",
+        title="[bold #ffb700][AgentOS] // SYSTEM CONFIGURATION[/bold #ffb700]",
+        border_style="#ffb700",
+        box=HEAVY,
+        expand=False
+    )
+    console.print(control_panel)
+    console.print()
+
     choice = questionary.select(
-        "Choose a Visual Theme Style:",
+        "❯ Choose a Visual Theme Style:",
         choices=[
             "Cyberpunk Neon",
             "Matrix Hacker",
@@ -150,4 +199,4 @@ def select_theme_menu():
         data = load_data()
         data["theme"] = choice
         save_data(data)
-        console.print(f"[bold #00ff66]✔ Theme changed to '{choice}'! Re-open or refresh to apply full banner styles.[/bold #00ff66]")
+        console.print(Panel(f"[bold #00ff66]✔ Theme configuration updated to '{choice}'! Re-open or refresh to apply full banner styles.[/bold #00ff66]", title="[bold #00ff66]Configuration Applied[/bold #00ff66]", border_style="#00ff66", box=HEAVY, expand=False))

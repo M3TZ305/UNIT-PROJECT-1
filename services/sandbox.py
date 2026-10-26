@@ -4,7 +4,7 @@ from datetime import datetime
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
-from rich.box import ROUNDED
+from rich.box import DOUBLE, ROUNDED
 from core.database import load_data
 import questionary
 from ui.animations import CYBERPUNK_STYLE
@@ -41,12 +41,23 @@ def calculate_benchmark_metrics(agent):
     }
 
 def launch_sandbox():
-    """Launch the professional AI Model Performance & Benchmark Testing Suite."""
+    """Launch the professional AI Model Performance & Benchmark Testing Suite with Neural Benchmarks oscilloscope layout."""
     console.clear()
     
     data = load_data()
     inventory = data.get("inventory", []) or data.get("history", [])
     
+    scope_panel = Panel(
+        r"[bold #00f3ff]~/\~/\~ OSCILLOSCOPE LATENCY WAVEFORM: 24.2ms (STABLE) ~/\~/\~[/bold #00f3ff]" + "\n" +
+        r"[dim]Neural Benchmarks & AI Testing Suite // Quantum Core Monitoring Active[/dim]",
+        title="[bold #00f3ff][AgentOS] // NEURAL BENCHMARK & TESTING MATRIX[/bold #00f3ff]",
+        border_style="#00f3ff",
+        box=DOUBLE,
+        expand=False
+    )
+    console.print(scope_panel)
+    console.print()
+
     if not inventory:
         console.print(Panel(
             "[bold red]❌ NO DEPLOYED AGENTS FOUND IN INVENTORY[/bold red]\n"
@@ -65,7 +76,7 @@ def launch_sandbox():
         BarColumn(bar_width=30, complete_style="bold #00ff66", style="dim #00f3ff"),
         console=console
     ) as progress:
-        task = progress.add_task("[bold #00f3ff]Initializing Neural Benchmark Matrix...[/bold #00f3ff]", total=100)
+        task = progress.add_task("[bold #00f3ff]Initializing Oscilloscope & Quantum Core Benchmark Matrix...[/bold #00f3ff]", total=100)
         for _ in range(12):
             time.sleep(0.04)
             progress.update(task, advance=8.33)
@@ -99,14 +110,14 @@ def launch_sandbox():
     
     console.clear()
     console.print(Panel(
-        f"[bold #00f3ff]🚀 AI MODEL PERFORMANCE & BENCHMARK SUITE[/bold #00f3ff]\n"
+        r"[bold #00f3ff]~/\~/\~ OSCILLOSCOPE MONITOR: ACTIVE WAVEFORM ~/\~/\~[/bold #00f3ff]" + "\n" +
         f"[bold white]Target Agent:[/bold white] [bold #00ff66]{agent_name}[/bold #00ff66]\n"
         f"[bold white]Specialty Matrix:[/bold white] [bold #ffb700]{specialty}[/bold #ffb700]\n"
         f"[bold white]Base Reliability Rate:[/bold white] [bold #00f3ff]{base_rate}[/bold #00f3ff]\n"
-        f"[dim]Press [Enter] to run test | Type 'save' or 'export' to save report | Type 'exit' to quit.[/dim]",
-        title="[bold #00f3ff]Neural Benchmark Active[/bold #00f3ff]",
+        f"[dim]Press [Enter] to run oscilloscope test | Type 'save' or 'export' to save report | Type 'exit' to quit.[/dim]",
+        title="[bold #00f3ff]Neural Benchmark Oscilloscope Active[/bold #00f3ff]",
         border_style="#00f3ff",
-        box=ROUNDED,
+        box=DOUBLE,
         expand=False
     ))
     
@@ -132,7 +143,7 @@ def launch_sandbox():
                 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 report_entry = (
                     f"==================================================\n"
-                    f"AGENT BENCHMARK REPORT\n"
+                    f"AGENT BENCHMARK REPORT (OSCILLOSCOPE SUITE)\n"
                     f"Timestamp       : {timestamp}\n"
                     f"Agent Name      : {agent_name}\n"
                     f"Specialty       : {specialty}\n"
@@ -174,27 +185,27 @@ def launch_sandbox():
                 TextColumn("[progress.description]{task.description}"),
                 console=console
             ) as progress:
-                progress.add_task(f"[bold #ffb700]Running neural inference test #{test_count} for {agent_name}...", total=None)
+                progress.add_task(f"[bold #ffb700]Running oscilloscope neural waveform test #{test_count} for {agent_name}...", total=None)
                 time.sleep(0.7)
             
             latest_metrics = calculate_benchmark_metrics(agent)
             
             report_content = (
-                f"[bold #00f3ff]📊 TEST CYCLE #{test_count} REPORT[/bold #00f3ff]\n"
+                r"[bold #00f3ff]~/\~/\~ OSCILLOSCOPE TEST CYCLE #" + str(test_count) + r" REPORT ~/\~/\~[/bold #00f3ff]" + "\n" +
                 f"--------------------------------------------------\n"
-                f"⏱️  [bold white]Response Latency:[/bold white]    [bold #ffb700]{latest_metrics['latency']} ms[/bold #ffb700]\n"
+                f"⏱️  [bold white]Response Latency:[/bold white]    [bold #ffb700]{latest_metrics['latency']} ms (OSC STABLE)[/bold #ffb700]\n"
                 f"🎯 [bold white]Inference Accuracy:[/bold white]  [bold #00ff66]{latest_metrics['accuracy']}%[/bold #00ff66]\n"
                 f"⚡ [bold white]Throughput Speed:[/bold white]    [bold #ffb700]{latest_metrics['throughput']} tokens/sec[/bold #ffb700]\n"
                 f"🛡️  [bold white]Core Security Check:[/bold white] [bold #00ff66]{latest_metrics['security_status']}[/bold #00ff66]\n"
                 f"--------------------------------------------------\n"
-                f"[dim]Agent Status: OPERATIONAL & FULLY SYNCED | Type 'save' to export report[/dim]"
+                f"[dim]Quantum Core Status: OPTIMAL | Type 'save' to export oscilloscope report[/dim]"
             )
             
             console.print(Panel(
                 report_content,
-                title=f"[bold #00ff66]Benchmark Report — Test #{test_count}[/bold #00ff66]",
+                title=f"[bold #00ff66]Oscilloscope Benchmark Report — Test #{test_count}[/bold #00ff66]",
                 border_style="#00ff66",
-                box=ROUNDED,
+                box=DOUBLE,
                 expand=False
             ))
             

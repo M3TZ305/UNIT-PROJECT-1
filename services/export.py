@@ -3,12 +3,12 @@ from datetime import datetime
 from core.database import load_data
 from rich.console import Console
 from rich.panel import Panel
-from rich.box import ROUNDED
+from rich.box import HEAVY
 
 console = Console()
 
 def export_data_to_csv():
-    """Export purchase history and system data to report.csv"""
+    """Export purchase history and system data to report.csv with Settings & System Configuration industrial control theme."""
     data = load_data()
     history = data.get("history", [])
     agents = data.get("agents", [])
@@ -57,11 +57,11 @@ def export_data_to_csv():
                 ])
                 
         console.print(Panel(
-            f"[bold #00ff66]📊 Report successfully exported to '{filename}'![/bold #00ff66]\n"
-            "[dim]You can now open 'report.csv' in Excel or any data viewer.[/dim]",
-            title="[bold #00ff66]CSV Export Successful[/bold #00ff66]",
-            border_style="#00ff66",
-            box=ROUNDED,
+            f"[bold #ffb700]⚙️ CONFIG BLOCK: CSV EXPORT SECURED │ 🟢 REPORT SAVED TO '{filename}'[/bold #ffb700]\n"
+            "[dim]Industrial control panel telemetry exported successfully for Excel or external data viewers.[/dim]",
+            title="[bold #ffb700][AgentOS] // SYSTEM CONFIGURATION EXPORT[/bold #ffb700]",
+            border_style="#ffb700",
+            box=HEAVY,
             expand=False
         ))
         return True
@@ -70,7 +70,7 @@ def export_data_to_csv():
             f"[bold red]❌ Failed to export CSV report: {e}[/bold red]",
             title="[bold red]Export Failed[/bold red]",
             border_style="red",
-            box=ROUNDED,
+            box=HEAVY,
             expand=False
         ))
         return False

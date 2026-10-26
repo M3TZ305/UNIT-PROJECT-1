@@ -4,7 +4,7 @@ import os
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
-from rich.box import ROUNDED
+from rich.box import ROUNDED, DOUBLE
 from core.database import load_data
 import questionary
 
@@ -43,7 +43,7 @@ BANNER_TEXT = """
   ║      █████╗   ██████╗ ███████╗███╗   ██╗████████╗ ██████╗  ███████╗         ║
   ║     ██╔══██╗ ██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗ ██╔════╝         ║
   ║     ███████║ ██║  ███╗█████╗  ██╔██╗ ██║   ██║   ██║   ██║ ███████╗         ║
-  ║     ██╔══██║ ██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║   ██║ ╚════██║         ║
+  ║     ██╔══██║ ██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║   ██║ ╚╚══██║         ║
   ║     ██║  ██║ ╚██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝ ███████║         ║
   ╚═════════════════════════════════════════════════════════════════════════════╝
 """
@@ -53,10 +53,10 @@ def get_current_theme_colors():
     theme_name = data.get("theme", "Cyberpunk Neon")
     return THEMES.get(theme_name, THEMES["Cyberpunk Neon"])
 
-def display_banner():
+def display_banner(breadcrumb="Main Grid"):
     colors = get_current_theme_colors()
     console.print(Panel(BANNER_TEXT, style=colors["banner_style"], border_style=colors["border_style"], box=ROUNDED))
-    console.print(f" [bold #00f3ff]⚡ SYSTEM STATUS: ONLINE[/bold #00f3ff]  [bold #ffb700]🎨 ACTIVE THEME: {load_data().get('theme', 'Cyberpunk Neon')}[/bold #ffb700]", style=colors["accent"])
+    console.print(f" [bold #00f3ff]⚡ SYSTEM STATUS: ONLINE[/bold #00f3ff]  [bold #ffb700]🎨 ACTIVE THEME: {load_data().get('theme', 'Cyberpunk Neon')}[/bold #ffb700]  [bold white]📍 BREADCRUMB: [AgentOS] > {breadcrumb}[/bold white]", style=colors["accent"])
     console.print("─" * 80, style="dim")
 
 def cinematic_startup_sequence():
@@ -66,20 +66,20 @@ def cinematic_startup_sequence():
     _BOOTED = True
 
     clear_screen()
-    display_banner()
+    display_banner("System Boot")
     
     console.print("\n[bold #00f3ff]✨ [AgentOS] NEURAL ORCHESTRATION ENGINE INITIALIZING...[/bold #00f3ff]")
     console.print("[dim]   [Please stand by while core systems and project branding load][/dim]\n")
-    time.sleep(2.5)
+    time.sleep(2.0)
     
     console.print("[bold #ffb700]⚡ BOOTING UP SYSTEM KERNEL v4.8...[/bold #ffb700]\n")
-    time.sleep(1.2)
+    time.sleep(1.0)
     
     steps = [
-        ("[dim]>> [01/04] Initializing Quantum Neural Core & Memory Grids...[/dim]", 0.8),
-        ("[bold #00f3ff]>> [02/04] Establishing secure quantum handshake with AI cluster nodes...[/bold #00f3ff]", 0.9),
-        ("[bold #00f3ff]>> [03/04] Calibrating token encryption & decryption matrices...[/bold #00f3ff]", 0.9),
-        ("[bold #00ff66]>> [04/04] Synchronizing decentralized node memory banks...[/bold #00ff66]", 1.0)
+        ("[dim]>> [01/04] Initializing Quantum Neural Core & Memory Grids...[/dim]", 0.6),
+        ("[bold #00f3ff]>> [02/04] Establishing secure quantum handshake with AI cluster nodes...[/bold #00f3ff]", 0.7),
+        ("[bold #00f3ff]>> [03/04] Calibrating token encryption & decryption matrices...[/bold #00f3ff]", 0.7),
+        ("[bold #00ff66]>> [04/04] Synchronizing decentralized node memory banks...[/bold #00ff66]", 0.8)
     ]
     
     for text, delay in steps:
@@ -95,11 +95,11 @@ def cinematic_startup_sequence():
     ) as progress:
         task = progress.add_task("Stabilizing Quantum Fields", total=100)
         while not progress.finished:
-            progress.update(task, advance=20)
-            time.sleep(0.4)
+            progress.update(task, advance=25)
+            time.sleep(0.3)
             
-    console.print("\n[bold #00ff66]✔ SUCCESS: System online and fully operational. Welcome, Operator.[/bold #00ff66]\n")
-    time.sleep(2.0)
+    console.print("\n[bold #00ff66]✔ SUCCESS: AgentOS online and fully operational. Welcome, Operator.[/bold #00ff66]\n")
+    time.sleep(1.5)
 
 def show_loading_spinner(message="Processing Neural Bridge..."):
     with Progress(
@@ -111,7 +111,7 @@ def show_loading_spinner(message="Processing Neural Bridge..."):
         task = progress.add_task(message, total=100)
         while not progress.finished:
             progress.update(task, advance=25)
-            time.sleep(0.15)
+            time.sleep(0.12)
 
 def show_deployment_animation(agent_name):
     console.print(f"\n[bold #ffb700]🚀 Initiating deployment sequence for {agent_name}...[/bold #ffb700]")
@@ -121,7 +121,7 @@ def show_deployment_animation(agent_name):
 
 def smooth_menu_transition(section_name):
     clear_screen()
-    display_banner()
+    display_banner(section_name)
     console.print(f"\n[bold #00f3ff]⚡ Loading [bold #ffb700]{section_name}[/bold #ffb700]...[/bold #00f3ff]")
     
     with Progress(
@@ -133,16 +133,16 @@ def smooth_menu_transition(section_name):
     ) as progress:
         task = progress.add_task(f"Synchronizing {section_name}", total=100)
         while not progress.finished:
-            progress.update(task, advance=25)
-            time.sleep(0.2)
+            progress.update(task, advance=34)
+            time.sleep(0.15)
             
     console.print(f"[bold #00ff66]>> [{section_name}] Initialized successfully.[/bold #00ff66]")
-    time.sleep(0.8)
+    time.sleep(0.5)
     console.print("─" * 80, style="dim")
 
 def cinematic_exit():
     clear_screen()
-    display_banner()
+    display_banner("System Shutdown")
     
     warning_panel = Panel(
         "[bold #ffb700]WARNING:[/bold #ffb700] Initiating emergency quantum core shutdown & local storage data encryption...\n"
@@ -153,7 +153,7 @@ def cinematic_exit():
         padding=(1, 2)
     )
     console.print(warning_panel)
-    time.sleep(1.2)
+    time.sleep(1.0)
     
     console.print()
     
@@ -166,10 +166,10 @@ def cinematic_exit():
     ) as progress:
         task1 = progress.add_task("Cooling down Quantum Cores...", total=100)
         while not progress.finished:
-            progress.update(task1, advance=20)
-            time.sleep(0.3)
+            progress.update(task1, advance=25)
+            time.sleep(0.2)
             
-    time.sleep(0.4)
+    time.sleep(0.3)
     
     with Progress(
         SpinnerColumn("dots", style="#00f3ff"),
@@ -180,10 +180,10 @@ def cinematic_exit():
     ) as progress:
         task2 = progress.add_task("Encrypting local storage (data_store.json)...", total=100)
         while not progress.finished:
-            progress.update(task2, advance=25)
-            time.sleep(0.35)
+            progress.update(task2, advance=34)
+            time.sleep(0.25)
             
-    time.sleep(0.6)
+    time.sleep(0.4)
     
     success_msg = "[🚀] SYSTEM OFFLINE. ALL NODES SECURED.\nHave a great day, Operator! See you at the top. ✨"
     success_panel = Panel(
@@ -194,4 +194,5 @@ def cinematic_exit():
         padding=(1, 2)
     )
     console.print(success_panel)
-    time.sleep(1.0)
+    time.sleep(0.8)
+

@@ -5,7 +5,7 @@ from cryptography.fernet import Fernet, InvalidToken
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from rich.box import ROUNDED
+from rich.box import DOUBLE, ROUNDED
 from core.logger import log_action
 
 console = Console()
@@ -109,37 +109,48 @@ def decrypt_all_receipts():
     return decoded_results
 
 def display_encrypted_receipts():
-    """Render decrypted transaction data into a sleek cyan Rich Table, highlighting tampered receipts."""
+    """Render encrypted transaction ledger in Deep Matrix Green security layout with clearance badges & Fernet encryption status."""
+    shield_panel = Panel(
+        "[bold #00ff66]🛡️ FERNET ENCRYPTION: ACTIVE (128-BIT) │ DEEP MATRIX GOVERNANCE: SECURE[/bold #00ff66]\n"
+        "[dim]Security Clearance: ALPHA-1 // Immutable Receipt Verification Active[/dim]",
+        title="[bold #00ff66][AgentOS] // CRYPTOGRAPHIC GOVERNANCE VAULT[/bold #00ff66]",
+        border_style="#00ff66",
+        box=DOUBLE,
+        expand=False
+    )
+    console.print(shield_panel)
+    console.print()
+
     results = decrypt_all_receipts()
     
     if not results:
         console.print(Panel(
             "[bold #ffb700]📜 No encrypted purchase receipts found in 'receipts.json'.[/bold #ffb700]",
             title="[bold #ffb700]Encrypted Receipts Ledger[/bold #ffb700]",
-            border_style="#ffb700",
+            border_style="#00ff66",
             box=ROUNDED,
             expand=False
         ))
         return
         
     table = Table(
-        title="[bold #00f3ff]📜 [AgentOS] ENCRYPTED PURCHASE RECEIPTS LEDGER[/bold #00f3ff]",
+        title="[bold #00ff66]📜 [AgentOS] ENCRYPTED PURCHASE RECEIPTS LEDGER[/bold #00ff66]",
         show_header=True,
-        box=ROUNDED,
-        border_style="#00f3ff",
+        box=DOUBLE,
+        border_style="#00ff66",
         header_style="bold #ffb700"
     )
-    table.add_column("Status Badge", width=22)
-    table.add_column("Tx ID", style="bold #00f3ff", width=18)
+    table.add_column("Security Clearance Badge", width=26)
+    table.add_column("Tx ID", style="bold #00ff66", width=18)
     table.add_column("Type", style="bold #ffb700", width=14)
-    table.add_column("Item / Agent", style="bold #00ff66")
+    table.add_column("Item / Agent", style="bold white")
     table.add_column("Amount", justify="right", style="bold #ffb700")
     table.add_column("Timestamp", style="dim", width=20)
     
     for res in results:
         if res["status"] == "VALID":
             d = res["data"]
-            badge = "[bold #00ff66][SECURE / VALID][/bold #00ff66]"
+            badge = "[bold #00ff66]🟢 [ALPHA-1 // VALID][/bold #00ff66]"
             table.add_row(
                 badge,
                 d.get("transaction_id", "N/A"),
@@ -149,7 +160,7 @@ def display_encrypted_receipts():
                 d.get("timestamp", "N/A")
             )
         else:
-            badge = "[bold red][TAMPERED / CORRUPTED][/bold red]"
+            badge = "[bold red]🚨 [TAMPERED // BREACH][/bold red]"
             table.add_row(
                 badge,
                 "CORRUPT-HASH",
@@ -160,4 +171,4 @@ def display_encrypted_receipts():
             )
             
     console.print(table)
-    console.print("[dim]💡 Tip: All receipts are encrypted using Fernet symmetric encryption via RECEIPT_SECRET_KEY in .env.[/dim]\n")
+    console.print("[dim]💡 Tip: All receipts are cryptographically protected via Fernet symmetric encryption in .env.[/dim]\n")

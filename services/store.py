@@ -1,14 +1,15 @@
 import random
 import re
+import time
 import questionary
-from core.database import load_data, save_data
+from core.database import load_data, save_data, is_valid_name
 from core.logger import log_action
 from core.crypto_receipts import create_encrypted_receipt
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich.box import ROUNDED
-from ui.animations import CYBERPUNK_STYLE
+from rich.box import ROUNDED, HEAVY
+from ui.animations import CYBERPUNK_STYLE, clear_screen
 
 console = Console()
 
@@ -85,26 +86,38 @@ def remove_from_cart(agent_id):
     return True
 
 def list_cart():
-    """Display shopping cart contents"""
+    """Display shopping cart contents with High-end Cyberpunk Neon exchange ticker layout"""
     data = load_data()
     cart = data["cart"]
     
+    ticker_panel = Panel(
+        "[bold #00f3ff]⚡ MARKET EXCHANGE: CART & DEPLOYMENT DESK │ STATUS: LIVE SYNC[/bold #00f3ff]\n"
+        "[dim]Review selected AI agent cluster items prior to quantum checkout execution.[/dim]",
+        title="[bold #00f3ff][AgentOS] // NEURAL TRADING CART[/bold #00f3ff]",
+        border_style="#00f3ff",
+        box=ROUNDED,
+        expand=False
+    )
+    console.print(ticker_panel)
+    console.print()
+
     if not cart:
         console.print(Panel("[bold #ffb700]🛒 Your cart is currently empty.[/bold #ffb700]", title="[bold #ffb700]Shopping Cart[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
         return 0
         
-    table = Table(title="[bold #00f3ff]Your Shopping Cart[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
+    table = Table(title="[bold #00f3ff]🛒 [AgentOS] SELECTED CLUSTER AGENTS CART[/bold #00f3ff]", show_header=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
     table.add_column("ID", style="dim")
     table.add_column("Agent Name", style="bold #00ff66")
-    table.add_column("Price (TC)", justify="right", style="bold #ffb700")
+    table.add_column("Specialty", style="bold #ffb700")
+    table.add_column("Price (TC)", justify="right", style="bold #00f3ff")
     
     total = 0
     for item in cart:
-        table.add_row(item["id"], item["name"], f"{item['price']} TC")
+        table.add_row(item["id"], item["name"], item.get("specialty", "Neural AI"), f"{item['price']} TC")
         total += item["price"]
         
     console.print(table)
-    console.print(Panel(f"[bold #00f3ff]Total Cart Value: {total} TC[/bold #00f3ff]", title="[bold #00f3ff]Summary[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED, expand=False))
+    console.print(Panel(f"[bold #00f3ff]Total Cart Cluster Value: {total} TC[/bold #00f3ff]", title="[bold #00f3ff]Financial Summary[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED, expand=False))
     return total
 
 def get_recommendations():
@@ -124,36 +137,125 @@ def get_recommendations():
     return recs
 
 def top_up_tokens():
-    """Token top-up feature with validation for name, Saudi mobile number (^05[0-9]{8}$), and bank card (16 digits)"""
+    """Token top-up feature with Settings & System Configuration modular industrial control panel layout"""
     data = load_data()
     current_tokens = data.get("tokens", 0)
     
-    console.print(Panel(f"[bold #00f3ff]💳 Your Current Balance:[/bold #00f3ff] [bold #ffb700]{current_tokens} TC[/bold #ffb700]", title="[bold #00f3ff]Token Wallet Top-Up Portal[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED, expand=False))
-    
-    name = questionary.text("Full Name:", style=CYBERPUNK_STYLE).ask()
-    if not name or not name.strip():
-        console.print(Panel("[bold red]❌ Invalid Name! Name cannot be empty. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
-        log_action("WARNING", "Top-up attempt failed due to empty operator name.")
-        return
+    # 1. Full Name
+    name = None
+    while True:
+        clear_screen()
+        control_panel = Panel(
+            f"[bold #ffb700]⚙️ CONFIG BLOCK: WALLET TOP-UP │ 🟢 GATEWAY ACTIVE[/bold #ffb700]\n"
+            f"[bold #00f3ff]💳 Current Balance:[/bold #00f3ff] [bold #ffb700]{current_tokens} TC[/bold #ffb700]\n"
+            "[dim]Modular Industrial Control Panel // Secure Hardware Diagnostic Active[/dim]\n"
+            "[dim]Press Enter to return to menu[/dim]",
+            title="[bold #ffb700][AgentOS] // SYSTEM CONFIGURATION & WALLET[/bold #ffb700]",
+            border_style="#ffb700",
+            box=HEAVY,
+            expand=False
+        )
+        console.print(control_panel)
+        console.print()
         
-    mobile = questionary.text("Saudi Mobile Number (e.g. 05XXXXXXXX):", style=CYBERPUNK_STYLE).ask()
-    if not mobile or not re.match(r"^05[0-9]{8}$", mobile.strip()):
-        console.print(Panel("[bold red]❌ Invalid Saudi Mobile Number! Must start with '05' followed by 8 digits (e.g., 0512345678). Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        name = questionary.text("Full Name:", style=CYBERPUNK_STYLE).ask()
+        if not name or not name.strip():
+            return
+        valid, err_msg = is_valid_name(name)
+        if valid:
+            break
+            
+        console.print(Panel(f"[bold red]{err_msg}[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", f"Top-up attempt failed: {err_msg}")
+        time.sleep(1.2)
+
+    # 2. Saudi Mobile Number
+    mobile = None
+    while True:
+        clear_screen()
+        control_panel = Panel(
+            f"[bold #ffb700]⚙️ CONFIG BLOCK: WALLET TOP-UP │ 🟢 GATEWAY ACTIVE[/bold #ffb700]\n"
+            f"[bold #00f3ff]💳 Current Balance:[/bold #00f3ff] [bold #ffb700]{current_tokens} TC[/bold #ffb700]\n"
+            f"[bold white]Full Name:[/bold white] [bold #00f3ff]{name.strip()}[/bold #00f3ff]\n"
+            "[dim]Modular Industrial Control Panel // Saudi Mobile Validation[/dim]\n"
+            "[dim]Press Enter to return to menu[/dim]",
+            title="[bold #ffb700][AgentOS] // SYSTEM CONFIGURATION & WALLET[/bold #ffb700]",
+            border_style="#ffb700",
+            box=HEAVY,
+            expand=False
+        )
+        console.print(control_panel)
+        console.print()
+        
+        mobile = questionary.text("Saudi Mobile Number (e.g. 05XXXXXXXX):", style=CYBERPUNK_STYLE).ask()
+        if not mobile or not mobile.strip():
+            return
+        if re.match(r"^05[0-9]{8}$", mobile.strip()):
+            break
+            
+        console.print(Panel("[bold red]❌ Invalid Saudi Mobile Number! Must start with '05' followed by 8 digits (e.g., 0512345678).[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
         log_action("WARNING", "Top-up attempt failed due to invalid Saudi mobile number format.")
-        return
+        time.sleep(1.2)
+
+    # 3. Bank Card Number
+    card_number = None
+    while True:
+        clear_screen()
+        control_panel = Panel(
+            f"[bold #ffb700]⚙️ CONFIG BLOCK: WALLET TOP-UP │ 🟢 GATEWAY ACTIVE[/bold #ffb700]\n"
+            f"[bold #00f3ff]💳 Current Balance:[/bold #00f3ff] [bold #ffb700]{current_tokens} TC[/bold #ffb700]\n"
+            f"[bold white]Full Name:[/bold white] [bold #00f3ff]{name.strip()}[/bold #00f3ff]\n"
+            f"[bold white]Saudi Mobile:[/bold white] [bold #00f3ff]{mobile.strip()}[/bold #00f3ff]\n"
+            "[dim]Modular Industrial Control Panel // Bank Card Security Check[/dim]\n"
+            "[dim]Press Enter to return to menu[/dim]",
+            title="[bold #ffb700][AgentOS] // SYSTEM CONFIGURATION & WALLET[/bold #ffb700]",
+            border_style="#ffb700",
+            box=HEAVY,
+            expand=False
+        )
+        console.print(control_panel)
+        console.print()
         
-    card_number = questionary.text("Bank Card Number (16 digits):", style=CYBERPUNK_STYLE).ask()
-    if not card_number or not card_number.isdigit() or len(card_number) != 16:
-        console.print(Panel("[bold red]❌ Invalid Bank Card Number! Must be exactly 16 numeric digits. Top-up canceled.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        card_number = questionary.text("Bank Card Number (16 digits):", style=CYBERPUNK_STYLE).ask()
+        if not card_number or not card_number.strip():
+            return
+        if card_number.isdigit() and len(card_number) == 16:
+            break
+            
+        console.print(Panel("[bold red]❌ Invalid Bank Card Number! Must be exactly 16 numeric digits.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
         log_action("WARNING", "Top-up attempt failed due to invalid bank card number format.")
-        return
+        time.sleep(1.2)
+
+    # 4. Token Amount
+    amount_str = None
+    while True:
+        clear_screen()
+        control_panel = Panel(
+            f"[bold #ffb700]⚙️ CONFIG BLOCK: WALLET TOP-UP │ 🟢 GATEWAY ACTIVE[/bold #ffb700]\n"
+            f"[bold #00f3ff]💳 Current Balance:[/bold #00f3ff] [bold #ffb700]{current_tokens} TC[/bold #ffb700]\n"
+            f"[bold white]Full Name:[/bold white] [bold #00f3ff]{name.strip()}[/bold #00f3ff]\n"
+            f"[bold white]Saudi Mobile:[/bold white] [bold #00f3ff]{mobile.strip()}[/bold #00f3ff]\n"
+            f"[bold white]Bank Card:[/bold white] [bold #ffb700]****-****-****-{card_number[-4:]}[/bold #ffb700]\n"
+            "[dim]Modular Industrial Control Panel // Final Token Allocation[/dim]\n"
+            "[dim]Press Enter to return to menu[/dim]",
+            title="[bold #ffb700][AgentOS] // SYSTEM CONFIGURATION & WALLET[/bold #ffb700]",
+            border_style="#ffb700",
+            box=HEAVY,
+            expand=False
+        )
+        console.print(control_panel)
+        console.print()
         
-    amount_str = questionary.text("Enter Token amount to top-up (e.g. 1000):", style=CYBERPUNK_STYLE).ask()
-    if not amount_str or not amount_str.isdigit() or int(amount_str) <= 0:
-        console.print(Panel("[bold red]❌ Invalid token amount entered. Top-up canceled.[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        amount_str = questionary.text("Enter Token amount to top-up (e.g. 1000):", style=CYBERPUNK_STYLE).ask()
+        if not amount_str or not amount_str.strip():
+            return
+        if amount_str.isdigit() and int(amount_str) > 0:
+            break
+            
+        console.print(Panel("[bold red]❌ Invalid token amount entered. Must be a positive integer.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
         log_action("WARNING", "Top-up attempt failed due to invalid token amount.")
-        return
-        
+        time.sleep(1.2)
+
     amount = int(amount_str)
     data["tokens"] = current_tokens + amount
     save_data(data)
@@ -182,92 +284,102 @@ def top_up_tokens():
         f"[bold white]Bank Card:[/bold white] [bold #ffb700]{masked_card}[/bold #ffb700]\n"
         f"[bold white]Amount Added:[/bold white] [bold #00ff66]+{amount} TC[/bold #00ff66]\n"
         f"[bold white]New Wallet Balance:[/bold white] [bold #ffb700]{data['tokens']} TC[/bold #ffb700]\n\n"
-        f"[dim]Reference ID: {ref_id} │ Securely Logged & Encrypted[/dim]"
+        f"[dim]Reference ID: {ref_id} │ Industrial Secure Control Block[/dim]"
     )
     
     console.print(Panel(
         success_banner,
-        title="[bold #00ff66]💳 RECHARGE SECURED[/bold #00ff66]",
-        border_style="#00ff66",
-        box=ROUNDED,
+        title="[bold #ffb700]⚙️ RECHARGE CONFIGURATION SECURED[/bold #ffb700]",
+        border_style="#ffb700",
+        box=HEAVY,
         expand=False
     ))
+    console.input("\n[dim]Press Enter to return to menu...[/dim]")
 
 def redeem_promo_code():
-    """Redeem discount coupons/promo codes (e.g., 'GRAD2026', 'CYBER100', 'VIP2026') to add bonus credits to wallet."""
+    """Redeem discount coupons with Settings & System Configuration industrial control panel theme"""
     data = load_data()
     if "redeemed_codes" not in data:
         data["redeemed_codes"] = []
         
-    console.print(Panel(
-        "[bold #00f3ff]🎟️ [AgentOSا] PROMO CODE REDEMPTION PORTAL[/bold #00f3ff]\n"
-        "[dim]Enter valid promotional codes to inject bonus tokens directly into your wallet.[/dim]\n"
-        "[bold #ffb700]💡 Hint: Try codes like 'GRAD2026', 'CYBER100', 'AGENTOS500', or 'VIP2026'[/bold #ffb700]",
-        title="[bold #00f3ff]Promo Code Hub[/bold #00f3ff]",
-        border_style="#00f3ff",
-        box=ROUNDED,
-        expand=False
-    ))
-    
-    code = questionary.text("Enter Promo Code:", style=CYBERPUNK_STYLE).ask()
-    if not code:
-        return
-        
-    clean_code = code.strip().upper()
-    
-    promo_rewards = {
-        "GRAD2026": 1000,
-        "CYBER100": 500,
-        "AGENTOS500": 500,
-        "OGB500": 500,
-        "VIP2026": 2000
-    }
-    
-    if clean_code not in promo_rewards:
-        console.print(Panel(
-            f"[bold red]❌ INVALID PROMO CODE: '{code}'[/bold red]\n"
-            "[dim]The code entered does not exist or has expired in the neural registry.[/dim]",
-            title="[bold red]Redemption Failed[/bold red]",
-            border_style="red",
-            box=ROUNDED,
-            expand=False
-        ))
-        log_action("WARNING", f"Attempted to redeem invalid promo code: '{code}'")
-        return
-        
-    if clean_code in data["redeemed_codes"]:
-        console.print(Panel(
-            f"[bold #ffb700]⚠️ PROMO CODE ALREADY REDEEMED[/bold #ffb700]\n"
-            f"[dim]You have already claimed the reward for '{clean_code}'. Each code can only be used once per operator.[/dim]",
-            title="[bold #ffb700]Already Claimed[/bold #ffb700]",
+    while True:
+        clear_screen()
+        control_panel = Panel(
+            "[bold #ffb700]⚙️ CONFIG BLOCK: PROMO CODE REDEMPTION │ 🟢 TOGGLE ACTIVE[/bold #ffb700]\n"
+            "[dim]Inject promotional discount coupons into system configuration.[/dim]\n"
+            "[bold #ffb700]💡 Hint: Try codes like 'GRAD2026', 'CYBER100', 'AGENTOS500', or 'VIP2026'[/bold #ffb700]\n"
+            "[dim]Press Enter to return to menu[/dim]",
+            title="[bold #ffb700][AgentOS] // SYSTEM CONFIGURATION HUB[/bold #ffb700]",
             border_style="#ffb700",
-            box=ROUNDED,
+            box=HEAVY,
+            expand=False
+        )
+        console.print(control_panel)
+        console.print()
+        
+        code = questionary.text("Enter Promo Code:", style=CYBERPUNK_STYLE).ask()
+        if not code or not code.strip():
+            return
+            
+        clean_code = code.strip().upper()
+        
+        promo_rewards = {
+            "GRAD2026": 1000,
+            "CYBER100": 500,
+            "AGENTOS500": 500,
+            "OGB500": 500,
+            "VIP2026": 2000
+        }
+        
+        if clean_code not in promo_rewards:
+            console.print(Panel(
+                f"[bold red]❌ INVALID PROMO CODE: '{code}'[/bold red]\n"
+                "[dim]The configuration block rejects unknown coupon signatures.[/dim]",
+                title="[bold red]Redemption Failed[/bold red]",
+                border_style="red",
+                box=HEAVY,
+                expand=False
+            ))
+            log_action("WARNING", f"Attempted to redeem invalid promo code: '{code}'")
+            time.sleep(1.2)
+            continue
+            
+        if clean_code in data["redeemed_codes"]:
+            console.print(Panel(
+                f"[bold #ffb700]⚠️ PROMO CODE ALREADY REDEEMED[/bold #ffb700]\n"
+                f"[dim]Configuration flag for '{clean_code}' has already been triggered.[/dim]",
+                title="[bold #ffb700]Already Claimed[/bold #ffb700]",
+                border_style="#ffb700",
+                box=HEAVY,
+                expand=False
+            ))
+            log_action("WARNING", f"Attempted to re-redeem already claimed promo code: '{clean_code}'")
+            time.sleep(1.2)
+            continue
+            
+        bonus = promo_rewards[clean_code]
+        data["tokens"] = data.get("tokens", 2000) + bonus
+        data["redeemed_codes"].append(clean_code)
+        save_data(data)
+        create_encrypted_receipt(f"PROMO-{clean_code}", f"Promo Code Reward ({clean_code})", f"+{bonus} TC", receipt_type="PROMO BONUS")
+        
+        new_balance = data["tokens"]
+        log_action("TRANSACTION", f"Promo code '{clean_code}' redeemed successfully. Bonus: +{bonus} TC. New balance: {new_balance} TC")
+        
+        success_banner = (
+            f"[bold #00ff66]🎉 PROMO CODE CONFIGURATION ACCEPTED! 🎉[/bold #00ff66]\n\n"
+            f"[bold white]Redeemed Code:[/bold white] [bold #00f3ff]{clean_code}[/bold #00f3ff]\n"
+            f"[bold white]Bonus Awarded:[/bold white] [bold #00ff66]+{bonus} TC[/bold #00ff66]\n"
+            f"[bold white]New Wallet Balance:[/bold white] [bold #ffb700]{new_balance} TC[/bold #ffb700]\n\n"
+            f"[dim]Industrial control block successfully updated.[/dim]"
+        )
+        
+        console.print(Panel(
+            success_banner,
+            title="[bold #ffb700]⚙️ CONFIGURATION APPLIED[/bold #ffb700]",
+            border_style="#ffb700",
+            box=HEAVY,
             expand=False
         ))
-        log_action("WARNING", f"Attempted to re-redeem already claimed promo code: '{clean_code}'")
-        return
-        
-    bonus = promo_rewards[clean_code]
-    data["tokens"] = data.get("tokens", 2000) + bonus
-    data["redeemed_codes"].append(clean_code)
-    save_data(data)
-    create_encrypted_receipt(f"PROMO-{clean_code}", f"Promo Code Reward ({clean_code})", f"+{bonus} TC", receipt_type="PROMO BONUS")
-    
-    new_balance = data["tokens"]
-    log_action("TRANSACTION", f"Promo code '{clean_code}' redeemed successfully. Bonus: +{bonus} TC. New balance: {new_balance} TC")
-    
-    success_banner = (
-        f"[bold #00ff66]🎉 PROMO CODE SUCCESSFULLY REDEEMED! 🎉[/bold #00ff66]\n\n"
-        f"[bold white]Redeemed Code:[/bold white] [bold #00f3ff]{clean_code}[/bold #00f3ff]\n"
-        f"[bold white]Bonus Awarded:[/bold white] [bold #00ff66]+{bonus} TC[/bold #00ff66]\n"
-        f"[bold white]New Wallet Balance:[/bold white] [bold #ffb700]{new_balance} TC[/bold #ffb700]\n\n"
-        f"[dim]Credits have been securely injected into your account.[/dim]"
-    )
-    
-    console.print(Panel(
-        success_banner,
-        title="[bold #00ff66]🏆 REWARD GRANTED[/bold #00ff66]",
-        border_style="#00ff66",
-        box=ROUNDED,
-        expand=False
-    ))
+        console.input("\n[dim]Press Enter to return to menu...[/dim]")
+        break

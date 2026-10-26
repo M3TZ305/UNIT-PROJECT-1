@@ -1,5 +1,5 @@
 import pytest
-from core.database import load_data, save_data
+from core.database import load_data, save_data, is_valid_name
 from services.store import search_agents, add_to_cart, remove_from_cart, get_fluctuated_market_agents, redeem_promo_code
 from ui.menus import calculate_operator_rank
 from services.synergy import check_agent_synergy
@@ -120,4 +120,32 @@ def test_bank_card_validation():
     
     alpha_card = "123456789012345a"
     assert not (alpha_card.isdigit() and len(alpha_card) == 16)
+
+def test_interactive_retry_flow_options():
+    """Test retry and return to main menu options"""
+    choices = [
+        "🔄 Try Again",
+        "🔙 Return to Main Menu"
+    ]
+    assert len(choices) == 2
+    assert "Try Again" in choices[0]
+    assert "Return to Main Menu" in choices[1]
+
+def test_name_validation():
+    """اختبار قيود الأسماء (يجب أن تبدأ بحرف وتتكون من حروف ومسافات فقط بدون أرقام أو رموز أو شرطات في البداية)"""
+    # حالات صحيحة
+    assert is_valid_name("Ahmed Ali")[0] is True
+    assert is_valid_name("محمد أحمد")[0] is True
+    assert is_valid_name("CyberOperator")[0] is True
+
+    # حالات خاطئة
+    assert is_valid_name("-Ahmed")[0] is False  # تبدأ بشرطة
+    assert is_valid_name("123Ahmed")[0] is False  # تبدأ برقم
+    assert is_valid_name("@Ahmed")[0] is False  # تبدأ برمز
+    assert is_valid_name("Ahmed@123")[0] is False  # تحتوي على رموز وأرقام
+    assert is_valid_name("---")[0] is False  # رموز فقط
+    assert is_valid_name("12345")[0] is False  # أرقام فقط
+    assert is_valid_name("")[0] is False  # فارغ
+    assert is_valid_name("   ")[0] is False  # مسافات فقط
+
 

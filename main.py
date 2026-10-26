@@ -1,10 +1,10 @@
 import sys
 import os
+import time
 os.environ["PROMPT_TOOLKIT_NO_WINDOWS_CONSOLE"] = "1"
 import questionary
 from core.database import load_data
 from core.logger import display_audit_logs
-from core.crypto_receipts import display_encrypted_receipts
 from ui.animations import cinematic_startup_sequence, show_deployment_animation, smooth_menu_transition, clear_screen, cinematic_exit, CYBERPUNK_STYLE
 from ui.menus import main_menu, display_agent_table, select_theme_menu
 from ui.dashboard import display_live_dashboard
@@ -16,6 +16,8 @@ from services.sandbox import launch_sandbox
 from services.minigame import run_hacking_minigame
 from services.export import export_data_to_csv
 from rich.console import Console
+from rich.panel import Panel
+from rich.box import ROUNDED
 
 if hasattr(sys.stdout, 'reconfigure'):
     try:
@@ -43,23 +45,42 @@ def run_app():
         elif choice == "🛒  Browse AI Agents Catalogue":
             smooth_menu_transition("AI Catalogue")
             display_agent_table(data["agents"])
-            agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter to go back):", style=CYBERPUNK_STYLE).ask()
-            if agent_id:
-                add_to_cart(agent_id.strip())
+            console.print("[dim]Press Enter to return to menu[/dim]\n")
+            while True:
+                agent_id = questionary.text("Enter Agent ID to add to cart:", style=CYBERPUNK_STYLE).ask()
+                if not agent_id or not agent_id.strip():
+                    break
+                success = add_to_cart(agent_id.strip())
+                if success:
+                    break
+                time.sleep(1.2)
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "🔍  Search for an Agent":
             smooth_menu_transition("Agent Search Engine")
-            query = questionary.text("Enter search keyword (name or specialty):", style=CYBERPUNK_STYLE).ask()
-            if query:
-                results = search_agents(query)
+            while True:
+                clear_screen()
+                smooth_menu_transition("Agent Search Engine")
+                console.print("[dim]Press Enter to return to menu[/dim]\n")
+                query = questionary.text("Enter search keyword (name or specialty):", style=CYBERPUNK_STYLE).ask()
+                if not query or not query.strip():
+                    break
+                results = search_agents(query.strip())
                 if results:
                     display_agent_table(results)
-                    agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter):", style=CYBERPUNK_STYLE).ask()
-                    if agent_id:
-                        add_to_cart(agent_id.strip())
+                    console.print("[dim]Press Enter to return to menu[/dim]\n")
+                    while True:
+                        agent_id = questionary.text("Enter Agent ID to add to cart:", style=CYBERPUNK_STYLE).ask()
+                        if not agent_id or not agent_id.strip():
+                            break
+                        success = add_to_cart(agent_id.strip())
+                        if success:
+                            break
+                        time.sleep(1.2)
+                    break
                 else:
-                    console.print("[bold #ffb700]No agents found matching your query.[/bold #ffb700]")
+                    console.print(Panel("[bold #ffb700]No agents found matching your query.[/bold #ffb700]", title="[bold #ffb700]Search Notice[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
+                    time.sleep(1.2)
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
                     
         elif choice == "💡  Get AI Recommendations":
@@ -67,9 +88,15 @@ def run_app():
             recs = get_recommendations()
             console.print("\n[bold #00f3ff]✨ Recommended AI Agents For Your Next Deployment:[/bold #00f3ff]")
             display_agent_table(recs)
-            agent_id = questionary.text("Enter Agent ID to add to cart (or press Enter):", style=CYBERPUNK_STYLE).ask()
-            if agent_id:
-                add_to_cart(agent_id.strip())
+            console.print("[dim]Press Enter to return to menu[/dim]\n")
+            while True:
+                agent_id = questionary.text("Enter Agent ID to add to cart:", style=CYBERPUNK_STYLE).ask()
+                if not agent_id or not agent_id.strip():
+                    break
+                success = add_to_cart(agent_id.strip())
+                if success:
+                    break
+                time.sleep(1.2)
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "🎨 ASCII Glitch Restorer (Mini-Game)":
@@ -84,16 +111,6 @@ def run_app():
         elif choice == "📊  View Live System Dashboard":
             smooth_menu_transition("Live System Dashboard")
             display_live_dashboard()
-            console.input("\n[dim]Press Enter to return to menu...[/dim]")
-                
-        elif choice == "📜  View Past Receipts & History":
-            smooth_menu_transition("Past Receipts Ledger")
-            view_purchase_history()
-            console.input("\n[dim]Press Enter to return to menu...[/dim]")
-                
-        elif choice == "🔐  View Encrypted Purchase Receipts":
-            smooth_menu_transition("Encrypted Purchase Receipts Ledger")
-            display_encrypted_receipts()
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "📋  View System Audit Logs":
@@ -117,15 +134,32 @@ def run_app():
                 ).ask()
                 
                 if sub_choice == "Proceed to Checkout":
-                    endpoint = questionary.text("Enter Target Endpoint / IP Address for deployment:", style=CYBERPUNK_STYLE).ask()
-                    if endpoint:
+                    while True:
+                        clear_screen()
+                        smooth_menu_transition("Shopping Cart & Checkout")
+                        list_cart()
+                        console.print("[dim]Press Enter to return to menu[/dim]\n")
+                        endpoint = questionary.text("Enter Target Endpoint / IP Address for deployment:", style=CYBERPUNK_STYLE).ask()
+                        if not endpoint or not endpoint.strip():
+                            break
                         success = process_checkout(endpoint.strip())
                         if success:
                             show_deployment_animation("Purchased Cluster Agents")
+                            break
+                        time.sleep(1.2)
                 elif sub_choice == "Remove an Item":
-                    item_id = questionary.text("Enter Agent ID to remove from cart:", style=CYBERPUNK_STYLE).ask()
-                    if item_id:
-                        remove_from_cart(item_id.strip())
+                    while True:
+                        clear_screen()
+                        smooth_menu_transition("Shopping Cart & Checkout")
+                        list_cart()
+                        console.print("[dim]Press Enter to return to menu[/dim]\n")
+                        item_id = questionary.text("Enter Agent ID to remove from cart:", style=CYBERPUNK_STYLE).ask()
+                        if not item_id or not item_id.strip():
+                            break
+                        success = remove_from_cart(item_id.strip())
+                        if success:
+                            break
+                        time.sleep(1.2)
             console.input("\n[dim]Press Enter to return to menu...[/dim]")
                 
         elif choice == "💳  Top-Up Wallet Tokens":

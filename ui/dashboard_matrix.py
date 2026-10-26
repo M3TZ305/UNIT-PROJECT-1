@@ -6,14 +6,14 @@ from rich.layout import Layout
 from rich.panel import Panel
 from rich.table import Table
 from rich.live import Live
-from rich.box import ROUNDED
+from rich.box import DOUBLE, ROUNDED
 from core.database import load_data
 from ui.animations import clear_screen
 
 console = Console()
 
 def generate_dashboard_layout():
-    """توليد هيكل الشاشة المقسمة إلى 3 أقسام رئيسية"""
+    """توليد هيكل الشاشة المقسمة إلى 3 أقسام رئيسية بتصميم Neural Benchmarks Oscilloscope"""
     data = load_data()
     agents = data.get("agents", [])
     history = data.get("history", [])
@@ -33,7 +33,7 @@ def generate_dashboard_layout():
     )
 
     # --- 1. قسم الكتالوج (Catalog Section) ---
-    table = Table(title="[bold #00f3ff][AgentOSا] Agents Catalog[/bold #00f3ff]", show_header=True, expand=True, box=ROUNDED, border_style="#00f3ff", header_style="bold #ffb700")
+    table = Table(title="[bold #00f3ff][AgentOS] Oscilloscope Agents Catalog Matrix[/bold #00f3ff]", show_header=True, expand=True, box=DOUBLE, border_style="#00f3ff", header_style="bold #ffb700")
     table.add_column("ID", style="dim", width=4)
     table.add_column("Agent Name", style="bold #00ff66")
     table.add_column("Specialty", style="bold #ffb700")
@@ -42,19 +42,19 @@ def generate_dashboard_layout():
     for agent in agents:
         table.add_row(agent["id"], agent["name"], agent["specialty"], f"{agent['price']} TC")
     
-    catalog_panel = Panel(table, title="[bold #00ff66]📦 1. [AgentOSا] Catalog Section[/bold #00ff66]", border_style="#00ff66", box=ROUNDED)
+    catalog_panel = Panel(table, title="[bold #00ff66]📦 1. [AgentOS] Catalog & Waveform Section[/bold #00ff66]", border_style="#00ff66", box=ROUNDED)
 
     # --- 2. قسم السجل الحي للعمليات (Live Logs Section) ---
     current_time = datetime.now().strftime("%H:%M:%S")
     logs_content = (
-        f"[dim]{current_time} - Core neural bridge online[/dim]\n"
-        f"[bold #00ff66]{current_time} - Cluster node US-East synced[/bold #00ff66]\n"
+        r"[dim]" + current_time + r" - Core neural bridge online (~/\~)[/dim]" + "\n" +
+        f"[bold #00ff66]{current_time} - Cluster node US-East synced (18ms)[/bold #00ff66]\n"
         f"[bold #00f3ff]{current_time} - Token ledger verified securely[/bold #00f3ff]\n"
         f"[bold #ffb700]{current_time} - Active deployments: {len(history)} nodes[/bold #ffb700]\n"
-        f"[bold #00ff66]{current_time} - Monitoring background threads...[/bold #00ff66]\n"
-        f"[bold #00ff66]>> Matrix stream running smoothly...[/bold #00ff66]"
+        f"[bold #00ff66]{current_time} - Oscilloscope waveform active...[/bold #00ff66]\n"
+        f"[bold #00ff66]>> Quantum core monitoring running smoothly...[/bold #00ff66]"
     )
-    logs_panel = Panel(logs_content, title="[bold #ffb700]⚡ 2. [AgentOSا] Live Logs Matrix[/bold #ffb700]", border_style="#ffb700", box=ROUNDED)
+    logs_panel = Panel(logs_content, title="[bold #ffb700]⚡ 2. [AgentOS] Oscilloscope Live Logs Matrix[/bold #ffb700]", border_style="#ffb700", box=ROUNDED)
 
     # ربط القسم العُلوي
     layout["upper"]["catalog"].update(catalog_panel)
@@ -65,18 +65,18 @@ def generate_dashboard_layout():
         f" [bold #ffb700]GPU Load:[/bold #ffb700] 48% | "
         f"[bold #00f3ff]VRAM Usage:[/bold #00f3ff] 11.2 / 16.0 GB | "
         f"[bold #ffb700]Wallet Balance:[/bold #ffb700] {tokens} TC | "
-        f"[bold #00ff66]Servers Status:[/bold #00ff66] ALL NODES OPTIMAL (100%)"
+        r"[bold #00ff66]Oscilloscope Status:[/bold #00ff66] STABLE (~/\~/\~) ALL NODES OPTIMAL"
     )
-    bottom_panel = Panel(gpu_info, title="[bold #00f3ff]💻 3. [AgentOSا] GPU & Server Performance Indicators[/bold #00f3ff]", border_style="#00f3ff", box=ROUNDED)
+    bottom_panel = Panel(gpu_info, title="[bold #00f3ff]💻 3. [AgentOS] Quantum Core & Oscilloscope Telemetry[/bold #00f3ff]", border_style="#00f3ff", box=DOUBLE)
     
     layout["lower"].update(bottom_panel)
 
     return layout
 
 def run_live_matrix_dashboard():
-    """تشغيل الشاشة التفاعلية المقسمة بشكل مستقر ودون مشاكل في التيرمينال"""
+    """تشغيل الشاشة التفاعلية المقسمة بشكل مستقر مع تصميم Neural Benchmarks Oscilloscope"""
     clear_screen()
-    console.print("[bold #ffb700]🚀 Launching Live Split-Screen Dashboard Matrix...[/bold #ffb700]")
+    console.print("[bold #ffb700]🚀 Launching Live Split-Screen Dashboard Matrix (Oscilloscope Suite)...[/bold #ffb700]")
     console.print("[dim]Press [bold red]Ctrl + C[/bold red] or [bold red]q[/bold red] to return to the main menu.[/dim]\n")
     time.sleep(1.0)
 

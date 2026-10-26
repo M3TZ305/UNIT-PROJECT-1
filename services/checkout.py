@@ -2,7 +2,7 @@ import time
 import random
 import uuid
 from datetime import datetime
-from core.database import load_data, save_data
+from core.database import load_data, save_data, is_valid_name
 from core.logger import log_action
 from core.crypto_receipts import create_encrypted_receipt
 from rich.console import Console
@@ -12,7 +12,7 @@ from rich.text import Text
 from rich.box import ROUNDED
 import questionary
 from services.synergy import display_synergy_report
-from ui.animations import CYBERPUNK_STYLE
+from ui.animations import CYBERPUNK_STYLE, clear_screen
 
 console = Console()
 
@@ -33,9 +33,28 @@ def process_checkout(endpoint_address):
         log_action("WARNING", f"Checkout failed: Insufficient tokens (Have {current_tokens} TC, Need {total_price} TC).")
         return False
         
-    buyer_name = questionary.text("Enter License Holder Full Name:", style=CYBERPUNK_STYLE).ask()
-    if not buyer_name or not buyer_name.strip():
-        buyer_name = "Authorized Developer"
+    buyer_name = None
+    while True:
+        clear_screen()
+        console.print(Panel(
+            "[bold #00f3ff]🛍️ Shopping Cart & Checkout[/bold #00f3ff]\n"
+            "[dim]Press Enter to return to menu[/dim]",
+            title="[bold #00f3ff]Checkout Portal[/bold #00f3ff]",
+            border_style="#00f3ff",
+            box=ROUNDED,
+            expand=False
+        ))
+        
+        buyer_name = questionary.text("Enter License Holder Full Name:", style=CYBERPUNK_STYLE).ask()
+        if not buyer_name or not buyer_name.strip():
+            return False
+        valid, err_msg = is_valid_name(buyer_name)
+        if valid:
+            break
+            
+        console.print(Panel(f"[bold red]{err_msg}[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        log_action("WARNING", f"Checkout attempt failed: {err_msg}")
+        time.sleep(1.2)
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

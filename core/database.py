@@ -34,3 +34,26 @@ def load_data():
 def save_data(data):
     with open(DB_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
+
+def is_valid_name(name: str) -> tuple[bool, str]:
+    """Validate name according to rules:
+    - Must not be empty or whitespace.
+    - Must not contain numbers (ممنوع تكتب ارقام بالاسم).
+    - Must start with a letter (English or Arabic).
+    - Must not contain symbols or special characters.
+    """
+    if not name or not name.strip():
+        return False, "Name cannot be empty."
+    stripped = name.strip()
+    
+    if any(char.isdigit() for char in stripped):
+        return False, "❌ Invalid Name! ممنوع تكتب أرقام بالاسم (Numbers are not allowed in names)."
+        
+    if not stripped[0].isalpha():
+        return False, "❌ Invalid Name! Name must start with a letter (no symbols or leading dashes)."
+        
+    for char in stripped:
+        if not char.isalpha() and not char.isspace():
+            return False, "❌ Invalid Name! Name cannot contain symbols or special characters."
+            
+    return True, ""
