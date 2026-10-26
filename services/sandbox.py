@@ -117,12 +117,14 @@ def launch_sandbox():
         try:
             user_input = console.input(f"\n[bold #00ff66]⚡ [{agent_name}] > Press Enter (or 'save'/'export'/'exit'): [/bold #00ff66]").strip()
             
-            if user_input.lower() in ["exit", "quit", "q"]:
+            if user_input == "":
+                pass
+            elif user_input.lower() in ["exit", "quit", "q"]:
                 console.print(f"\n[dim]Disconnecting from {agent_name} Benchmark Suite. Returning to Main Menu...[/dim]")
                 time.sleep(0.4)
                 break
                 
-            if user_input.lower() in ["save", "export"]:
+            elif user_input.lower() in ["save", "export"]:
                 if test_count == 0 or not latest_metrics:
                     console.print(Panel("[bold #ffb700]⚠️ No benchmark test has been executed yet. Run at least one test cycle before saving![/bold #ffb700]", title="[bold #ffb700]Warning[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
                     continue
@@ -154,6 +156,15 @@ def launch_sandbox():
                     ))
                 except Exception as e:
                     console.print(Panel(f"[bold red]❌ Failed to save benchmark report: {e}[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+                continue
+            else:
+                console.print(Panel(
+                    "[bold #ffb700][ERROR]: Invalid command or out-of-context input. Please use 'save', 'export', 'exit', or press Enter.[/bold #ffb700]",
+                    title="[bold #ffb700]Invalid Input[/bold #ffb700]",
+                    border_style="#ffb700",
+                    box=ROUNDED,
+                    expand=False
+                ))
                 continue
                 
             test_count += 1

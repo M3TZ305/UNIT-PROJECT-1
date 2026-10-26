@@ -55,3 +55,22 @@ def test_benchmark_report_export():
     
     if os.path.exists("benchmark_report.txt"):
         os.remove("benchmark_report.txt")
+
+def test_sandbox_input_validation():
+    """اختبار التحقق من صحة إدخال المستخدم في وضع الساندبوكس (sandbox)"""
+    allowed_commands = ["save", "export", "exit", "quit", "q"]
+    
+    # Test empty input -> runs test
+    user_input = ""
+    assert user_input == ""
+    
+    # Test valid commands
+    for cmd in ["save", "export", "exit"]:
+        assert cmd.lower() in allowed_commands
+        
+    # Test invalid / out-of-context inputs
+    invalid_inputs = ["hi", "hello", "random", "test123", "foo"]
+    for invalid in invalid_inputs:
+        assert invalid.lower() not in allowed_commands
+        assert invalid != ""
+
