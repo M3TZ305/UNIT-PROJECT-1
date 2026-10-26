@@ -34,3 +34,39 @@ Timestamp: 2026-10-26 23:04:49
 Holder Name: KKa
 Total Paid: 600 TC
 --------------------------------------------------
+
+  +------------------------------------------------------------------+
+  |                 [AgentOS] CLUSTER LICENSE CERTIFICATE            |
+  +------------------------------------------------------------------+
+  |  HOLDER NAME  : KKOR                                          |
+  |  REFERENCE ID : CRN-5C5B6A-9730                               |
+  |  PURCHASE TIME: 2026-10-26 23:36:22                           |
+  |  PURCHASED MOD: DeepCode-V4                                   |
+  |  MODEL TYPE   : Architecture                                  |
+  |  STATUS       : [ SECURED & VERIFIED BY QUANTUM CORE ]           |
+  |                                                                  |
+  |  SECURE BARCODE: █ █║█║█ █║█ █║█║█ █║█ █║█║█ █ █║██                 |
+  +------------------------------------------------------------------+
+    
+Timestamp: 2026-10-26 23:36:22
+Holder Name: KKOR
+Total Paid: 450 TC
+--------------------------------------------------
+
+  +------------------------------------------------------------------+
+  |                 [AgentOS] CLUSTER LICENSE CERTIFICATE            |
+  +------------------------------------------------------------------+
+  |  HOLDER NAME  : ggg                                           |
+  |  REFERENCE ID : CRN-5286B6-5708                               |
+  |  PURCHASE TIME: 2026-10-26 23:38:41                           |
+  |  PURCHASED MOD: test                                          |
+  |  MODEL TYPE   : test                                          |
+  |  STATUS       : [ SECURED & VERIFIED BY QUANTUM CORE ]           |
+  |                                                                  |
+  |  SECURE BARCODE: █ █║█║█ █║█ █║█║█ █║█ █║█║█ █ █║██                 |
+  +------------------------------------------------------------------+
+    
+Timestamp: 2026-10-26 23:38:41
+Holder Name: ggg
+Total Paid: 100 TC
+--------------------------------------------------
