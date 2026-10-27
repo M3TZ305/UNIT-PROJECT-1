@@ -148,4 +148,44 @@ def test_name_validation():
     assert is_valid_name("")[0] is False  # فارغ
     assert is_valid_name("   ")[0] is False  # مسافات فقط
 
+def test_agent_add_edit_delete():
+    """اختبار إضافة وتعديل وحذف الوكيل"""
+    data = load_data()
+    initial_count = len(data["agents"])
+    
+    # Add new agent
+    new_agent = {
+        "id": "99",
+        "name": "TestAgent",
+        "specialty": "Testing",
+        "success_rate": 99.0,
+        "price": 500,
+        "stock": 10
+    }
+    data["agents"].append(new_agent)
+    save_data(data)
+    
+    data_after_add = load_data()
+    assert len(data_after_add["agents"]) == initial_count + 1
+    
+    # Edit agent
+    for agent in data_after_add["agents"]:
+        if agent["id"] == "99":
+            agent["name"] = "UpdatedAgent"
+            agent["price"] = 550
+    save_data(data_after_add)
+    
+    data_after_edit = load_data()
+    target = next(a for a in data_after_edit["agents"] if a["id"] == "99")
+    assert target["name"] == "UpdatedAgent"
+    assert target["price"] == 550
+    
+    # Delete agent
+    data_after_edit["agents"] = [a for a in data_after_edit["agents"] if a["id"] != "99"]
+    save_data(data_after_edit)
+    
+    data_final = load_data()
+    assert len(data_final["agents"]) == initial_count
+
+
 

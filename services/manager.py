@@ -81,6 +81,8 @@ def manager_dashboard():
             choices=[
                 "📊 View All Inventory & Stock",
                 "➕ Register New AI Agent",
+                "✏️ Edit AI Agent",
+                "🗑️ Delete AI Agent",
                 "📜 View Encrypted Purchase Receipts & History",
                 "📁 Export System Data to CSV (report.csv)",
                 "🗑️  Data Reset (Clear History & Logs)",
@@ -96,6 +98,14 @@ def manager_dashboard():
         elif choice == "➕ Register New AI Agent":
             smooth_menu_transition("Register New Agent")
             add_new_agent()
+            console.input("\n[dim]Press Enter to continue...[/dim]")
+        elif choice == "✏️ Edit AI Agent":
+            smooth_menu_transition("Edit AI Agent")
+            edit_agent()
+            console.input("\n[dim]Press Enter to continue...[/dim]")
+        elif choice == "🗑️ Delete AI Agent":
+            smooth_menu_transition("Delete AI Agent")
+            delete_agent()
             console.input("\n[dim]Press Enter to continue...[/dim]")
         elif choice == "📜 View Encrypted Purchase Receipts & History":
             smooth_menu_transition("Encrypted Purchase Receipts & History")
@@ -250,3 +260,129 @@ def add_new_agent():
     save_data(data)
     log_action("SUCCESS", f"Registered new AI Agent '{name.strip()}' (Specialty: {specialty.strip()}, Price: {price} TC, Stock: {stock}) to marketplace.")
     console.print(Panel(f"[bold #00ff66]✔ Agent '{name.strip()}' successfully registered to the marketplace catalogue![/bold #00ff66]", title="[bold #00ff66]Registration Successful[/bold #00ff66]", border_style="#00ff66", box=DOUBLE, expand=False))
+
+def edit_agent():
+    """Edit an existing AI agent in the catalogue"""
+    data = load_data()
+    agents = data["agents"]
+    
+    if not agents:
+        console.print(Panel("[bold red]❌ No agents available to edit.[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        return
+
+    while True:
+        clear_screen()
+        smooth_menu_transition("Edit AI Agent")
+        show_inventory()
+        console.print("\n[dim]Press Enter without text to return to menu[/dim]\n")
+        
+        agent_id = questionary.text("Enter Agent ID to edit (e.g. 01, 02):", style=CYBERPUNK_STYLE).ask()
+        if not agent_id or not agent_id.strip():
+            return
+            
+        target_agent = None
+        for agent in agents:
+            if agent["id"] == agent_id.strip():
+                target_agent = agent
+                break
+                
+        if not target_agent:
+            console.print(Panel(f"[bold red]❌ Agent ID '{agent_id.strip()}' not found.[/bold red]", title="[bold red]Not Found[/bold red]", border_style="red", box=ROUNDED, expand=False))
+            time.sleep(1.2)
+            continue
+            
+        console.print(Panel(f"[bold #00ff66]Editing Agent: {target_agent['name']} (ID: {target_agent['id']})[/bold #00ff66]", title="[bold #00ff66]Agent Editor[/bold #00ff66]", border_style="#00ff66", box=ROUNDED, expand=False))
+        
+        new_name = questionary.text(f"Enter New Name [{target_agent['name']}]:", default=target_agent['name'], style=CYBERPUNK_STYLE).ask()
+        if new_name is None:
+            return
+        if new_name.strip():
+            valid, err_msg = is_valid_name(new_name)
+            if not valid:
+                console.print(Panel(f"[bold red]{err_msg}[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+                time.sleep(1.2)
+                continue
+            target_agent['name'] = new_name.strip()
+            
+        new_specialty = questionary.text(f"Enter New Specialty [{target_agent['specialty']}]:", default=target_agent['specialty'], style=CYBERPUNK_STYLE).ask()
+        if new_specialty is None:
+            return
+        if new_specialty.strip():
+            target_agent['specialty'] = new_specialty.strip()
+            
+        try:
+            new_success_str = questionary.text(f"Enter New Success Rate [{target_agent['success_rate']}]:", default=str(target_agent['success_rate']), style=CYBERPUNK_STYLE).ask()
+            if new_success_str is None:
+                return
+            if new_success_str.strip():
+                target_agent['success_rate'] = float(new_success_str.strip())
+                
+            new_price_str = questionary.text(f"Enter New Price in Tokens [{target_agent['price']}]:", default=str(target_agent['price']), style=CYBERPUNK_STYLE).ask()
+            if new_price_str is None:
+                return
+            if new_price_str.strip():
+                target_agent['price'] = int(new_price_str.strip())
+                
+            new_stock_str = questionary.text(f"Enter New Stock Quantity [{target_agent.get('stock', 10)}]:", default=str(target_agent.get('stock', 10)), style=CYBERPUNK_STYLE).ask()
+            if new_stock_str is None:
+                return
+            if new_stock_str.strip():
+                target_agent['stock'] = int(new_stock_str.strip())
+        except ValueError:
+            console.print(Panel("[bold red]❌ Invalid input! Letters are not allowed in numbers.[/bold red]", title="[bold red]Validation Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+            time.sleep(1.2)
+            continue
+            
+        save_data(data)
+        log_action("SUCCESS", f"Successfully updated Agent ID {target_agent['id']} ('{target_agent['name']}').")
+        console.print(Panel(f"[bold #00ff66]✔ Agent '{target_agent['name']}' successfully updated![/bold #00ff66]", title="[bold #00ff66]Update Successful[/bold #00ff66]", border_style="#00ff66", box=DOUBLE, expand=False))
+        break
+
+def delete_agent():
+    """Delete an AI agent from the marketplace catalogue"""
+    data = load_data()
+    agents = data["agents"]
+    
+    if not agents:
+        console.print(Panel("[bold red]❌ No agents available to delete.[/bold red]", title="[bold red]Error[/bold red]", border_style="red", box=ROUNDED, expand=False))
+        return
+
+    while True:
+        clear_screen()
+        smooth_menu_transition("Delete AI Agent")
+        show_inventory()
+        console.print("\n[dim]Press Enter without text to return to menu[/dim]\n")
+        
+        agent_id = questionary.text("Enter Agent ID to delete (e.g. 01, 02):", style=CYBERPUNK_STYLE).ask()
+        if not agent_id or not agent_id.strip():
+            return
+            
+        target_agent = None
+        target_index = -1
+        for idx, agent in enumerate(agents):
+            if agent["id"] == agent_id.strip():
+                target_agent = agent
+                target_index = idx
+                break
+                
+        if not target_agent:
+            console.print(Panel(f"[bold red]❌ Agent ID '{agent_id.strip()}' not found.[/bold red]", title="[bold red]Not Found[/bold red]", border_style="red", box=ROUNDED, expand=False))
+            time.sleep(1.2)
+            continue
+            
+        confirm = questionary.select(
+            f"⚠️ Are you sure you want to delete agent '{target_agent['name']}' (ID: {target_agent['id']})?",
+            choices=["No (Cancel)", "Yes (Delete)"],
+            style=CYBERPUNK_STYLE
+        ).ask()
+        
+        if confirm != "Yes (Delete)":
+            console.print(Panel("[bold #ffb700]ℹ️ Deletion canceled by operator.[/bold #ffb700]", title="[bold #ffb700]Action Aborted[/bold #ffb700]", border_style="#ffb700", box=ROUNDED, expand=False))
+            time.sleep(1.0)
+            continue
+            
+        agents.pop(target_index)
+        save_data(data)
+        log_action("SUCCESS", f"Successfully deleted Agent ID {target_agent['id']} ('{target_agent['name']}').")
+        console.print(Panel(f"[bold #00ff66]✔ Agent '{target_agent['name']}' successfully deleted from catalogue![/bold #00ff66]", title="[bold #00ff66]Deletion Successful[/bold #00ff66]", border_style="#00ff66", box=DOUBLE, expand=False))
+        break

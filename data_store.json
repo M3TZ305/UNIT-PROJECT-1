@@ -31,60 +31,11 @@
             "success_rate": 95.5,
             "price": 250,
             "stock": 15
-        },
-        {
-            "id": "05",
-            "name": "test",
-            "specialty": "test",
-            "success_rate": 100.0,
-            "price": 100,
-            "stock": 2
         }
     ],
     "cart": [],
-    "history": [
-        {
-            "id": "05",
-            "name": "test",
-            "specialty": "test",
-            "success_rate": 100.0,
-            "price": 100,
-            "stock": 2,
-            "buyer": "Mutaz",
-            "timestamp": "2026-10-26 22:49:39"
-        },
-        {
-            "id": "02",
-            "name": "SecGuard-X",
-            "specialty": "Cyber Defense",
-            "success_rate": 98.8,
-            "price": 600,
-            "stock": 5,
-            "buyer": "KKa",
-            "timestamp": "2026-10-26 23:04:49"
-        },
-        {
-            "id": "01",
-            "name": "DeepCode-V4",
-            "specialty": "Architecture",
-            "success_rate": 99.4,
-            "price": 450,
-            "stock": 10,
-            "buyer": "KKOR",
-            "timestamp": "2026-10-26 23:36:22"
-        },
-        {
-            "id": "05",
-            "name": "test",
-            "specialty": "test",
-            "success_rate": 100.0,
-            "price": 100,
-            "stock": 2,
-            "buyer": "ggg",
-            "timestamp": "2026-10-26 23:38:41"
-        }
-    ],
-    "tokens": 1450,
-    "theme": "Gold Luxury",
+    "history": [],
+    "tokens": 2000,
+    "theme": "Matrix Hacker",
     "redeemed_codes": []
 }

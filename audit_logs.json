@@ -1,91 +1,41 @@
 [
     {
-        "timestamp": "2026-10-26 23:17:29",
+        "timestamp": "2026-10-27 07:47:38",
         "type": "SYSTEM",
         "message": "Searched agents catalogue with query: 'deepcode' (Found 1 results)"
     },
     {
-        "timestamp": "2026-10-26 23:17:29",
+        "timestamp": "2026-10-27 07:47:38",
         "type": "SUCCESS",
         "message": "Added agent 'DeepCode-V4' (ID: 01) to shopping cart."
     },
     {
-        "timestamp": "2026-10-26 23:17:29",
+        "timestamp": "2026-10-27 07:47:38",
         "type": "SYSTEM",
         "message": "Removed agent ID '01' from shopping cart."
     },
     {
-        "timestamp": "2026-10-26 23:34:58",
+        "timestamp": "2026-10-27 07:48:54",
         "type": "SUCCESS",
         "message": "Manager successfully authenticated into the Cyber Security & Governance Portal."
     },
     {
-        "timestamp": "2026-10-26 23:35:26",
+        "timestamp": "2026-10-27 07:49:02",
         "type": "SYSTEM",
-        "message": "Manager exited Administrator Portal and returned to main orchestration grid."
+        "message": "Manager viewed inventory table containing 4 agents."
     },
     {
-        "timestamp": "2026-10-26 23:35:34",
-        "type": "SUCCESS",
-        "message": "Added agent 'DeepCode-V4' (ID: 01) to shopping cart."
-    },
-    {
-        "timestamp": "2026-10-26 23:37:09",
-        "type": "TRANSACTION",
-        "message": "Successful checkout: Purchased [DeepCode-V4] for 450 TC. Holder: KKOR."
-    },
-    {
-        "timestamp": "2026-10-26 23:37:18",
-        "type": "SUCCESS",
-        "message": "Encrypted receipt generated & securely stored for DeepCode-V4 (CRN-5C5B6A-9730)"
-    },
-    {
-        "timestamp": "2026-10-26 23:37:33",
-        "type": "SUCCESS",
-        "message": "Manager successfully authenticated into the Cyber Security & Governance Portal."
-    },
-    {
-        "timestamp": "2026-10-26 23:37:41",
+        "timestamp": "2026-10-27 07:49:16",
         "type": "SYSTEM",
-        "message": "Manager viewed inventory table containing 5 agents."
+        "message": "Manager viewed inventory table containing 4 agents."
     },
     {
-        "timestamp": "2026-10-26 23:37:44",
+        "timestamp": "2026-10-27 07:49:24",
         "type": "SYSTEM",
-        "message": "Manager exited Administrator Portal and returned to main orchestration grid."
+        "message": "Manager viewed inventory table containing 4 agents."
     },
     {
-        "timestamp": "2026-10-26 23:38:10",
-        "type": "SUCCESS",
-        "message": "Added agent 'test' (ID: 05) to shopping cart."
-    },
-    {
-        "timestamp": "2026-10-26 23:38:59",
-        "type": "TRANSACTION",
-        "message": "Successful checkout: Purchased [test] for 100 TC. Holder: ggg."
-    },
-    {
-        "timestamp": "2026-10-26 23:39:07",
-        "type": "SUCCESS",
-        "message": "Encrypted receipt generated & securely stored for test (CRN-5286B6-5708)"
-    },
-    {
-        "timestamp": "2026-10-26 23:39:26",
-        "type": "SUCCESS",
-        "message": "Manager successfully authenticated into the Cyber Security & Governance Portal."
-    },
-    {
-        "timestamp": "2026-10-26 23:39:34",
-        "type": "SYSTEM",
-        "message": "Manager exited Administrator Portal and returned to main orchestration grid."
-    },
-    {
-        "timestamp": "2026-10-26 23:40:16",
-        "type": "SUCCESS",
-        "message": "Manager successfully authenticated into the Cyber Security & Governance Portal."
-    },
-    {
-        "timestamp": "2026-10-26 23:40:23",
+        "timestamp": "2026-10-27 07:49:30",
         "type": "SYSTEM",
         "message": "Manager exited Administrator Portal and returned to main orchestration grid."
     }
